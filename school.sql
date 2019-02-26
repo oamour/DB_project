@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 21, 2019 at 05:31 PM
+-- Generation Time: Feb 26, 2019 at 06:09 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.1
 
@@ -68,9 +68,20 @@ CREATE TABLE `materialfor` (
 --
 
 CREATE TABLE `menteefor` (
-  `userID` int(11) NOT NULL,
+  `menteeID` int(11) NOT NULL,
   `sectionID` int(11) NOT NULL,
   `courseID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mentees`
+--
+
+CREATE TABLE `mentees` (
+  `menteeID` int(11) NOT NULL,
+  `userID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -80,9 +91,31 @@ CREATE TABLE `menteefor` (
 --
 
 CREATE TABLE `mentorfor` (
-  `userID` int(11) NOT NULL,
+  `mentorID` int(11) NOT NULL,
   `sectionID` int(11) NOT NULL,
   `courseID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mentors`
+--
+
+CREATE TABLE `mentors` (
+  `mentorID` int(11) NOT NULL,
+  `userID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `moderators`
+--
+
+CREATE TABLE `moderators` (
+  `modID` int(11) NOT NULL,
+  `userID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -92,7 +125,7 @@ CREATE TABLE `mentorfor` (
 --
 
 CREATE TABLE `modfor` (
-  `userID` int(11) NOT NULL,
+  `modID` int(11) NOT NULL,
   `sectionID` int(11) NOT NULL,
   `courseID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -118,6 +151,17 @@ CREATE TABLE `participatingin` (
   `userID` int(11) NOT NULL,
   `sessionID` int(11) NOT NULL,
   `sectionID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `postmaterials`
+--
+
+CREATE TABLE `postmaterials` (
+  `modID` int(11) NOT NULL,
+  `studyMaterialID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -225,21 +269,42 @@ ALTER TABLE `materialfor`
 -- Indexes for table `menteefor`
 --
 ALTER TABLE `menteefor`
-  ADD PRIMARY KEY (`userID`,`sectionID`),
+  ADD PRIMARY KEY (`menteeID`,`sectionID`),
   ADD KEY `sectionID` (`sectionID`);
+
+--
+-- Indexes for table `mentees`
+--
+ALTER TABLE `mentees`
+  ADD PRIMARY KEY (`menteeID`,`userID`),
+  ADD KEY `userID` (`userID`);
 
 --
 -- Indexes for table `mentorfor`
 --
 ALTER TABLE `mentorfor`
-  ADD PRIMARY KEY (`userID`,`sectionID`),
+  ADD PRIMARY KEY (`mentorID`,`sectionID`),
   ADD KEY `sectionID` (`sectionID`);
+
+--
+-- Indexes for table `mentors`
+--
+ALTER TABLE `mentors`
+  ADD PRIMARY KEY (`mentorID`,`userID`),
+  ADD KEY `userID` (`userID`);
+
+--
+-- Indexes for table `moderators`
+--
+ALTER TABLE `moderators`
+  ADD PRIMARY KEY (`modID`,`userID`),
+  ADD KEY `userID` (`userID`);
 
 --
 -- Indexes for table `modfor`
 --
 ALTER TABLE `modfor`
-  ADD PRIMARY KEY (`userID`,`sectionID`),
+  ADD PRIMARY KEY (`modID`,`sectionID`),
   ADD KEY `sectionID` (`sectionID`);
 
 --
@@ -255,6 +320,13 @@ ALTER TABLE `participatingin`
   ADD PRIMARY KEY (`userID`,`sectionID`,`sessionID`),
   ADD KEY `sectionID` (`sectionID`),
   ADD KEY `sessionID` (`sessionID`);
+
+--
+-- Indexes for table `postmaterials`
+--
+ALTER TABLE `postmaterials`
+  ADD PRIMARY KEY (`modID`,`studyMaterialID`),
+  ADD KEY `studyMaterialID` (`studyMaterialID`);
 
 --
 -- Indexes for table `sections`
@@ -309,21 +381,39 @@ ALTER TABLE `materialfor`
 -- Constraints for table `menteefor`
 --
 ALTER TABLE `menteefor`
-  ADD CONSTRAINT `menteefor_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`),
+  ADD CONSTRAINT `menteefor_ibfk_1` FOREIGN KEY (`menteeID`) REFERENCES `mentees` (`menteeID`),
   ADD CONSTRAINT `menteefor_ibfk_2` FOREIGN KEY (`sectionID`) REFERENCES `sections` (`sectionID`);
+
+--
+-- Constraints for table `mentees`
+--
+ALTER TABLE `mentees`
+  ADD CONSTRAINT `mentees_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`);
 
 --
 -- Constraints for table `mentorfor`
 --
 ALTER TABLE `mentorfor`
-  ADD CONSTRAINT `mentorfor_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`),
+  ADD CONSTRAINT `mentorfor_ibfk_1` FOREIGN KEY (`mentorID`) REFERENCES `mentors` (`mentorID`),
   ADD CONSTRAINT `mentorfor_ibfk_2` FOREIGN KEY (`sectionID`) REFERENCES `sections` (`sectionID`);
+
+--
+-- Constraints for table `mentors`
+--
+ALTER TABLE `mentors`
+  ADD CONSTRAINT `mentors_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`);
+
+--
+-- Constraints for table `moderators`
+--
+ALTER TABLE `moderators`
+  ADD CONSTRAINT `moderators_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`);
 
 --
 -- Constraints for table `modfor`
 --
 ALTER TABLE `modfor`
-  ADD CONSTRAINT `modfor_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`),
+  ADD CONSTRAINT `modfor_ibfk_1` FOREIGN KEY (`modID`) REFERENCES `moderators` (`modID`),
   ADD CONSTRAINT `modfor_ibfk_2` FOREIGN KEY (`sectionID`) REFERENCES `sections` (`sectionID`);
 
 --
@@ -333,6 +423,13 @@ ALTER TABLE `participatingin`
   ADD CONSTRAINT `participatingin_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`),
   ADD CONSTRAINT `participatingin_ibfk_2` FOREIGN KEY (`sectionID`) REFERENCES `sections` (`sectionID`),
   ADD CONSTRAINT `participatingin_ibfk_3` FOREIGN KEY (`sessionID`) REFERENCES `sessions` (`sessionID`);
+
+--
+-- Constraints for table `postmaterials`
+--
+ALTER TABLE `postmaterials`
+  ADD CONSTRAINT `postmaterials_ibfk_1` FOREIGN KEY (`modID`) REFERENCES `moderators` (`modID`),
+  ADD CONSTRAINT `postmaterials_ibfk_2` FOREIGN KEY (`studyMaterialID`) REFERENCES `studymaterials` (`studyMaterialID`);
 
 --
 -- Constraints for table `sections`
