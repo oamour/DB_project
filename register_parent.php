@@ -1,4 +1,5 @@
 <?php
+# default values for each field
 $email = "";
 $pass = "";
 $pass_confirm = "";
@@ -8,11 +9,14 @@ $phone_num = "";
 $city = "";
 $state = "";
 
-if(isset($_POST['register'])){ //check if form was submitted
+# Submission handler
+if(isset($_POST['register'])){
   $myconnection = mysqli_connect('localhost', 'root', '') 
     or die ('Could not connect: ' . mysql_error());
 	
-  $mydb = mysqli_select_db ($myconnection, 'school') or die ('Could not select database');
+  $mydb = mysqli_select_db ($myconnection, 'db2') or die ('Could not select database');
+  
+  # Receive data from POST header
   $email = $_POST['email'];
   $pass = $_POST['password'];
   $pass_confirm = $_POST['pass_confirm'];
@@ -24,24 +28,51 @@ if(isset($_POST['register'])){ //check if form was submitted
   
   $input_valid = 1;
 
+  # Verify email address
   $email_matches = preg_match("/[^@]+@[^@]+\.[^@]+/", $email);
   if($email_matches == 0) {
 	  $input_valid = 0;
   }
   
-  if($pass != $pass_confirm) {
-	  $pass_matches == 0;
+  # Verify password (must be at least 8 characters
+  if(strlen($pass) < 8) {
+	  $input_valid = 0;
+	  $pass_error_code = 1; 
+  } elseif($pass != $pass_confirm) {
+	  $input_valid = 0;
+	  $pass_error_code = 2;
   }
   
+  # Verify phone number
   $phone_num_sanitized = preg_replace("/[^\d]/","", $phone_num);
   $phone_num_matches = preg_match("/\d{10}/", $phone_num_sanitized);
-  echo $phone_num_sanitized . " - " . $phone_num_matches;
+  if($phone_num_matches == 0) {
+	  $input_valid = 0;
+  }
   
-  #$query = 'SELECT DISTINCT title, length FROM movies WHERE year = ' . $year;
-  #$result = mysqli_query($myconnection, $query) or die ('Query failed: ' . mysql_error());
-
-  $input = $_POST['email']; //get input text
-  $message = "Success! You entered: ".$input;
+  # add user to database if valid
+  if($input_valid == 1) {
+	# create user
+	$query = 'INSERT INTO users(name, email, phone, gradeLevel, isParent, isStudent) VALUES(\'' . $name . '\', \'' . $email . '\', \'' . $phone_num_sanitized . '\', NULL, 1, 0)';
+    $result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error($myconnection));
+	$new_user_id = mysqli_insert_id($myconnection);
+	$hashed_pass = password_hash($pass, PASSWORD_BCRYPT);
+	
+	# create account for user
+	$query = "INSERT INTO accounts(userID, username, hash) VALUES(" . $new_user_id . ", '" . $email . "', '" . $hashed_pass . "')";
+	$result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error($myconnection));
+	
+	# if failed to create account, remove user data
+	if($result == false) {
+	  $query = "DELETE FROM users WHERE userID = " . $new_user_id;
+      mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error($myconnection));
+	  echo "Failed to create new user. Please try again.";
+	} else {
+	  $message = "Success! New user created.";  
+	}
+  } else {
+	$message = "Failure! Invalid input.";
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -60,14 +91,16 @@ if(isset($_POST['register'])){ //check if form was submitted
 		<tr>
 		<td><label for="email">Email:</label></td>
 		<td><input type="text" name="email" id="email" value="<?php echo $email ?>" required></td>
-		<td><?php if(isset($email_matches) and $email_matches == 0) echo "Entered email address is invalid"; ?></td>
+		<?php if(isset($email_matches) and $email_matches == 0) echo "<td>Entered email address is invalid.</td>"; ?>
 		</tr>
 		<tr>
 		<td><label for="password">Password:</label></td>
 		<td><input type="password" name="password" id="password" required></td>
+		<?php if(isset($pass_error_code) and $pass_error_code == 1) echo "<td>Passwords must be at least 8 characters long.</td>"; ?>
 		<tr>
 		<td><label for="pass_confirm">Confirm Password:</label></td>
 		<td><input type="password" name="pass_confirm" id="pass_confirm" required></td>
+		<?php if(isset($pass_error_code) and $pass_error_code == 2) echo "<td>Passwords do not match.</td>"; ?>
 		</tr>
 		<tr>
 		<td><label for="role">Role:</label></td>
@@ -85,6 +118,7 @@ if(isset($_POST['register'])){ //check if form was submitted
 		</tr>
 		<td><label for="phone_num">Phone#:</label></td>
 		<td><input type="text" name="phone_num" id="phone_num" value="<?php echo $phone_num ?>" required></td>
+		<?php if(isset($phone_num_matches) and $phone_num_matches == 0) echo "<td>Phone number must be ten numbers long.</td>" ?>
 		</tr>
 		<tr>
 		<td><label for="city">City:</label></td>
