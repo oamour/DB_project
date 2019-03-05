@@ -57,21 +57,24 @@ if(isset($_POST['register'])){
 	
 	if($result->num_rows > 0) {
 	  # Email exists, check that associated account is a parent
-	  $row = $result->fetch_row()
-	  $result = mysqli_query($myconnection, "SELECT isParent FROM users WHERE userID = " . $row[0];
+	  $row = $result->fetch_row();
+	  $parent_id = $row[0];
+	  $result = mysqli_query($myconnection, "SELECT isParent FROM users WHERE userID = " . $parent_id);
 	  
 	  if($result->num_rows > 0) {
-	    $row = $result->fetch_row()
-		if($row[0] == 0) {
-		  $parent_email_is_parent = 1
-		  $input_valid = 0
+	    $row = $result->fetch_row();
+		$is_parent = $row[0];
+		
+		if($is_parent == 0) {
+		  $parent_email_is_parent = 1;
+		  $input_valid = 0;
 		}
 	  } else {
 		  # Should never get here
 		  die ("No userid matching account ID#" . $row[0] . "; " . mysqli_error($myconnection)); 
 	  }
     } else {
-	  $parent_email_missing = 1;
+	  $parent_email_is_parent = 1;
 	  $input_valid = 0;
 	}
   }
@@ -95,32 +98,46 @@ if(isset($_POST['register'])){
   # add user to database if valid
   if($input_valid == 1) {
 	# create user
-	$query = 'INSERT INTO users(name, email, phone, gradeLevel, isParent, isStudent) VALUES(\'' . $name . '\', \'' . $student_email . '\', \'' . $phone_num_sanitized . '\', NULL, 1, 0)';
-    $result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error($myconnection));
+	$query = "INSERT INTO users(name, email, phone, gradeLevel, isParent, isStudent) VALUES('" . $name . "', '" . $student_email . "', '" . $phone_num_sanitized . "', " . $grade . ", 0, 1)";
+    $result = mysqli_query($myconnection, $query);
 	$new_user_id = mysqli_insert_id($myconnection);
 	
 	# create account for user
-	$hashed_pass = password_hash($pass, PASSWORD_BCRYPT);
-	$query = "INSERT INTO accounts(userID, username, hash) VALUES(" . $new_user_id . ", '" . $student_email . "', '" . $hashed_pass . "')";
-	$result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error($myconnection));
+	if($result != false) {
+	  $hashed_pass = password_hash($pass, PASSWORD_BCRYPT);
+	  $query = "INSERT INTO accounts(userID, username, hash) VALUES(" . $new_user_id . ", '" . $student_email . "', '" . $hashed_pass . "')";
+	  $result = mysqli_query($myconnection, $query);
+	}
 	
-	# create moderator listing if applicable
-	if ($role == "mod") {
-	  $query = "INSERT INTO moderators(modID, userID) VALUES(" . $new_user_id . ", " . $new_user_id . ")";
-	  mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error($myconnection));
+	# create mentee and mentor listings if applicable
+	if (($role == "mentee" or $role == "both") and $result != false) {
+	  $query = "INSERT INTO mentees(menteeID, userID) VALUES(" . $new_user_id . ", " . $new_user_id . ")";
+	  $result = mysqli_query($myconnection, $query);
+	}
+	if (($role == "mentor" or $role == "both") and $result != false) {
+	  $query = "INSERT INTO mentors(mentorID, userID) VALUES(" . $new_user_id . ", " . $new_user_id . ")";
+	  $result = mysqli_query($myconnection, $query);
+	}
+	
+	# create parent listing
+	if(isset($parent_id) and $result != false) {
+		$query = "INSERT INTO parentChild(parentID, childID) VALUES(" . $parent_id . ", " . $new_user_id . ")";
+		$result = mysqli_query($myconnection, $query);
 	}
 	
 	# if failed to create account, remove user data
 	if($result == false) {
 	  # Close connection rolls back transaction
+	  mysqli_query($myconnection, "ROLLBACK");
 	  mysqli_close($myconnection);
 	  echo "Failed to create new user. Please try again.";
 	} else {
 	  # User creation succeeded; commit transaction
-	  mysqli_query($myconnection, "COMMIT;");
+	  mysqli_query($myconnection, "COMMIT");
 	  $message = "Success! New user created.";  
 	}
   } else {
+	mysqli_query($myconnection, "ROLLBACK");
 	mysqli_close($myconnection);
 	$message = "Failure! Invalid input.";
   }
@@ -128,7 +145,7 @@ if(isset($_POST['register'])){
 ?>
 <!DOCTYPE html>
 <html>
-<head>0
+<head>
 </head>
 <body>
 	<a href="index.html">Back to Start</a>
@@ -149,7 +166,7 @@ if(isset($_POST['register'])){
 				<td><label for="parent_email">Parent Email:</label></td>
 				<td><input type="text" name="parent_email" id="parent_email" value="<?php echo $parent_email ?>" required></td>
 				<?php if(isset($parent_email_valid) and $parent_email_valid == 0) echo "<td>Entered email address is invalid.</td>"; ?>
-				<?php if(isset($parent_email_missing) and $parent_email_missing == 1) echo "<td>Email address not associated with parent</td>"; ?>
+				<?php if(isset($parent_email_is_parent) and $parent_email_is_parent == 1) echo "<td>Email address not associated with parent</td>"; ?>
 			</tr>
 			<tr>
 				<td><label for="password">Password:</label></td>
