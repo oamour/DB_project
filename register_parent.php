@@ -119,6 +119,15 @@ if(isset($_POST['register'])){
 			</tr>
 			<tr>
 				<td><label for="pass_confirm">Confirm Password:</label></td>
+				<td><input type="password" name="pass_confirm" id="pass_confirm" required></td>
+				<?php if(isset($pass_error_code) and $pass_error_code == 2) echo "<td>Passwords do not match.</td>"; ?>
+			</tr>
+			<tr>
+				<td><label for="role">Role:</label></td>
+				<td><select name="role" id="role">
+					<option value="none">None</option>
+					<option value="mod">Moderator</option>
+				</select></td>
 			</tr>
 		</table>
 		<h3>Personal Info</h3>
