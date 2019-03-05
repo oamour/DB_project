@@ -1,9 +1,11 @@
 <?php
 # default values for each field
-$email = "";
+$student_email = "";
+$parent_email = "";
 $pass = "";
 $pass_confirm = "";
 $role = "";
+$grade = "";
 $name = "";
 $phone_num = "";
 $city = "";
@@ -19,10 +21,12 @@ if(isset($_POST['register'])){
   mysqli_query($myconnection, "START TRANSACTION");
   
   # Receive data from POST header
-  $email = $_POST['email'];
+  $student_email = $_POST['student_email'];
+  $parent_email = $_POST['parent_email'];
   $pass = $_POST['password'];
   $pass_confirm = $_POST['pass_confirm'];
   $role = $_POST['role'];
+  $grade = $_POST['grade'];
   $name = $_POST['name'];
   $phone_num = $_POST['phone_num'];
   $city = $_POST['city'];
@@ -30,17 +34,46 @@ if(isset($_POST['register'])){
   
   $input_valid = 1;
 
-  # Verify email address
-  $email_matches = preg_match("/[^@]+@[^@]+\.[^@]+/", $email);
-  if($email_matches == 0) {
+  # Verify student email address
+  $student_email_valid = preg_match("/[^@]+@[^@]+\.[^@]+/", $student_email);
+  if($student_email_valid == 0) {
 	  $input_valid = 0;
   } else {
 	# Check whether email address exists in database
-	$result = mysqli_query($myconnection, "SELECT * FROM accounts WHERE username = '" . $email . "'");
+	$result = mysqli_query($myconnection, "SELECT * FROM accounts WHERE username = '" . $student_email . "'");
 	if($result->num_rows > 0) {
-	  $email_already_exists = 1;
+	  $student_email_already_exists = 1;
 	  $input_valid = 0;
     }
+  }
+  
+  # Verify parent email address
+  $parent_email_valid = preg_match("/[^@]+@[^@]+\.[^@]+/", $student_email);
+  if($parent_email_valid == 0) {
+	  $input_valid = 0;
+  } else {
+	# Check whether parent with given email address exists in database
+	$result = mysqli_query($myconnection, "SELECT userID FROM accounts WHERE username = '" . $parent_email . "'");
+	
+	if($result->num_rows > 0) {
+	  # Email exists, check that associated account is a parent
+	  $row = $result->fetch_row()
+	  $result = mysqli_query($myconnection, "SELECT isParent FROM users WHERE userID = " . $row[0];
+	  
+	  if($result->num_rows > 0) {
+	    $row = $result->fetch_row()
+		if($row[0] == 0) {
+		  $parent_email_is_parent = 1
+		  $input_valid = 0
+		}
+	  } else {
+		  # Should never get here
+		  die ("No userid matching account ID#" . $row[0] . "; " . mysqli_error($myconnection)); 
+	  }
+    } else {
+	  $parent_email_missing = 1;
+	  $input_valid = 0;
+	}
   }
   
   # Verify password (must be at least 8 characters
@@ -62,13 +95,13 @@ if(isset($_POST['register'])){
   # add user to database if valid
   if($input_valid == 1) {
 	# create user
-	$query = 'INSERT INTO users(name, email, phone, gradeLevel, isParent, isStudent) VALUES(\'' . $name . '\', \'' . $email . '\', \'' . $phone_num_sanitized . '\', NULL, 1, 0)';
+	$query = 'INSERT INTO users(name, email, phone, gradeLevel, isParent, isStudent) VALUES(\'' . $name . '\', \'' . $student_email . '\', \'' . $phone_num_sanitized . '\', NULL, 1, 0)';
     $result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error($myconnection));
 	$new_user_id = mysqli_insert_id($myconnection);
 	
 	# create account for user
 	$hashed_pass = password_hash($pass, PASSWORD_BCRYPT);
-	$query = "INSERT INTO accounts(userID, username, hash) VALUES(" . $new_user_id . ", '" . $email . "', '" . $hashed_pass . "')";
+	$query = "INSERT INTO accounts(userID, username, hash) VALUES(" . $new_user_id . ", '" . $student_email . "', '" . $hashed_pass . "')";
 	$result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error($myconnection));
 	
 	# create moderator listing if applicable
@@ -95,22 +128,28 @@ if(isset($_POST['register'])){
 ?>
 <!DOCTYPE html>
 <html>
-<head>
+<head>0
 </head>
 <body>
 	<a href="index.html">Back to Start</a>
-	<h1>Register as Parent</h1>
-	<form method="post" action="register_parent.php">
+	<h1>Register as Student</h1>
+	<form method="post" action="register_student.php">
 		<?php if(isset($message)){
 			echo $message; 
 		} ?>
 		<h3>Account Info</h3>
 		<table>
 			<tr>
-				<td><label for="email">Email:</label></td>
-				<td><input type="text" name="email" id="email" value="<?php echo $email ?>" required></td>
-				<?php if(isset($email_matches) and $email_matches == 0) echo "<td>Entered email address is invalid.</td>"; ?>
-				<?php if(isset($email_already_exists) and $email_already_exists == 1) echo "<td>Account with this email address already exists</td>"; ?>
+				<td><label for="student_email">Email:</label></td>
+				<td><input type="text" name="student_email" id="student_email" value="<?php echo $student_email ?>" required></td>
+				<?php if(isset($student_email_valid) and $student_email_valid == 0) echo "<td>Entered email address is invalid.</td>"; ?>
+				<?php if(isset($student_email_already_exists) and $student_email_already_exists == 1) echo "<td>Account with this email address already exists</td>"; ?>
+			</tr>
+			<tr>
+				<td><label for="parent_email">Parent Email:</label></td>
+				<td><input type="text" name="parent_email" id="parent_email" value="<?php echo $parent_email ?>" required></td>
+				<?php if(isset($parent_email_valid) and $parent_email_valid == 0) echo "<td>Entered email address is invalid.</td>"; ?>
+				<?php if(isset($parent_email_missing) and $parent_email_missing == 1) echo "<td>Email address not associated with parent</td>"; ?>
 			</tr>
 			<tr>
 				<td><label for="password">Password:</label></td>
@@ -119,6 +158,26 @@ if(isset($_POST['register'])){
 			</tr>
 			<tr>
 				<td><label for="pass_confirm">Confirm Password:</label></td>
+				<td><input type="password" name="pass_confirm" id="pass_confirm" required></td>
+				<?php if(isset($pass_error_code) and $pass_error_code == 2) echo "<td>Passwords do not match.</td>"; ?>
+			</tr>
+			<tr>
+				<td><label for="role">Role:</label></td>
+				<td><select name="role" id="role">
+					<option value="none">None</option>
+					<option value="mentee">Mentee</option>
+					<option value="mentor">Mentor</option>
+					<option value="both">Mentee and Mentor</option>
+				</select></td>
+			</tr>
+			<tr>
+				<td><label for="grade">Grade Level:</label></td>
+				<td><select name="grade" id="grade">
+					<option value="1">Freshman</option>
+					<option value="2">Sophomore</option>
+					<option value="3">Junior</option>
+					<option value="4">Senior</option>
+				</select></td>
 			</tr>
 		</table>
 		<h3>Personal Info</h3>
