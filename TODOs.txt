@@ -1,2 +1,4 @@
 TODO:
-Give IDs auto-increment property (userid, mentorid, etc.)
+Give IDs auto-increment property to userID
+Add ON DELETE CASCADE to foreign keys 
+Username = email = primary key of accounts table
