@@ -35,7 +35,9 @@ if(isset($_POST['register'])){
   $input_valid = 1;
 
   # Verify student email address
-  $student_email_valid = preg_match("/[^@]+@[^@]+\.[^@]+/", $student_email);
+  # $student_email_valid = preg_match("/[^@]+@[^@]+\.[^@]+/", $student_email);
+  $email_regex = "/^[^\s@]+@([^\s@]+\.[^\s@]+[^\s@\.]|[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})/";
+  $student_email_valid = preg_match($email_regex, $student_email);
   if($student_email_valid == 0) {
 	  $input_valid = 0;
   } else {
@@ -48,7 +50,7 @@ if(isset($_POST['register'])){
   }
   
   # Verify parent email address
-  $parent_email_valid = preg_match("/[^@]+@[^@]+\.[^@]+/", $student_email);
+  $parent_email_valid = preg_match($email_regex, $parent_email);
   if($parent_email_valid == 0) {
 	  $input_valid = 0;
   } else {
@@ -90,7 +92,7 @@ if(isset($_POST['register'])){
   
   # Verify phone number
   $phone_num_sanitized = preg_replace("/[^\d]/","", $phone_num);
-  $phone_num_matches = preg_match("/\d{10}/", $phone_num_sanitized);
+  $phone_num_matches = preg_match("/^\d{10}$/", $phone_num_sanitized);
   if($phone_num_matches == 0) {
 	  $input_valid = 0;
   }
@@ -157,7 +159,7 @@ if(isset($_POST['register'])){
 		<h3>Account Info</h3>
 		<table>
 			<tr>
-				<td><label for="student_email">Email:</label></td>
+				<td><label for="student_email">Student Email:</label></td>
 				<td><input type="text" name="student_email" id="student_email" value="<?php echo $student_email ?>" required></td>
 				<?php if(isset($student_email_valid) and $student_email_valid == 0) echo "<td>Entered email address is invalid.</td>"; ?>
 				<?php if(isset($student_email_already_exists) and $student_email_already_exists == 1) echo "<td>Account with this email address already exists</td>"; ?>

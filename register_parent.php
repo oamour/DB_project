@@ -31,7 +31,8 @@ if(isset($_POST['register'])){
   $input_valid = 1;
 
   # Verify email address
-  $email_matches = preg_match("/[^@]+@[^@]+\.[^@]+/", $email);
+  $email_regex = "/^[^\s@]+@([^\s@]+\.[^\s@]+[^\s@\.]|[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})/";
+  $email_matches = preg_match($email_regex, $email);
   if($email_matches == 0) {
 	  $input_valid = 0;
   } else {
@@ -54,7 +55,7 @@ if(isset($_POST['register'])){
   
   # Verify phone number
   $phone_num_sanitized = preg_replace("/[^\d]/","", $phone_num);
-  $phone_num_matches = preg_match("/\d{10}/", $phone_num_sanitized);
+  $phone_num_matches = preg_match("/^\d{10}$/", $phone_num_sanitized);
   if($phone_num_matches == 0) {
 	  $input_valid = 0;
   }
