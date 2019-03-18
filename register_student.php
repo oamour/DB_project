@@ -150,7 +150,7 @@ if(isset($_POST['register'])){
 <head>
 </head>
 <body>
-	<a href="index.html">Back to Start</a>
+	<a href="index.php">Back to Start</a>
 	<h1>Register as Student</h1>
 	<form method="post" action="register_student.php">
 		<?php if(isset($message)){

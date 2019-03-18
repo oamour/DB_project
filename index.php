@@ -1,3 +1,8 @@
+<?php 
+if (isset($_GET['logout']) and $_GET['logout'] == 1) {
+	echo "<div>You have been logged out successfully.</div>";
+}
+?>
 <!DOCTYPE html>
 <head>
 	<title>School Database</title>

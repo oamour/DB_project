@@ -2,7 +2,7 @@
 <html>
 	<head></head>
 	<body>
-		<a href="index.html">Back to Start</a>
+		<a href="index.php">Back to Start</a>
 		<h1>Student Login</h1>
 		<form method="post" action="login.php">
 			<table>
