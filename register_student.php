@@ -100,7 +100,7 @@ if(isset($_POST['register'])){
   # add user to database if valid
   if($input_valid == 1) {
 	# create user
-	$query = "INSERT INTO users(name, email, phone, gradeLevel, isParent, isStudent) VALUES('" . $name . "', '" . $student_email . "', '" . $phone_num_sanitized . "', " . $grade . ", 0, 1)";
+	$query = "INSERT INTO users(name, email, phone, gradeLevel, isParent, isStudent, city, state) VALUES('" . $name . "', '" . $email . "', '" . $phone_num_sanitized . "', " . $grade . ", 0, 1, '" . $city . "', '" . $state . "')";
     $result = mysqli_query($myconnection, $query);
 	$new_user_id = mysqli_insert_id($myconnection);
 	
