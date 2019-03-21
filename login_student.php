@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-	<head></head>
+	<head>
+		<title>School Database</title>
+	</head>
 	<body>
 		<a href="index.php">Back to Start</a>
 		<h1>Student Login</h1>
