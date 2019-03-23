@@ -86,7 +86,8 @@ if(isset($_POST['register'])){
 	} else {
 	  # User creation succeeded; commit transaction
 	  mysqli_query($myconnection, "COMMIT;");
-	  $message = "Success! New user created.";  
+	  $message = "Success! New user created."; 
+	  mysqli_close($myconnection);
 	}
   } else {
 	mysqli_close($myconnection);
@@ -97,6 +98,7 @@ if(isset($_POST['register'])){
 <!DOCTYPE html>
 <html>
 <head>
+	<title>School Database</title>
 </head>
 <body>
 	<a href="index.php">Back to Start</a>

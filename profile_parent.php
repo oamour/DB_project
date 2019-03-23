@@ -1,26 +1,12 @@
 <?php
-function get_user_info($myconnection, $userid) {
-	$query = "SELECT * FROM users WHERE userid = " . $userid;
-	$result = mysqli_query($myconnection, $query);
-	if(mysqli_num_rows($result) == 0) die("FATAL ERROR: Missing userdata for account '$userid'");
-	
-	return mysqli_fetch_array($result);
-}
+include 'functions.php';
 
-$session_key = md5("database");
 session_start();
 
-if (empty($_SESSION[$session_key])) {
-	echo "Not logged in! Please <a href='index.php'>CLICK HERE</a> to return to the main page.";
-} elseif (intval($_SESSION[$session_key]) <= 0) {
-	unset($_SESSION[$session_key]);
-	echo "Invalid session key! Please <a href='index.php'>CLICK HERE</a> to return to the main page.";
-} else {
-	$userid = $_SESSION[$session_key];
-}
+$userid = check_session();
 
 # Submission handler
-if(isset($_POST['register']) and isset($userid)){
+if(isset($_POST['register']) and isset($userid) and $userid != false){
   $myconnection = mysqli_connect('localhost', 'root', '') 
     or die ('Could not connect: ' . mysql_error());
 	
@@ -82,6 +68,7 @@ if(isset($_POST['register']) and isset($userid)){
 	  # User creation succeeded; commit transaction
 	  mysqli_query($myconnection, "COMMIT;");
 	  $message = "Success! Profile updated.";  
+	  mysqli_close($myconnection);
 	}
   } else {
 	mysqli_close($myconnection);
@@ -89,7 +76,7 @@ if(isset($_POST['register']) and isset($userid)){
   }
 }
 
-if (isset($userid)) {
+if (isset($userid) and $userid != false) {
   #start MySQL connection
   $myconnection = mysqli_connect('localhost', 'root', '') or die ('Could not connect: ' . mysql_error());
   $mydb = mysqli_select_db ($myconnection, 'db2') or die ('Could not select database');
@@ -107,7 +94,7 @@ if (isset($userid)) {
 <head>
 </head>
 <body>
-	<?php if (isset($userid)) : ?>
+	<?php if (isset($userid) and $userid != false) : ?>
 	<a href="dashboard.php">Back to Dashboard</a>
 	<h1>Change Profile as Parent</h1>
 	<form method="post" action="profile_parent.php">
