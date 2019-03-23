@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 19, 2019 at 08:52 PM
+-- Generation Time: Mar 24, 2019 at 12:31 AM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.1
 
@@ -62,6 +62,7 @@ CREATE TABLE `courses` (
 --
 
 INSERT INTO `courses` (`courseID`, `title`, `description`, `mentorReq`, `menteeReq`) VALUES
+(1, 'The History fo Funk', 'Funk Music', 3, 2),
 (2, 'European History', 'European history from the Middle ages through the Reneisance', 3, 2),
 (3, 'Algebra I', 'The foundations of Algebra', 1, 1),
 (4, 'Algebra II', 'Advanced algebra building off of Algebra I', 3, 2);
@@ -98,6 +99,13 @@ CREATE TABLE `menteefor` (
   `courseID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `menteefor`
+--
+
+INSERT INTO `menteefor` (`menteeID`, `sectionID`, `courseID`) VALUES
+(3, 101, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -133,7 +141,7 @@ CREATE TABLE `mentorfor` (
 --
 
 INSERT INTO `mentorfor` (`mentorID`, `sectionID`, `courseID`) VALUES
-(3, 301, 3);
+(3, 401, 4);
 
 -- --------------------------------------------------------
 
@@ -254,9 +262,10 @@ CREATE TABLE `sections` (
 --
 
 INSERT INTO `sections` (`courseID`, `sectionID`, `name`, `capacity`, `startDate`, `endDate`, `timeSlotID`) VALUES
-(2, 201, 'The Dark Ages', 9, NULL, NULL, 45),
-(3, 301, 'Algebra I', 7, NULL, NULL, 46),
-(4, 401, 'Algebra II', 9, NULL, NULL, 47);
+(1, 101, 'FUNk 101', 9999, NULL, NULL, 45),
+(2, 201, 'The Dark Ages', 7, NULL, NULL, 45),
+(3, 301, 'Algebra I', 5, NULL, NULL, 46),
+(4, 401, 'Algebra II', 7, NULL, NULL, 47);
 
 -- --------------------------------------------------------
 

@@ -23,11 +23,13 @@
 
 	$mydb = mysqli_select_db ($myconnection, 'db2') or die ('Could not select database');
 
-	$findcourses = "SELECT cou.title,sec.sectionID,ts.startTime,ts.endTime,ts.m,ts.t,ts.w,ts.th,ts.f,ts.sa,cou.menteeReq,cou.mentorReq,sec.capacity FROM sections sec, courses cou, timeslot ts WHERE sec.courseID = cou.courseID AND ts.timeSlotID = sec.timeSlotID;";
+	$findcourses = "SELECT cou.title,sec.sectionID,ts.startTime,ts.endTime,ts.m,ts.t,ts.w,ts.th,ts.f,ts.sa,cou.menteeReq,cou.mentorReq,sec.capacity,sec.courseID,sec.timeSlotID FROM sections sec, courses cou, timeslot ts WHERE sec.courseID = cou.courseID AND ts.timeSlotID = sec.timeSlotID;";
 	$result = mysqli_query($myconnection, $findcourses) or die ("Failed to query database: " . mysqli_error($myconnection));
 
 	$answer = $result->fetch_all();
-
+	
+	
+	
 	$GetMenteeID = "SELECT menteeID FROM mentees WHERE userID = " . $userid . ";";
 	$menteeID = mysqli_query($myconnection, $GetMenteeID) or die ("Failed to query database: " . mysqli_error($myconnection));
 	$menteeID = $menteeID->fetch_array()[0];
@@ -40,12 +42,23 @@
 		$GetMenteeIn = "SELECT sectionID FROM menteefor WHERE menteeID = " . $menteeID . ";";
 		$MenteeIn = mysqli_query($myconnection, $GetMenteeIn) or die ("Failed to query database: " . mysqli_error($myconnection));
 		$MenteeIn = $MenteeIn->fetch_all();
+		
+		$GetMenteeTS = "SELECT timeSlotID FROM sections WHERE sectionID in (SELECT sectionID FROM menteefor WHERE menteeID = " . $menteeID . ");";
+		$MenteeTS = mysqli_query($myconnection, $GetMenteeTS) or die ("Failed to query database: " . mysqli_error($myconnection));
+		$menteeTS = $MenteeTS->fetch_all();
 	}
 	if($mentorID!=NULL){
 		$GetMentorIn = "SELECT sectionID FROM mentorfor WHERE mentorID = " . $mentorID . ";";
 		$MentorIn = mysqli_query($myconnection, $GetMentorIn) or die ("Failed to query database: " . mysqli_error($myconnection));
 		$MentorIn = $MentorIn->fetch_all();
+		
+		$GetMentorTS = "SELECT timeSlotID FROM sections WHERE sectionID in (SELECT sectionID FROM mentorfor WHERE mentorID = " . $mentorID . ");";
+		$MentorTS = mysqli_query($myconnection, $GetMentorTS) or die ("Failed to query database: " . mysqli_error($myconnection));
+		$mentorTS = $MentorTS->fetch_all();
 	}
+	
+	$usedTS = array_merge($menteeTS,$mentorTS);
+	
 	$GetUserLevel = "SELECT gradeLevel FROM users WHERE userID = " . $userid . ";";
 	$UserLevel = mysqli_query($myconnection, $GetUserLevel) or die ("Failed to query database: " . mysqli_error($myconnection));
 	$UserLevel = $UserLevel->fetch_array()[0];
@@ -123,6 +136,15 @@ if(isset($_POST['register'])){
 	}
 	
 }
+	$MenteeCount= "SELECT  courseID,sectionID, COUNT(menteeId) FROM menteefor GROUP BY sectionId,courseID;";
+	$menteeCount = mysqli_query($myconnection, $MenteeCount) or die ("Failed to query database: " . mysqli_error($myconnection));
+	$menteeCount = $menteeCount->fetch_all();
+	//var_dump($menteeCount);
+	
+	$MentorCount= "SELECT  courseID,sectionID,COUNT(mentorId) FROM mentorfor GROUP BY sectionId,courseID;";
+	$mentorCount = mysqli_query($myconnection, $MentorCount) or die ("Failed to query database: " . mysqli_error($myconnection));
+	$mentorCount = $mentorCount->fetch_all();
+	//var_dump($mentorCount);
 	if($deltaMentee == True){
 		$GetMenteeIn = "SELECT sectionID FROM menteefor WHERE menteeID = " . $menteeID . ";";
 		$MenteeIn = mysqli_query($myconnection, $GetMenteeIn) or die ("Failed to query database: " . mysqli_error($myconnection));
@@ -152,6 +174,8 @@ if(isset($_POST['register'])){
 				<th style="min-width:125px;border:1px solid;border-collapse: collapse;">Course</th>
 				<th style="min-width:100px;border:1px solid;border-collapse: collapse;">Section</th>
 				<th style="min-width:175px;border:1px solid;border-collapse: collapse;">Time</th>
+				<th style="min-width:100px;border:1px solid;border-collapse: collapse;">Mentee Slots</th>
+				<th style="min-width:100px;border:1px solid;border-collapse: collapse;">Mentor Slots</th>
 				<th colspan="2" style="border:1px solid;border-collapse: collapse;">Reg. As</th>
 			</tr>
 			<?php
@@ -180,12 +204,31 @@ if(isset($_POST['register'])){
 				}
 				echo(" - " . $answer[$i][2] . "-" . $answer[$i][3] . "</td>");
 				$temp= array($answer[$i][1]);
-				if($answer[$i][12] > 0 and $menteeID!=NULL and $UserLevel >= $answer[$i][10] and !(in_array($temp,$MenteeIn) or in_array($temp,$MentorIn))){
+				$TS = array($answer[$i][14]);
+				$CurrentMenteeCount = 6;
+				for ($j = 0; $j < count($menteeCount);$j++){
+					if($menteeCount[$j][0] == $answer[$i][13] and $menteeCount[$j][1] == $answer[$i][1]){
+						$CurrentMenteeCount -= $menteeCount[$j][2];
+						break;
+					}
+				}
+				$CurrentMentorCount = 3;
+				for ($j = 0; $j < count($mentorCount);$j++){
+					if($mentorCount[$j][0] == $answer[$i][13] and $mentorCount[$j][1] == $answer[$i][1]){
+						$CurrentMentorCount -= $mentorCount[$j][2];
+						break;
+					}
+				}
+				echo("<td style = \"border:1px solid;border-collapse: collapse;text-align:center\"> " . $CurrentMenteeCount . "</td>
+				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $CurrentMentorCount . "</td>");
+				//var_dump($usedTS);
+				if(!in_array($TS,$usedTS)and $CurrentMenteeCount > 0 and $menteeID!=NULL and $UserLevel >= $answer[$i][10] and !(in_array($temp,$MenteeIn) or in_array($temp,$MentorIn))){
 					echo("<td><button type=\"submit\" name=\"register\" id=\"register\" value=\"0-" . $answer[$i][1] . "\">mentee</button></td>");
 				} else{
 					echo("<td>N/A</td>");
 				}
-				if($answer[$i][12] > 0 and $mentorID!=NULL and $UserLevel >= $answer[$i][11]and !(in_array($temp,$MentorIn) or in_array($temp,$MenteeIn))){
+				
+				if(!in_array($TS,$usedTS) and $CurrentMentorCount > 0 and $mentorID!=NULL and $UserLevel >= $answer[$i][11]and !(in_array($temp,$MentorIn) or in_array($temp,$MenteeIn))){
 					echo("<td><button type=\"submit\" name=\"register\" id=\"register\" value=\"1-" . $answer[$i][1] . "\">mentor</button></td>");
 				} else{
 				echo("<td>N/A</td>");
