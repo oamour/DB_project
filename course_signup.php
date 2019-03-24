@@ -200,6 +200,7 @@ if(isset($_POST['register'])){
 		}
 	}
 
+	mysqli_close($myconnection);
 ?>
 <!DOCTYPE html>
 <html>
