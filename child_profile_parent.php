@@ -5,15 +5,14 @@ session_start();
 
 $userid = check_session();
 
-if (isset($_GET["childID"])) {
-  $childID = $_GET["childID"];
-  echo $childID;
+if (isset($_GET['childID'])) {
+  $childID = $_GET['childID'];
 } else {
   $childID = false;
 }
 
 # Submission handler
-if(isset($_POST['register']) and isset($userid) and $userid != false){
+if(isset($_POST['update']) and isset($userid) and $userid != false){
   $myconnection = mysqli_connect('localhost', 'root', '') 
     or die ('Could not connect: ' . mysql_error());
 	
@@ -31,7 +30,7 @@ if(isset($_POST['register']) and isset($userid) and $userid != false){
   
   $childID = $_POST['childID'];
   
-  $is_parent = check_is_parent($myconnection, $parentID, $childID);
+  $is_parent = check_is_parent($myconnection, $userid, $childID);
 
   $input_valid = 1;
   
@@ -91,13 +90,16 @@ if(isset($_POST['register']) and isset($userid) and $userid != false){
   }
 }
 
+###
+#INITIALIZE FIELDS
+###
 if (isset($userid) and $userid != false and isset($childID) and $childID != false) {
   #start MySQL connection
   $myconnection = mysqli_connect('localhost', 'root', '') or die ('Could not connect: ' . mysql_error());
   $mydb = mysqli_select_db ($myconnection, 'db2') or die ('Could not select database');
   
   $row = get_user_info($myconnection, $childID);
-  
+    
   $is_parent = check_is_parent($myconnection, $userid, $childID);
   
   $name = $row['name'];
@@ -111,9 +113,10 @@ if (isset($userid) and $userid != false and isset($childID) and $childID != fals
 <head>
 </head>
 <body>
-	<?php if (isset($userid) and $userid != false) : ?>
-	<a href="dashboard.php">Back to Dashboard</a>
-	<h1>Change Profile as Student</h1>
+	<?php if (isset($userid) and $userid != false and $is_parent != false) : ?>
+	<a href="dashboard.php">Back to Dashboard</a></br>
+	<a href="children_parent.php">Back to Child List</a>
+	<h1>Change Child's Profile</h1>
 	<form method="post" action="child_profile_parent.php">
 		<?php if(isset($message)){
 			echo $message; 
@@ -149,8 +152,14 @@ if (isset($userid) and $userid != false and isset($childID) and $childID != fals
 				<td><input type="text" name="state" id="state" value="<?php echo $state ?>" required></td>
 			</tr>
 		</table>
-		<input type="submit" name="register" id="register" value="Register">
+		<input type="submit" name="update" id="update" value="Update">
 	</form>
+	<?php endif; ?>
+	<?php if (isset($is_parent) and $is_parent == false) : ?>
+	<div>
+		<span>Error! You are not the parent of this user!</span></br>
+		<span>Please <a href="dashboard.php">CLICK HERE</a> to return to the dashboard</span>
+	</div>
 	<?php endif; ?>
 </body>
 </html>

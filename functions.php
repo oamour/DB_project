@@ -47,7 +47,7 @@ the child's user ID.
 Returns true if the user is the parent of the child, and false otherwise
 */
 function check_is_parent($myconnection, $parentID, $childID) {
-	$query = "SELECT * FROM parentchild WHERE parentID = $parentID, childID = $childID";
+	$query = "SELECT * FROM parentchild WHERE parentID = $parentID and childID = $childID";
 	$result = mysqli_query($myconnection, $query);
 	if($result != false and $result->num_rows > 0) {
 		return true;
