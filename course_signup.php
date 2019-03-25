@@ -208,7 +208,7 @@ if(isset($_POST['register'])){
 			echo($errorMessage . "<br />");
 		}
 	?>
-	<form method="post" action="CourseSignup.php">
+	<form method="post" action="course_signup.php">
 		<table style="border:1px solid;border-collapse: collapse;">
 			<tr style = "border:1px solid;border-collapse: collapse;">
 				<th style="min-width:125px;border:1px solid;border-collapse: collapse;">Course</th>

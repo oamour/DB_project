@@ -24,7 +24,10 @@
 	$mentorID = mysqli_query($myconnection, $GetMentorID) or die ("Failed to query database: " . mysqli_error($myconnection));
 	$mentorID = $mentorID->fetch_array()[0];
 	
-	$today = $today = new DateTime();
+	$today =  new DateTime();
+	$plusWeek = new DateInterval("P7D");
+	$plusWeek = $today->add($plusWeek);
+	$today =  new DateTime();
 	
 	if($menteeID != NULL){
 		$GetActiveMentee= "SELECT sec.name, sec.sectionID, sec.courseID, ses.sessionID,ses.sessionDate, ts.startTime,ts.endTime 
@@ -102,40 +105,44 @@
 					echo("<tr style=\"min-width:100px;border:1px solid;border-collapse: collapse;\"><th style=\"min-width:100px;border:1px solid;border-collapse: collapse;\" colspan = \"6\" >Mentee Courses</th></tr>");
 					for($i=0;$i<count($activeMentee);$i++){
 						$sesDate = new DateTime($activeMentee[$i][4]);
-						echo("<tr style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">
-							<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$activeMentee[$i][0] ."</td>
-							<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">".$activeMentee[$i][1] . "</td>
-							<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">".$activeMentee[$i][3] . "</td>
-							<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$sesDate->format("l m/d") . "</td>
-							<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$activeMentee[$i][5]. "-".$activeMentee[$i][6] . "</td>");
-							$row_check=array($userid,$activeMentee[$i][3],$activeMentee[$i][1],$activeMentee[$i][2],0,1);
-							if(!in_array($row_check,$participating)){
-								echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\"><button type=\"submit\" name=\"register\" id=\"register\" value=\"0-". $activeMentee[$i][2]. "-" . $activeMentee[$i][1] . "-". $activeMentee[$i][3]."\">Participate</button></td>");
-							}
-							else{
-								echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">Confirmed</td>");
-							}
-						echo("</tr>");
+						if($sesDate-> diff($today)->invert AND !$sesDate->diff($plusWeek)->invert){
+							echo("<tr style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">
+								<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$activeMentee[$i][0] ."</td>
+								<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">".$activeMentee[$i][1] . "</td>
+								<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">".$activeMentee[$i][3] . "</td>
+								<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$sesDate->format("l m/d") . "</td>
+								<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$activeMentee[$i][5]. "-".$activeMentee[$i][6] . "</td>");
+								$row_check=array($userid,$activeMentee[$i][3],$activeMentee[$i][1],$activeMentee[$i][2],0,1);
+								if(!in_array($row_check,$participating)){
+									echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\"><button type=\"submit\" name=\"register\" id=\"register\" value=\"0-". $activeMentee[$i][2]. "-" . $activeMentee[$i][1] . "-". $activeMentee[$i][3]."\">Participate</button></td>");
+								}
+								else{
+									echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">Confirmed</td>");
+								}
+							echo("</tr>");
+						}
 					}
 				}
 				if($mentorID != NULL){
 					echo("<tr style=\"min-width:100px;border:1px solid;border-collapse: collapse;\"><th style=\"min-width:100px;border:1px solid;border-collapse: collapse;\"colspan = \"6\" >Mentor Courses</th></tr>");
 					for($i=0;$i<count($activeMentor);$i++){
 						$sesDate = new DateTime($activeMentor[$i][4]);
-						echo("<tr>
-							<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$activeMentor[$i][0] ."</td>
-							<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">".$activeMentor[$i][1] . "</td>
-							<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">".$activeMentor[$i][3] . "</td>
-							<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$sesDate->format("l m/d") . "</td>
-							<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$activeMentor[$i][5]. "-".$activeMentor[$i][6] . "</td>");
-							$row_check=array($userid,$activeMentor[$i][3],$activeMentor[$i][1],$activeMentor[$i][2],1,0);
-							if(!in_array($row_check,$participating)){
-								echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\"><button type=\"submit\" name=\"register\" id=\"register\" value=\"1-". $activeMentor[$i][2]. "-" . $activeMentor[$i][1] . "-". $activeMentor[$i][3]."\">Participate</button></td>");
-							}
-							else{
-								echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">Confirmed</td>");
-							}
-						echo("</tr>");
+						if($sesDate-> diff($today)->invert AND !$sesDate->diff($plusWeek)->invert){
+							echo("<tr>
+								<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$activeMentor[$i][0] ."</td>
+								<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">".$activeMentor[$i][1] . "</td>
+								<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">".$activeMentor[$i][3] . "</td>
+								<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$sesDate->format("l m/d") . "</td>
+								<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$activeMentor[$i][5]. "-".$activeMentor[$i][6] . "</td>");
+								$row_check=array($userid,$activeMentor[$i][3],$activeMentor[$i][1],$activeMentor[$i][2],1,0);
+								if(!in_array($row_check,$participating)){
+									echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\"><button type=\"submit\" name=\"register\" id=\"register\" value=\"1-". $activeMentor[$i][2]. "-" . $activeMentor[$i][1] . "-". $activeMentor[$i][3]."\">Participate</button></td>");
+								}
+								else{
+									echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">Confirmed</td>");
+								}
+							echo("</tr>");
+						}
 					}
 				}
 			?>
