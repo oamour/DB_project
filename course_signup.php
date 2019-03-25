@@ -32,10 +32,6 @@
 	//var_dump($answer);
 	
 	$today = new DateTime();
-	$date = new DateTime('2019-04-10');
-	$date2 = new DateTime();
-	//echo ($date->diff($date2)->invert);
-
 	
 	$GetMenteeID = "SELECT menteeID FROM mentees WHERE userID = " . $userid . ";";
 	$menteeID = mysqli_query($myconnection, $GetMenteeID) or die ("Failed to query database: " . mysqli_error($myconnection));
@@ -127,19 +123,17 @@ if(isset($_POST['register'])){
 			// $MentorIn = mysqli_query($myconnection, $GetMentorIn) or die ("Failed to query database: " . mysqli_error($myconnection));
 			// $MentorIn = $MenteeIn->fetch_all();
 			// $alredyRegistered=false;
-			$temp= array($Section);
+			$temp= array($Course,$Section);
 			if($section!=NULL){
 				if (in_array($temp,$MentorIn)){
 					$errorMessage = "Already Registered for this Course";
 				}
 				else{
-					if($UserLevel >= $section[2] && $section[3] > 0){
 						$deltaMentor = True;
 						$Enrole = "INSERT INTO mentorfor(mentorID,sectionID,courseID) VALUES (" . $mentorID . "," . $section[0] . "," . $section[1] .");";
 						$enroled = mysqli_query($myconnection, $Enrole) or die ("Failed to query database: " . mysqli_error($myconnection));
 						//$Update = "UPDATE sections SET capacity = capacity-1 WHERE sectionID = ". $section[0].";";
 						//$updated = mysqli_query($myconnection, $Update) or die ("Failed to query database: " . mysqli_error($myconnection));
-					}
 				}
 			}
 		}
@@ -200,7 +194,7 @@ if(isset($_POST['register'])){
 		}
 	}
 
-	mysqli_close($myconnection);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -343,6 +337,7 @@ if(isset($_POST['register'])){
 					echo("</tr>");
 				}
 			}
+				mysqli_close($myconnection);
 			?>
 		</table>
 	</form>
