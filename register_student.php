@@ -185,7 +185,7 @@ if(isset($_POST['register'])){
 			<tr>
 				<td><label for="role">Role:</label></td>
 				<td><select name="role" id="role">
-					<option value="none">None</option>
+					<!--<option value="none">None</option>-->
 					<option value="mentee">Mentee</option>
 					<option value="mentor">Mentor</option>
 					<option value="both">Mentee and Mentor</option>

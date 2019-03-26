@@ -36,6 +36,9 @@ session_start();
 
 $userid = check_session();
 ?>
+
+<!--HTML-->
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -59,6 +62,8 @@ $userid = check_session();
 			generate_child_rows($userid);
 			?>
 		</table>
+	<?php else : ?>
+		<span>"Not logged in! Please <a href='index.php'>CLICK HERE</a> to return to the main page."</span>
 	<?php endif; ?>
 	</body>
 </html>

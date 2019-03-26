@@ -154,12 +154,13 @@ if (isset($userid) and $userid != false and isset($childID) and $childID != fals
 		</table>
 		<input type="submit" name="update" id="update" value="Update">
 	</form>
-	<?php endif; ?>
-	<?php if (isset($is_parent) and $is_parent == false) : ?>
+	<?php elseif (isset($is_parent) and $is_parent == false) : ?>
 	<div>
 		<span>Error! You are not the parent of this user!</span></br>
 		<span>Please <a href="dashboard.php">CLICK HERE</a> to return to the dashboard</span>
 	</div>
+	<?php else : ?>
+		<span>"Not logged in! Please <a href='index.php'>CLICK HERE</a> to return to the main page."</span>
 	<?php endif; ?>
 </body>
 </html>

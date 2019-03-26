@@ -133,7 +133,7 @@ if(isset($_POST['register'])){
 					$errorMessage = "Already Registered for this Course";
 				}
 				else{
-					if($UserLevel >= $section[2] && $section[3] > 0){
+					if($UserLevel >= $section[2] and $section[3] > 0){
 						$deltaMentor = True;
 						$Enrole = "INSERT INTO mentorfor(mentorID,sectionID,courseID) VALUES (" . $mentorID . "," . $section[0] . "," . $section[1] .");";
 						$enroled = mysqli_query($myconnection, $Enrole) or die ("Failed to query database: " . mysqli_error($myconnection));
@@ -214,7 +214,7 @@ if(isset($_POST['register'])){
 			echo($errorMessage . "<br />");
 		}
 	?>
-	<form method="post" action="CourseSignup.php">
+	<form method="post" action="course_signup.php">
 		<table style="border:1px solid;border-collapse: collapse;">
 			<tr style = "border:1px solid;border-collapse: collapse;">
 				<th style="min-width:125px;border:1px solid;border-collapse: collapse;">Course</th>

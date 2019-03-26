@@ -5,7 +5,8 @@ function get_grade_level($grade_level) {
 	if ($grade_level == 1) return "Freshman";
 	if ($grade_level == 2) return "Sophomore";
 	if ($grade_level == 3) return "Junior";
-	if ($grade_level == 4) return "None";
+	if ($grade_level == 4) return "Senior";
+	return "None";
 }
 
 function get_mentor_row($myconnection, $row) {
@@ -44,6 +45,70 @@ function get_moderator_row($myconnection, $row) {
 	}
 }
 
+###
+# NOTIFICATIONS
+###
+function get_mentor_notifications($myconnection, $row) {
+	$userid = $row['userid'];
+	$query = "SELECT * FROM sessions WHERE sectionID IN (SELECT sectionID FROM mentorFor WHERE userID = $userid) AND sessionID NOT IN (SELECT sessionID FROM participatingIn WHERE userID = $userid)";
+	$result = mysqli_query($myconnection, $query) or die ("Failed to query database");
+	if(mysqli_num_rows($result) > 0) {
+		echo "<h1>Mentor Notifications for Next Week</h1>";
+		echo "<table border='1'>";
+		echo "<tr>";
+		echo "<td>Role</td><td>Course Name</td><td>Session Name</td>";
+		echo "<td>Participating Mentee Count</td><td>Participate/Cancel</td>";
+		echo "</tr>";
+		
+		while(($session_info = $result->fetch_array()) != NULL) {
+			# Get section info
+			$query = "SELECT * FROM sections WHERE sectionID = " . $session_info['sectionID'];
+			$section_result = mysqli_query($myconnection, $query) or die ("Failed to query database";
+			$section_info = $section_result->fetch_array();
+			
+			# Get course info
+			$query = "SELECT * FROM courses WHERE courseID = " . $section_info['courseID'];
+			$course_result = mysqli_query($myconnection, $query) or die ("Failed to query database");
+			$course_info = $course_result->fetch_array();
+			
+			echo "<tr>";
+			echo "<td>Mentor</td>";
+			echo "<td>" . $course_info['name'] . "</td>";
+			echo "<td>" . $section_info['name'] . "</td>";
+			echo "<td>" . $session_info['name'] . "</td>";
+			echo "<td>" . $session_info['sessionDate'] . "</td>";
+			
+			#Get participating mentees
+			$query = "SELECT count(userID) FROM participatingIn WHERE sessionID = " . $session_info['sessionID'] . " AND userID IN (SELECT userID FROM menteeFor WHERE sectionID = ". $section_info['sectionID'] . ") GROUP BY sessionID";
+			$mentee_count = mysqli_query($myconnection, $query) or die ("Failed to query database");
+			if(mysqli_num_rows($mentee_count) == 0) {
+				$mentee_count = "N/A";
+			} else {
+				$mentee_count = $mentee_count->fetch_row()[0];
+			}
+			echo "<td>$mentee_count</td>";
+			
+			# Form
+			echo "<td><form method='post' action='dashboard.php'>";
+			echo "<input type='hidden' name='sessionID' value='" . $session_info['sessionID'] . "'>";
+			echo "<input type='hidden' name='sectionID' value='" . $section_info['sectionID'] . "'>";
+			echo "<select name='participating' id='participating'>";
+			echo "<option value='yes'>Participate</option>";
+			echo "<option value='no'>Decline</option>";
+			echo "</select>";
+			echo "<input type='submit' name='submit' id='submit' value='Submit'>"
+			echo "</form></td></tr>";
+		}
+	}
+	
+}
+
+function get_mentee_notifications($myconnection, $row) {
+	$userid = $row['userid'];
+	$query = "SELECT * FROM sessions WHERE sectionID IN (SELECT sectionID FROM menteeFor WHERE userID = $userid) AND sessionID NOT IN (SELECT sessionID FROM participatingIn WHERE userID = $userid)";
+	$result = mysqli_query($myconnection, $query);
+}
+	
 function create_student_dashboard($myconnection, $row) {
 	echo "<a href='dashboard.php'>Student Dashboard</a><br />";
 	echo "<a href='logout.php'>Logout</a><br />";
@@ -68,6 +133,9 @@ function create_student_dashboard($myconnection, $row) {
 	get_mentor_row($myconnection, $row);
 	get_mentee_row($myconnection, $row);
 	echo "</table>";
+	
+	get_mentor_notifications($myconnection, $row);
+	get_mentee_notifications($myconnection, $row);
 }
 
 function create_parent_dashboard($myconnection, $row) {
@@ -122,5 +190,9 @@ if (isset($userid) and $userid != false) {
 <!DOCTYPE html>
 <html>
 <head></head>
-<body></body>
+<body>
+<?php if (!isset($userid) or $userid == false) : ?>
+    <span>"Not logged in! Please <a href='index.php'>CLICK HERE</a> to return to the main page."</span>
+<?php endif; ?>
+</body>
 </html>

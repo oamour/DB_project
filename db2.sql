@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2019 at 12:31 AM
+-- Generation Time: Mar 26, 2019 at 05:01 AM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.1
 
@@ -394,6 +394,8 @@ CREATE TABLE `users` (
   `name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `phone` char(10) DEFAULT NULL,
+  `city` varchar(50) NOT NULL,
+  `state` varchar(20) NOT NULL,
   `gradeLevel` int(11) DEFAULT NULL,
   `isParent` tinyint(1) DEFAULT NULL,
   `isStudent` tinyint(1) DEFAULT NULL
@@ -403,9 +405,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userID`, `name`, `email`, `phone`, `gradeLevel`, `isParent`, `isStudent`) VALUES
-(1, 'Oven Amuur', 'oamour22@gmail.com', '5084731921', NULL, 1, 0),
-(3, 'Owel Manure2', 'owen_amour2@student.uml.edu', '5084986253', 4, 0, 1);
+INSERT INTO `users` (`userID`, `name`, `email`, `phone`, `city`, `state`, `gradeLevel`, `isParent`, `isStudent`) VALUES
+(1, 'Oven Amuur', 'oamour22@gmail.com', '5084731921', '', '', NULL, 1, 0),
+(3, 'Owel Manure2', 'owen_amour2@student.uml.edu', '5084986253', '', '', 4, 0, 1);
 
 --
 -- Indexes for dumped tables

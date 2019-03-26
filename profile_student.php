@@ -6,7 +6,7 @@ session_start();
 $userid = check_session();
 
 # Submission handler
-if(isset($_POST['register']) and isset($userid) and $userid != false){
+if(isset($_POST['update']) and isset($userid) and $userid != false){
   $myconnection = mysqli_connect('localhost', 'root', '') 
     or die ('Could not connect: ' . mysql_error());
 	
@@ -142,8 +142,10 @@ if (isset($userid) and $userid != false) {
 				</select></td>
 			</tr>-->
 		</table>
-		<input type="submit" name="register" id="register" value="Register">
+		<input type="submit" name="update" id="update" value="Update">
 	</form>
+	<?php else : ?>
+		<span>"Not logged in! Please <a href='index.php'>CLICK HERE</a> to return to the main page."</span>
 	<?php endif; ?>
 </body>
 </html>

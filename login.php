@@ -32,6 +32,7 @@ if (isset($_POST)) {
 		header("Location: dashboard.php");
 	} else {
 		echo "Failure! Failed to log in as " . $_POST['username'];
+		echo "Please <a href='index.php'>CLICK HERE</a> to return to main page.";
 	}
 }
 ?>
