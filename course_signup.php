@@ -207,7 +207,7 @@ if(isset($_POST['register'])){
 <head>
 </head>
 <body>
-	<a href="index.html">Back to Start</a>
+	<a href="index.php">Back to Start</a>
 	<h1>Register for a Course</h1>
 	<?php 
 		if($errorMessage != ""){

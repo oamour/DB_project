@@ -88,7 +88,7 @@
 <head>
 </head>
 <body>
-	<a href="index.html">Back to Start</a>
+	<a href="index.php">Back to Start</a>
 	<h1>Attendance Conformation</h1>
 	<form method="post" action="session_conformation.php">
 		<table style="border:1px solid;border-collapse: collapse;">

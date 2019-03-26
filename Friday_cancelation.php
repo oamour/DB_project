@@ -58,7 +58,7 @@
 				fclose($myfile);
 				
 			}
-			if($MenteeCount[0][1] < 2 ){
+			else if($MenteeCount[0][1] < 2 ){
 				$mentorEmail = "SELECT usr.name,usr.email FROM modfor p, moderators m, users usr WHERE p.sectionID = ". $CurrentWeekSessions[$i][1]." AND p.courseID = ". $CurrentWeekSessions[$i][2]." AND p.modID = m.modID AND m.userID = usr.userID;";
 				$MentorEmail = mysqli_query($myconnection, $mentorEmail) or die ("Failed to query database: " . mysqli_error($myconnection));
 				$MentorEmail = $MentorEmail->fetch_all();
@@ -76,10 +76,3 @@
 		mysqli_close($myconnection);
 	}
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-</head>
-<body>
-<?php //var_dump($CurrentWeekSessions);?>
-</body></html>

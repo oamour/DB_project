@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2019 at 05:01 AM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 7.3.1
+-- Generation Time: Mar 26, 2019 at 04:18 PM
+-- Server version: 10.1.38-MariaDB
+-- PHP Version: 7.3.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -75,17 +75,10 @@ INSERT INTO `courses` (`courseID`, `title`, `description`, `mentorReq`, `menteeR
 
 CREATE TABLE `materialfor` (
   `studyMaterialID` int(11) NOT NULL,
+  `courseID` int(11) NOT NULL,
   `sectionID` int(11) NOT NULL,
   `assignedDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `materialfor`
---
-
-INSERT INTO `materialfor` (`studyMaterialID`, `sectionID`, `assignedDate`) VALUES
-(2, 301, NULL),
-(2, 401, NULL);
 
 -- --------------------------------------------------------
 
@@ -96,7 +89,7 @@ INSERT INTO `materialfor` (`studyMaterialID`, `sectionID`, `assignedDate`) VALUE
 CREATE TABLE `menteefor` (
   `menteeID` int(11) NOT NULL,
   `sectionID` int(11) NOT NULL,
-  `courseID` int(11) DEFAULT NULL
+  `courseID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -104,7 +97,8 @@ CREATE TABLE `menteefor` (
 --
 
 INSERT INTO `menteefor` (`menteeID`, `sectionID`, `courseID`) VALUES
-(3, 101, 1);
+(3, 1, 1),
+(3, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -133,7 +127,7 @@ INSERT INTO `mentees` (`menteeID`, `userID`) VALUES
 CREATE TABLE `mentorfor` (
   `mentorID` int(11) NOT NULL,
   `sectionID` int(11) NOT NULL,
-  `courseID` int(11) DEFAULT NULL
+  `courseID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -141,7 +135,7 @@ CREATE TABLE `mentorfor` (
 --
 
 INSERT INTO `mentorfor` (`mentorID`, `sectionID`, `courseID`) VALUES
-(3, 401, 4);
+(3, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -188,8 +182,15 @@ INSERT INTO `moderators` (`modID`, `userID`) VALUES
 CREATE TABLE `modfor` (
   `modID` int(11) NOT NULL,
   `sectionID` int(11) NOT NULL,
-  `courseID` int(11) DEFAULT NULL
+  `courseID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `modfor`
+--
+
+INSERT INTO `modfor` (`modID`, `sectionID`, `courseID`) VALUES
+(1, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -219,8 +220,20 @@ INSERT INTO `parentchild` (`parentID`, `childID`) VALUES
 CREATE TABLE `participatingin` (
   `userID` int(11) NOT NULL,
   `sessionID` int(11) NOT NULL,
-  `sectionID` int(11) NOT NULL
+  `sectionID` int(11) NOT NULL,
+  `courseID` int(11) NOT NULL,
+  `mentor` tinyint(1) DEFAULT NULL,
+  `mentee` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `participatingin`
+--
+
+INSERT INTO `participatingin` (`userID`, `sessionID`, `sectionID`, `courseID`, `mentor`, `mentee`) VALUES
+(3, 1, 2, 2, 0, 1),
+(3, 2, 2, 2, 0, 1),
+(3, 1, 1, 4, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -248,7 +261,7 @@ INSERT INTO `postmaterials` (`modID`, `studyMaterialID`) VALUES
 --
 
 CREATE TABLE `sections` (
-  `courseID` int(11) DEFAULT NULL,
+  `courseID` int(11) NOT NULL,
   `sectionID` int(11) NOT NULL,
   `name` varchar(80) DEFAULT NULL,
   `capacity` int(11) DEFAULT NULL,
@@ -262,10 +275,12 @@ CREATE TABLE `sections` (
 --
 
 INSERT INTO `sections` (`courseID`, `sectionID`, `name`, `capacity`, `startDate`, `endDate`, `timeSlotID`) VALUES
-(1, 101, 'FUNk 101', 9999, NULL, NULL, 45),
-(2, 201, 'The Dark Ages', 7, NULL, NULL, 45),
-(3, 301, 'Algebra I', 5, NULL, NULL, 46),
-(4, 401, 'Algebra II', 7, NULL, NULL, 47);
+(1, 1, 'FUNk 101', 9999, '2019-04-10', '2019-05-14', 1),
+(2, 1, 'The Dark Ages', 7, '2019-03-20', '2019-05-18', 1),
+(3, 1, 'Algebra I', 5, '2018-10-31', '2018-12-31', 4),
+(4, 1, 'Algebra II', 7, '2018-12-31', '2019-12-31', 15),
+(2, 2, 'The Dark Ages', 7, '2019-03-20', '2019-05-18', 1),
+(2, 3, 'The Dark Ages', 8, '2020-03-20', '2020-05-18', 18);
 
 -- --------------------------------------------------------
 
@@ -274,7 +289,8 @@ INSERT INTO `sections` (`courseID`, `sectionID`, `name`, `capacity`, `startDate`
 --
 
 CREATE TABLE `sessions` (
-  `sectionID` int(11) DEFAULT NULL,
+  `courseID` int(11) NOT NULL,
+  `sectionID` int(11) NOT NULL,
   `sessionDate` date DEFAULT NULL,
   `sessionID` int(11) NOT NULL,
   `announcement` varchar(500) DEFAULT NULL
@@ -284,10 +300,12 @@ CREATE TABLE `sessions` (
 -- Dumping data for table `sessions`
 --
 
-INSERT INTO `sessions` (`sectionID`, `sessionDate`, `sessionID`, `announcement`) VALUES
-(201, NULL, 2, 'Hello Class'),
-(301, NULL, 3, 'No Announcements'),
-(401, NULL, 4, 'WE A\'INT FOUND SHIT!');
+INSERT INTO `sessions` (`courseID`, `sectionID`, `sessionDate`, `sessionID`, `announcement`) VALUES
+(2, 1, NULL, 1, 'Hello Class'),
+(2, 2, '2019-03-27', 1, 'Hello Class'),
+(2, 2, '2019-03-29', 2, 'Hello Class'),
+(3, 1, NULL, 1, 'No Announcements'),
+(4, 1, '2019-03-26', 1, 'No Announcements');
 
 -- --------------------------------------------------------
 
@@ -335,53 +353,26 @@ CREATE TABLE `timeslot` (
 --
 
 INSERT INTO `timeslot` (`M`, `T`, `W`, `Th`, `F`, `Sa`, `timeSlotID`, `startTime`, `endTime`) VALUES
-(1, 0, 0, 0, 0, 0, 1, '08:00:00', '08:50:00'),
-(0, 0, 1, 0, 0, 0, 2, '08:00:00', '08:50:00'),
-(0, 0, 0, 0, 1, 0, 3, '08:00:00', '08:50:00'),
-(1, 0, 0, 0, 0, 0, 4, '09:00:00', '09:50:00'),
-(0, 0, 1, 0, 0, 0, 5, '09:00:00', '09:50:00'),
-(0, 0, 0, 0, 1, 0, 6, '09:00:00', '09:50:00'),
-(1, 0, 0, 0, 0, 0, 7, '10:00:00', '10:50:00'),
-(0, 0, 1, 0, 0, 0, 8, '10:00:00', '10:50:00'),
-(0, 0, 0, 0, 1, 0, 9, '10:00:00', '10:50:00'),
-(1, 0, 0, 0, 0, 0, 10, '11:00:00', '11:50:00'),
-(0, 0, 1, 0, 0, 0, 11, '11:00:00', '11:50:00'),
-(0, 0, 0, 0, 1, 0, 12, '11:00:00', '11:50:00'),
-(1, 0, 0, 0, 0, 0, 13, '12:00:00', '12:50:00'),
-(0, 0, 1, 0, 0, 0, 14, '12:00:00', '12:50:00'),
-(0, 0, 0, 0, 1, 0, 15, '12:00:00', '12:50:00'),
-(1, 0, 0, 0, 0, 0, 16, '13:00:00', '13:50:00'),
-(0, 0, 1, 0, 0, 0, 17, '13:00:00', '13:50:00'),
-(0, 0, 0, 0, 1, 0, 18, '13:00:00', '13:50:00'),
-(1, 0, 0, 0, 0, 0, 19, '14:00:00', '14:50:00'),
-(0, 0, 1, 0, 0, 0, 20, '14:00:00', '14:50:00'),
-(0, 0, 0, 0, 1, 0, 21, '14:00:00', '14:50:00'),
-(1, 0, 0, 0, 0, 0, 22, '15:00:00', '15:50:00'),
-(0, 0, 1, 0, 0, 0, 23, '15:00:00', '15:50:00'),
-(0, 0, 0, 0, 1, 0, 24, '15:00:00', '15:50:00'),
-(1, 0, 0, 0, 0, 0, 25, '16:00:00', '16:50:00'),
-(0, 0, 1, 0, 0, 0, 26, '16:00:00', '16:50:00'),
-(0, 0, 0, 0, 1, 0, 27, '16:00:00', '16:50:00'),
-(1, 0, 0, 0, 0, 0, 28, '17:00:00', '17:50:00'),
-(0, 0, 1, 0, 0, 0, 29, '17:00:00', '17:50:00'),
-(0, 0, 0, 0, 1, 0, 30, '17:00:00', '17:50:00'),
-(0, 1, 0, 0, 0, 0, 31, '08:00:00', '09:20:00'),
-(0, 0, 0, 1, 0, 0, 32, '08:00:00', '09:20:00'),
-(0, 1, 0, 0, 0, 0, 33, '09:30:00', '10:50:00'),
-(0, 0, 0, 1, 0, 0, 34, '09:30:00', '10:50:00'),
-(0, 1, 0, 0, 0, 0, 35, '11:00:00', '12:20:00'),
-(0, 0, 0, 1, 0, 0, 36, '11:00:00', '12:20:00'),
-(0, 1, 0, 0, 0, 0, 37, '12:30:00', '13:50:00'),
-(0, 0, 0, 1, 0, 0, 38, '12:30:00', '13:50:00'),
-(0, 1, 0, 0, 0, 0, 39, '14:00:00', '15:20:00'),
-(0, 0, 0, 1, 0, 0, 40, '14:00:00', '15:20:00'),
-(0, 1, 0, 0, 0, 0, 41, '15:30:00', '16:50:00'),
-(0, 0, 0, 1, 0, 0, 42, '15:30:00', '16:50:00'),
-(0, 1, 0, 0, 0, 0, 43, '17:00:00', '18:20:00'),
-(0, 0, 0, 1, 0, 0, 44, '17:00:00', '18:20:00'),
-(1, 0, 1, 0, 1, 0, 45, '08:00:00', '08:50:00'),
-(0, 1, 0, 1, 0, 0, 46, '08:00:00', '09:20:00'),
-(0, 1, 0, 1, 0, 0, 47, '09:30:00', '10:50:00');
+(1, 0, 1, 0, 1, 0, 1, '08:00:00', '08:50:00'),
+(1, 0, 1, 0, 1, 0, 2, '09:00:00', '09:50:00'),
+(1, 0, 1, 0, 1, 0, 3, '10:00:00', '10:50:00'),
+(1, 0, 1, 0, 1, 0, 4, '11:00:00', '11:50:00'),
+(1, 0, 1, 0, 1, 0, 5, '12:00:00', '12:50:00'),
+(1, 0, 1, 0, 1, 0, 6, '13:00:00', '13:50:00'),
+(1, 0, 1, 0, 1, 0, 7, '14:00:00', '14:50:00'),
+(1, 0, 1, 0, 1, 0, 8, '15:00:00', '15:50:00'),
+(1, 0, 1, 0, 1, 0, 9, '16:00:00', '16:50:00'),
+(1, 0, 1, 0, 1, 0, 10, '17:00:00', '17:50:00'),
+(0, 1, 0, 1, 0, 0, 11, '08:00:00', '09:15:00'),
+(0, 1, 0, 1, 0, 0, 12, '09:30:00', '10:45:00'),
+(0, 1, 0, 1, 0, 0, 13, '11:00:00', '12:15:00'),
+(0, 1, 0, 1, 0, 0, 14, '12:30:00', '13:45:00'),
+(0, 1, 0, 1, 0, 0, 15, '14:00:00', '15:15:00'),
+(0, 1, 0, 1, 0, 0, 16, '15:30:00', '16:45:00'),
+(0, 1, 0, 1, 0, 0, 17, '17:00:00', '18:15:00'),
+(0, 0, 0, 0, 0, 1, 18, '08:00:00', '10:50:00'),
+(0, 0, 0, 0, 0, 1, 19, '11:00:00', '13:50:00'),
+(0, 0, 0, 0, 0, 1, 20, '14:00:00', '16:50:00');
 
 -- --------------------------------------------------------
 
@@ -394,8 +385,8 @@ CREATE TABLE `users` (
   `name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `phone` char(10) DEFAULT NULL,
-  `city` varchar(50) NOT NULL,
-  `state` varchar(20) NOT NULL,
+  `city` varchar(50) DEFAULT NULL,
+  `state` varchar(20) DEFAULT NULL,
   `gradeLevel` int(11) DEFAULT NULL,
   `isParent` tinyint(1) DEFAULT NULL,
   `isStudent` tinyint(1) DEFAULT NULL
@@ -406,8 +397,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userID`, `name`, `email`, `phone`, `city`, `state`, `gradeLevel`, `isParent`, `isStudent`) VALUES
-(1, 'Oven Amuur', 'oamour22@gmail.com', '5084731921', '', '', NULL, 1, 0),
-(3, 'Owel Manure2', 'owen_amour2@student.uml.edu', '5084986253', '', '', 4, 0, 1);
+(1, 'Oven Amuur', 'oamour22@gmail.com', '5084731921', NULL, NULL, NULL, 1, 0),
+(3, 'Owel Florin', 'owen_amour2@student.uml.edu', '5084986253', NULL, NULL, 4, 0, 1);
 
 --
 -- Indexes for dumped tables
@@ -430,14 +421,14 @@ ALTER TABLE `courses`
 -- Indexes for table `materialfor`
 --
 ALTER TABLE `materialfor`
-  ADD PRIMARY KEY (`studyMaterialID`,`sectionID`),
+  ADD PRIMARY KEY (`studyMaterialID`,`courseID`,`sectionID`),
   ADD KEY `sectionID` (`sectionID`);
 
 --
 -- Indexes for table `menteefor`
 --
 ALTER TABLE `menteefor`
-  ADD PRIMARY KEY (`menteeID`,`sectionID`),
+  ADD PRIMARY KEY (`menteeID`,`sectionID`,`courseID`),
   ADD KEY `sectionID` (`sectionID`);
 
 --
@@ -451,8 +442,9 @@ ALTER TABLE `mentees`
 -- Indexes for table `mentorfor`
 --
 ALTER TABLE `mentorfor`
-  ADD PRIMARY KEY (`mentorID`,`sectionID`),
-  ADD KEY `sectionID` (`sectionID`);
+  ADD PRIMARY KEY (`mentorID`,`sectionID`,`courseID`),
+  ADD KEY `sectionID` (`sectionID`),
+  ADD KEY `mentorfor_ibfk_2` (`courseID`,`sectionID`);
 
 --
 -- Indexes for table `mentors`
@@ -473,7 +465,8 @@ ALTER TABLE `moderators`
 --
 ALTER TABLE `modfor`
   ADD PRIMARY KEY (`modID`,`sectionID`),
-  ADD KEY `sectionID` (`sectionID`);
+  ADD KEY `sectionID` (`sectionID`),
+  ADD KEY `modfor_ibfk_2` (`courseID`,`sectionID`);
 
 --
 -- Indexes for table `parentchild`
@@ -485,9 +478,9 @@ ALTER TABLE `parentchild`
 -- Indexes for table `participatingin`
 --
 ALTER TABLE `participatingin`
-  ADD PRIMARY KEY (`userID`,`sectionID`,`sessionID`),
-  ADD KEY `sectionID` (`sectionID`),
-  ADD KEY `sessionID` (`sessionID`);
+  ADD PRIMARY KEY (`userID`,`courseID`,`sectionID`,`sessionID`),
+  ADD KEY `sessionID` (`sessionID`),
+  ADD KEY `participatingin_ibfk_3` (`courseID`,`sectionID`,`sessionID`);
 
 --
 -- Indexes for table `postmaterials`
@@ -500,15 +493,15 @@ ALTER TABLE `postmaterials`
 -- Indexes for table `sections`
 --
 ALTER TABLE `sections`
-  ADD PRIMARY KEY (`sectionID`),
+  ADD PRIMARY KEY (`sectionID`,`courseID`),
   ADD KEY `courseID` (`courseID`);
 
 --
 -- Indexes for table `sessions`
 --
 ALTER TABLE `sessions`
-  ADD PRIMARY KEY (`sessionID`),
-  ADD KEY `sectionID` (`sectionID`);
+  ADD PRIMARY KEY (`courseID`,`sectionID`,`sessionID`),
+  ADD KEY `sectionID` (`courseID`,`sectionID`);
 
 --
 -- Indexes for table `studymaterials`
@@ -573,7 +566,7 @@ ALTER TABLE `mentees`
 --
 ALTER TABLE `mentorfor`
   ADD CONSTRAINT `mentorfor_ibfk_1` FOREIGN KEY (`mentorID`) REFERENCES `mentors` (`mentorID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `mentorfor_ibfk_2` FOREIGN KEY (`sectionID`) REFERENCES `sections` (`sectionID`) ON DELETE CASCADE;
+  ADD CONSTRAINT `mentorfor_ibfk_2` FOREIGN KEY (`courseID`,`sectionID`) REFERENCES `sections` (`courseID`, `sectionID`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `mentors`
@@ -592,15 +585,14 @@ ALTER TABLE `moderators`
 --
 ALTER TABLE `modfor`
   ADD CONSTRAINT `modfor_ibfk_1` FOREIGN KEY (`modID`) REFERENCES `moderators` (`modID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `modfor_ibfk_2` FOREIGN KEY (`sectionID`) REFERENCES `sections` (`sectionID`) ON DELETE CASCADE;
+  ADD CONSTRAINT `modfor_ibfk_2` FOREIGN KEY (`courseID`,`sectionID`) REFERENCES `sections` (`courseID`, `sectionID`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `participatingin`
 --
 ALTER TABLE `participatingin`
   ADD CONSTRAINT `participatingin_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `participatingin_ibfk_2` FOREIGN KEY (`sectionID`) REFERENCES `sections` (`sectionID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `participatingin_ibfk_3` FOREIGN KEY (`sessionID`) REFERENCES `sessions` (`sessionID`) ON DELETE CASCADE;
+  ADD CONSTRAINT `participatingin_ibfk_3` FOREIGN KEY (`courseID`,`sectionID`,`sessionID`) REFERENCES `sessions` (`courseID`, `sectionID`, `sessionID`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `postmaterials`
@@ -619,7 +611,7 @@ ALTER TABLE `sections`
 -- Constraints for table `sessions`
 --
 ALTER TABLE `sessions`
-  ADD CONSTRAINT `sessions_ibfk_1` FOREIGN KEY (`sectionID`) REFERENCES `sections` (`sectionID`) ON DELETE CASCADE;
+  ADD CONSTRAINT `sessions_ibfk_1` FOREIGN KEY (`courseID`,`sectionID`) REFERENCES `sections` (`courseID`, `sectionID`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
