@@ -3,9 +3,10 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2019 at 04:18 PM
--- Server version: 10.1.38-MariaDB
--- PHP Version: 7.3.2
+
+-- Generation Time: Mar 26, 2019 at 04:27 PM
+-- Server version: 10.1.37-MariaDB
+-- PHP Version: 7.3.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -41,7 +42,13 @@ CREATE TABLE `accounts` (
 
 INSERT INTO `accounts` (`userID`, `username`, `hash`, `salt`) VALUES
 (1, 'oamour22@gmail.com', '$2y$10$qStzXyp0CRJH15seykyUaeLc1VLLiAiRBE/Bghpp5te8LfljgiMxm', NULL),
-(3, 'owen_amour2@student.uml.edu', '$2y$10$7l0Mq/cGxJgN1tr18kwCn.KWfe4qBVGnY1ZaREPyXrmaRu1dPn0Vy', NULL);
+(3, 'owen_amour2@student.uml.edu', '$2y$10$7l0Mq/cGxJgN1tr18kwCn.KWfe4qBVGnY1ZaREPyXrmaRu1dPn0Vy', NULL),
+(5, 'test_p1@gmail.com', '$2y$10$lTM5FKwugwWrs6MPsJqC2ums5qgkdPBZiwVLwZRNg/81ulfvz2oeO', NULL),
+(6, 'test_p2@gmail.com', '$2y$10$kCL72Uoh5LRv0vyxssHWeec4zosxzOMqhl58iFuIiYZy721Izixgy', NULL),
+(7, 'test_p3@gmail.com', '$2y$10$Nn59svNTX/s5D3TuOfs6Luy1BeYXDty2PdVJiZji0/TMK1oMkzhS.', NULL),
+(8, 'test_s1@gmail.com', '$2y$10$aKXWiUjH0jymYcdg6puZA.RN7XkpBlKezPPl9M9FtsxICqEVD4Nuu', NULL),
+(9, 'test_s2@gmail.com', '$2y$10$DETk2Nna.6a6VxnyJrtWkuBUVZ1q.zS5fg3ysqwNxhz/2FPSEQWUW', NULL),
+(10, 'test_s3@gmail.com', '$2y$10$.6GA/.jMvFj1rx6aO.eFdOK3BfAA1Pc61RKVztO4a3V2e9qhwXYXW', NULL);
 
 -- --------------------------------------------------------
 
@@ -116,7 +123,9 @@ CREATE TABLE `mentees` (
 --
 
 INSERT INTO `mentees` (`menteeID`, `userID`) VALUES
-(3, 3);
+(3, 3),
+(8, 8),
+(9, 9);
 
 -- --------------------------------------------------------
 
@@ -153,7 +162,9 @@ CREATE TABLE `mentors` (
 --
 
 INSERT INTO `mentors` (`mentorID`, `userID`) VALUES
-(3, 3);
+(3, 3),
+(8, 8),
+(10, 10);
 
 -- --------------------------------------------------------
 
@@ -171,7 +182,8 @@ CREATE TABLE `moderators` (
 --
 
 INSERT INTO `moderators` (`modID`, `userID`) VALUES
-(1, 1);
+(1, 1),
+(5, 5);
 
 -- --------------------------------------------------------
 
@@ -209,7 +221,10 @@ CREATE TABLE `parentchild` (
 
 INSERT INTO `parentchild` (`parentID`, `childID`) VALUES
 (1, 2),
-(1, 3);
+(1, 3),
+(5, 8),
+(5, 9),
+(5, 10);
 
 -- --------------------------------------------------------
 
@@ -399,6 +414,12 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`userID`, `name`, `email`, `phone`, `city`, `state`, `gradeLevel`, `isParent`, `isStudent`) VALUES
 (1, 'Oven Amuur', 'oamour22@gmail.com', '5084731921', NULL, NULL, NULL, 1, 0),
 (3, 'Owel Florin', 'owen_amour2@student.uml.edu', '5084986253', NULL, NULL, 4, 0, 1);
+(5, 'Nick', 'test_p1@gmail.com', '1234567890', 'Nahant', 'MA', NULL, 1, 0),
+(6, 'David', 'test_p2@gmail.com', '1234567890', 'Salem', 'NH', NULL, 1, 0),
+(7, 'Jaime', 'test_p3@gmail.com', '1234567890', 'Salem', 'MA', NULL, 1, 0),
+(8, 'Nora', 'test_s1@gmail.com', '1002003004', 'Nahant', 'MA', 4, 0, 1),
+(9, 'Sarah', 'test_s2@gmail.com', '1002003004', 'Nahant', 'MA', 2, 0, 1),
+(10, 'Ralph', 'test_s3@gmail.com', '1002003004', 'Nahant', 'MA', 3, 0, 1);
 
 --
 -- Indexes for dumped tables
@@ -529,7 +550,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
