@@ -49,8 +49,8 @@ function get_moderator_row($myconnection, $row) {
 # NOTIFICATIONS
 ###
 function get_mentor_notifications($myconnection, $row) {
-	$userid = $row['userid'];
-	$query = "SELECT * FROM sessions WHERE sectionID IN (SELECT sectionID FROM mentorFor WHERE userID = $userid) AND sessionID NOT IN (SELECT sessionID FROM participatingIn WHERE userID = $userid)";
+	$userid = $row['userID'];
+	$query = "SELECT * FROM sessions WHERE sectionID IN (SELECT sectionID FROM mentorFor WHERE mentorID = $userid) AND sessionID NOT IN (SELECT sessionID FROM participatingIn WHERE userID = $userid)";
 	$result = mysqli_query($myconnection, $query) or die ("Failed to query database");
 	if(mysqli_num_rows($result) > 0) {
 		echo "<h1>Mentor Notifications for Next Week</h1>";
@@ -63,7 +63,7 @@ function get_mentor_notifications($myconnection, $row) {
 		while(($session_info = $result->fetch_array()) != NULL) {
 			# Get section info
 			$query = "SELECT * FROM sections WHERE sectionID = " . $session_info['sectionID'];
-			$section_result = mysqli_query($myconnection, $query) or die ("Failed to query database";
+			$section_result = mysqli_query($myconnection, $query) or die ("Failed to query database");
 			$section_info = $section_result->fetch_array();
 			
 			# Get course info
@@ -96,7 +96,7 @@ function get_mentor_notifications($myconnection, $row) {
 			echo "<option value='yes'>Participate</option>";
 			echo "<option value='no'>Decline</option>";
 			echo "</select>";
-			echo "<input type='submit' name='submit' id='submit' value='Submit'>"
+			echo "<input type='submit' name='submit' id='submit' value='Submit'>";
 			echo "</form></td></tr>";
 		}
 	}
@@ -104,7 +104,7 @@ function get_mentor_notifications($myconnection, $row) {
 }
 
 function get_mentee_notifications($myconnection, $row) {
-	$userid = $row['userid'];
+	$userid = $row['userID'];
 	$query = "SELECT * FROM sessions WHERE sectionID IN (SELECT sectionID FROM menteeFor WHERE userID = $userid) AND sessionID NOT IN (SELECT sessionID FROM participatingIn WHERE userID = $userid)";
 	$result = mysqli_query($myconnection, $query);
 }
