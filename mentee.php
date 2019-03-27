@@ -1,8 +1,8 @@
 <?php
 include 'functions.php';
 
-function get_mentees($myconnection, $sectionID) {
-	$query = "SELECT menteeID FROM menteeFor WHERE sectionID = $sectionID";
+function get_mentees($myconnection, $sectionID, $courseID) {
+	$query = "SELECT menteeID FROM menteeFor WHERE courseID = $courseID AND sectionID = $sectionID";
 	$result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error());
 	
 	if($result->num_rows > 0) {
@@ -19,19 +19,21 @@ function get_mentees($myconnection, $sectionID) {
 	}
 }
 
-function get_mentors($myconnection, $sectionID) {
-	$query = "SELECT mentorID FROM mentorFor WHERE sectionID = $sectionID";
+function get_mentors($myconnection, $sectionID, $courseID) {
+	$query = "SELECT mentorID FROM mentorFor WHERE courseID = $courseID AND sectionID = $sectionID";
 	$result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error());
 	
 	if($result->num_rows > 0) {
 		echo "<tr><td colspan=3 align='center'>MENTORS</td></tr>";
-		$user_info = get_user_info($myconnection, $result['mentorID']);
-		$grade_level = get_grade_level($user_info['grade_level']);
-		echo "<tr>"; # Start printing info
-		echo "<td>" . $user_info['name'] . "</td>";
-		echo "<td>" . $grade_level . "</td>";
-		echo "<td>Mentor</td>";
-		echo "</tr>";
+		while(($row = $result->fetch_array()) != NULL) {
+			$user_info = get_user_info($myconnection, $row['mentorID']);
+			$grade_level = get_grade_level($user_info['gradeLevel']);
+			echo "<tr>"; # Start printing info
+			echo "<td>" . $user_info['name'] . "</td>";
+			echo "<td>" . $grade_level . "</td>";
+			echo "<td>Mentor</td>";
+			echo "</tr>";
+		}
 	}
 }
 
@@ -47,7 +49,7 @@ function get_class_sections($userid) {
   if ($result->num_rows > 0) {
 	  # At least one section
 	  while (($row = $result->fetch_array()) != NULL) {
-		  $section_info = get_section_info($myconnection, $row["sectionID"]);
+		  $section_info = get_section_info($myconnection, $row["sectionID"], $row['courseID']);
 		  $course_info = get_course_info($myconnection, $row["courseID"]);
 		  
 		  echo "<table border=1>";
@@ -57,8 +59,8 @@ function get_class_sections($userid) {
 		  echo "<td>Student Grade</td>";
 		  echo "<td>Student Role</td>";
 		  echo "</tr>";
-		  get_mentees($myconnection, $row["sectionID"]);
-		  get_mentors($myconnection, $row["sectionID"]);
+		  get_mentees($myconnection, $row["sectionID"], $row["courseID"]);
+		  get_mentors($myconnection, $row["sectionID"], $row["courseID"]);
 		  echo "</table>";
 	  }
   } else { # no sections as mentee

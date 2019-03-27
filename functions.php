@@ -33,8 +33,8 @@ get_section_info()
 Takes an open MySQL database connection and a valid sectionID, returns
 the corresponding row in the sections table
 */
-function get_section_info($myconnection, $sectionID) {
-	$query = "SELECT * FROM sections WHERE sectionID = $sectionID";
+function get_section_info($myconnection, $sectionID, $courseID) {
+	$query = "SELECT * FROM sections WHERE courseID = $courseID AND sectionID = $sectionID";
 	$result = mysqli_query($myconnection, $query);
 	if(mysqli_num_rows($result) == 0) die("FATAL ERROR: Missing userdata for account '$userid'");
 	

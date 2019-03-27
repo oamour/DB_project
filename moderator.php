@@ -33,16 +33,37 @@ function generate_session_list($userid) {
 			echo "<tr>"; # Section Info
 			echo "<td>" . $course_info['title'] . "</td>";
 			echo "<td>" . $section_info['sectionID'] . "</td>";
-			echo "<td>" . $session_info['startDate'] . "</td>";
-			echo "<td>" . $session_info['endDate'] . "</td>";
+			echo "<td>" . $section_info['startDate'] . "</td>";
+			echo "<td>" . $section_info['endDate'] . "</td>";
 			echo "<td>Time Slot Placeholder</td>";
-			echo "<td>" . $session_info['capacity'] . "</td>";
-			echo "<td>" . get_grade_level($session_info['mentorReq']) . "</td>";
-			echo "<td>" . get_grade_level($session_info['menteeReq']) . "</td>";
-			echo "<td>Enrolled Mentor Placeholder</td>";
-			echo "<td>Enrolled Mentee Placeholder</td>";
+			echo "<td>" . $section_info['capacity'] . "</td>";
+			echo "<td>" . get_grade_level($course_info['mentorReq']) . "</td>";
+			echo "<td>" . get_grade_level($course_info['menteeReq']) . "</td>";
+			echo "<td>"; # START MENTOR COUNT
+			$query = "SELECT count(mentorID) AS total FROM mentorFor WHERE sectionID = " . $section_info['sectionID'] . " GROUP BY sectionID";
+			$mentor_count = mysqli_query($myconnection, $query);
+			if($result->num_rows > 0) {
+				$mentor_count = $mentor_count->fetch_row()[0];
+				echo $mentor_count . "/3";
+			} else {
+				echo "0/3";
+			}
+			echo "</td>"; # END MENTOR COUNT
+			echo "<td>"; # START MENTEE COUNT
+			$query = "SELECT count(menteeID) AS total FROM menteeFor WHERE sectionID = " . $section_info['sectionID'] . " GROUP BY sectionID";
+			$mentee_count = mysqli_query($myconnection, $query);
+			if($result->num_rows > 0) {
+				$mentee_count = $mentee_count->fetch_row()[0];
+				echo $mentee_count . "/3";
+			} else {
+				echo "0/3";
+			}
+			echo "</td>"; # END MENTOR COUNT
 			echo "<td>Add Mentor if Low</td>";
 			echo "</tr>";
+			
+			#session loop
+			echo "<tr>"
 		}
 	} else { # no sections as moderator
 		echo "Sorry, you are not a moderator for any sections";
