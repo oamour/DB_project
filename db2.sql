@@ -3,10 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
-
--- Generation Time: Mar 26, 2019 at 04:27 PM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 7.3.1
+-- Generation Time: Mar 26, 2019 at 10:54 PM
+-- Server version: 10.1.38-MariaDB
+-- PHP Version: 7.3.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -69,7 +68,7 @@ CREATE TABLE `courses` (
 --
 
 INSERT INTO `courses` (`courseID`, `title`, `description`, `mentorReq`, `menteeReq`) VALUES
-(1, 'The History fo Funk', 'Funk Music', 3, 2),
+(1, 'The History of Funk', 'Funk Music', 3, 2),
 (2, 'European History', 'European history from the Middle ages through the Reneisance', 3, 2),
 (3, 'Algebra I', 'The foundations of Algebra', 1, 1),
 (4, 'Algebra II', 'Advanced algebra building off of Algebra I', 3, 2);
@@ -174,16 +173,17 @@ INSERT INTO `mentors` (`mentorID`, `userID`) VALUES
 
 CREATE TABLE `moderators` (
   `modID` int(11) NOT NULL,
-  `userID` int(11) NOT NULL
+  `userID` int(11) NOT NULL,
+  `superMod` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `moderators`
 --
 
-INSERT INTO `moderators` (`modID`, `userID`) VALUES
-(1, 1),
-(5, 5);
+INSERT INTO `moderators` (`modID`, `userID`, `superMod`) VALUES
+(1, 1, 0),
+(5, 5, 0);
 
 -- --------------------------------------------------------
 
@@ -202,7 +202,7 @@ CREATE TABLE `modfor` (
 --
 
 INSERT INTO `modfor` (`modID`, `sectionID`, `courseID`) VALUES
-(1, 1, 4);
+(1, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -343,7 +343,7 @@ CREATE TABLE `studymaterials` (
 
 INSERT INTO `studymaterials` (`studyMaterialID`, `title`, `author`, `materialType`, `url`, `notes`) VALUES
 (1, 'Collonial America', 'James Dawson', 'Book', 'None', 'The textbook'),
-(2, 'University Algebra', 'Mel Brooks', 'book', 'Now', 'When is then? Now. Well when will now be then? Soon.');
+(2, 'University Algebra', 'Mel Brooks', 'book', 'None', 'this is the testbook for Algebra I and II');
 
 -- --------------------------------------------------------
 
@@ -412,8 +412,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userID`, `name`, `email`, `phone`, `city`, `state`, `gradeLevel`, `isParent`, `isStudent`) VALUES
-(1, 'Oven Amuur', 'oamour22@gmail.com', '5084731921', NULL, NULL, NULL, 1, 0),
-(3, 'Owel Florin', 'owen_amour2@student.uml.edu', '5084986253', NULL, NULL, 4, 0, 1);
+(1, 'Oven Amuur', 'oamour22@gmail.com', '5084731921', 'Milford', 'MA', NULL, 1, 0),
+(3, 'Owel Florin', 'owen_amour2@student.uml.edu', '5084986253', 'Milford', 'MA', 4, 0, 1),
 (5, 'Nick', 'test_p1@gmail.com', '1234567890', 'Nahant', 'MA', NULL, 1, 0),
 (6, 'David', 'test_p2@gmail.com', '1234567890', 'Salem', 'NH', NULL, 1, 0),
 (7, 'Jaime', 'test_p3@gmail.com', '1234567890', 'Salem', 'MA', NULL, 1, 0),
@@ -485,9 +485,9 @@ ALTER TABLE `moderators`
 -- Indexes for table `modfor`
 --
 ALTER TABLE `modfor`
-  ADD PRIMARY KEY (`modID`,`sectionID`),
-  ADD KEY `sectionID` (`sectionID`),
-  ADD KEY `modfor_ibfk_2` (`courseID`,`sectionID`);
+  ADD PRIMARY KEY (`modID`,`sectionID`,`courseID`),
+  ADD KEY `modID` (`modID`),
+  ADD KEY `courseID` (`courseID`,`sectionID`);
 
 --
 -- Indexes for table `parentchild`

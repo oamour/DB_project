@@ -25,9 +25,12 @@
 	$mentorID = $mentorID->fetch_array()[0];
 	
 	$today =  new DateTime();
-	$plusWeek = new DateInterval("P7D");
-	$plusWeek = $today->add($plusWeek);
-	$today =  new DateTime();
+		while($today->format('N')<7){
+			$today ->add(new DateInterval("P1D"));
+		}
+		$plusWeek1 = new DateInterval("P7D");
+		$plusWeek =  new DateTime($today->add($plusWeek1)->format('Y-m-d'));
+		$today = $today->sub($plusWeek1);
 	
 	if($menteeID != NULL){
 		$GetActiveMentee= "SELECT sec.name, sec.sectionID, sec.courseID, ses.sessionID,ses.sessionDate, ts.startTime,ts.endTime 

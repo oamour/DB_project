@@ -32,9 +32,6 @@
 	//var_dump($answer);
 	
 	$today = new DateTime();
-	$date = new DateTime('2019-04-10');
-	$date2 = new DateTime();
-	//echo ($date->diff($date2)->invert);
 
 	
 	$GetMenteeID = "SELECT menteeID FROM mentees WHERE userID = " . $userid . ";";
@@ -200,14 +197,14 @@ if(isset($_POST['register'])){
 		}
 	}
 
-	mysqli_close($myconnection);
+	
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 </head>
 <body>
-	<a href="index.php">Back to Start</a>
+	<a href="dashboard.php">Back to Start</a>
 	<h1>Register for a Course</h1>
 	<?php 
 		if($errorMessage != ""){
@@ -343,6 +340,8 @@ if(isset($_POST['register'])){
 					echo("</tr>");
 				}
 			}
+			
+			mysqli_close($myconnection);
 			?>
 		</table>
 	</form>

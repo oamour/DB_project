@@ -45,6 +45,101 @@ function get_moderator_row($myconnection, $row) {
 	}
 }
 
+
+function mentee_conformation( $myconnection, $row){
+	$GetMenteeID = "SELECT menteeID FROM mentees WHERE userID = " . $row[0] . ";";
+	$menteeID = mysqli_query($myconnection, $GetMenteeID) or die ("Failed to query database: " . mysqli_error($myconnection));
+	$menteeID = $menteeID->fetch_array()[0];
+	
+	$getParticipating = "SELECT * FROM participatingin WHERE userID =".$row[0].";";
+	$participating = mysqli_query($myconnection, $getParticipating) or die ("Failed to query database: " . mysqli_error($myconnection));
+	$participating = $participating->fetch_all();
+	
+	$today =  new DateTime();
+	while($today->format('N')<7){
+		$today ->add(new DateInterval("P1D"));
+	}
+	$plusWeek1 = new DateInterval("P7D");
+	$plusWeek =  new DateTime($today->add($plusWeek1)->format('Y-m-d'));
+	$today = $today->sub($plusWeek1);
+	
+	if($menteeID != NULL){
+		$GetActiveMentee= "SELECT sec.name, sec.sectionID, sec.courseID, ses.sessionID,ses.sessionDate, ts.startTime,ts.endTime 
+		FROM sessions ses, sections sec,timeslot ts,menteefor mf 
+		WHERE mf.menteeID =" . $menteeID . " AND mf.courseID = sec.courseID AND mf.sectionID = sec.sectionID AND ses.sectionID = sec.sectionID AND ses.courseID = sec.courseID AND sec.timeSlotID = ts.timeSlotID;";
+		$activeMentee = mysqli_query($myconnection, $GetActiveMentee) or die ("Failed to query database: " . mysqli_error($myconnection));
+		$activeMentee = $activeMentee->fetch_all();
+		
+		echo("<tr style=\"min-width:100px;border:1px solid;border-collapse: collapse;\"><th style=\"min-width:100px;border:1px solid;border-collapse: collapse;\" colspan = \"6\" >Mentee Courses</th></tr>");
+		for($i=0;$i<count($activeMentee);$i++){
+			$sesDate = new DateTime($activeMentee[$i][4]);
+			if($sesDate-> diff($today)->invert AND !$sesDate->diff($plusWeek)->invert){
+				echo("<tr style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">
+					<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$activeMentee[$i][0] ."</td>
+					<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">".$activeMentee[$i][1] . "</td>
+					<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">".$activeMentee[$i][3] . "</td>
+					<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$sesDate->format("l m/d") . "</td>
+					<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$activeMentee[$i][5]. "-".$activeMentee[$i][6] . "</td>");
+					$row_check=array($row[0],$activeMentee[$i][3],$activeMentee[$i][1],$activeMentee[$i][2],0,1);
+					if(!in_array($row_check,$participating)){
+						echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\"><button type=\"submit\" name=\"register\" id=\"register\" value=\"0-". $activeMentee[$i][2]. "-" . $activeMentee[$i][1] . "-". $activeMentee[$i][3]."\">Participate</button></td>");
+					}
+					else{
+						echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">Confirmed</td>");
+					}
+				echo("</tr>");
+			}
+		}
+	}
+}
+
+function mentor_conformation( $myconnection, $row){
+	$GetMentorID = "SELECT mentorID FROM mentors WHERE userID = " . $row[0] . ";";
+	$mentorID = mysqli_query($myconnection, $GetMentorID) or die ("Failed to query database: " . mysqli_error($myconnection));
+	$mentorID = $mentorID->fetch_array()[0];
+	
+	$getParticipating = "SELECT * FROM participatingin WHERE userID =".$row[0].";";
+	$participating = mysqli_query($myconnection, $getParticipating) or die ("Failed to query database: " . mysqli_error($myconnection));
+	$participating = $participating->fetch_all();
+	
+	$today =  new DateTime();
+	while($today->format('N')<7){
+		$today ->add(new DateInterval("P1D"));
+	}
+	$plusWeek1 = new DateInterval("P7D");
+	$plusWeek =  new DateTime($today->add($plusWeek1)->format('Y-m-d'));
+	$today = $today->sub($plusWeek1);
+	
+	if($mentorID != NULL){
+		$GetActiveMentor= "SELECT sec.name, sec.sectionID, sec.courseID, ses.sessionID,ses.sessionDate, ts.startTime,ts.endTime 
+		FROM sessions ses, sections sec,timeslot ts,mentorfor mf 
+		WHERE mf.mentorID =" . $mentorID . " AND mf.courseID = sec.courseID AND mf.sectionID = sec.sectionID AND ses.sectionID = sec.sectionID AND ses.courseID = sec.courseID AND sec.timeSlotID = ts.timeSlotID;";
+		$activeMentor = mysqli_query($myconnection, $GetActiveMentor) or die ("Failed to query database: " . mysqli_error($myconnection));
+		$activeMentor = $activeMentor->fetch_all();
+		
+		echo("<tr style=\"min-width:100px;border:1px solid;border-collapse: collapse;\"><th style=\"min-width:100px;border:1px solid;border-collapse: collapse;\"colspan = \"6\" >Mentor Courses</th></tr>");
+		for($i=0;$i<count($activeMentor);$i++){
+			$sesDate = new DateTime($activeMentor[$i][4]);
+			if($sesDate-> diff($today)->invert AND !$sesDate->diff($plusWeek)->invert){
+				echo("<tr>
+					<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$activeMentor[$i][0] ."</td>
+					<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">".$activeMentor[$i][1] . "</td>
+					<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">".$activeMentor[$i][3] . "</td>
+					<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$sesDate->format("l m/d") . "</td>
+					<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;\">".$activeMentor[$i][5]. "-".$activeMentor[$i][6] . "</td>");
+					$row_check=array($row[0],$activeMentor[$i][3],$activeMentor[$i][1],$activeMentor[$i][2],1,0);
+					if(!in_array($row_check,$participating)){
+						echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\"><button type=\"submit\" name=\"register\" id=\"register\" value=\"1-". $activeMentor[$i][2]. "-" . $activeMentor[$i][1] . "-". $activeMentor[$i][3]."\">Participate</button></td>");
+					}
+					else{
+						echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">Confirmed</td>");
+					}
+				echo("</tr>");
+			}
+		}
+	}
+	
+}
 ###
 # NOTIFICATIONS
 ###
@@ -185,6 +280,19 @@ function create_student_dashboard($myconnection, $row) {
 	get_mentee_row($myconnection, $row);
 	echo "</table>";
 	
+	echo("<h3>Attendance Conformation</h3>
+	<form method=\"post\" action=\"session_conformation.php\">
+		<table style=\"border:1px solid;border-collapse: collapse;\">
+			<tr style=\"border:1px solid;border-collapse: collapse;\">
+				<th style=\"border:1px solid;border-collapse: collapse;\">Course</th>
+				<th style=\"border:1px solid;border-collapse: collapse;\">Section</th>
+				<th style=\"border:1px solid;border-collapse: collapse;\">Session</th>
+				<th style=\"min-width:150px;border:1px solid;border-collapse: collapse;\">Date</th>
+				<th style=\"border:1px solid;border-collapse: collapse;\">Time</th>
+				<th style=\"border:1px solid;border-collapse: collapse;\">Participating</th>
+			</tr>");
+	mentee_conformation($myconnection, $row);
+	mentor_conformation($myconnection, $row);
 	get_mentor_notifications($myconnection, $row);
 	get_mentee_notifications($myconnection, $row);
 }
