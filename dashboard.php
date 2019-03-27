@@ -266,7 +266,7 @@ function create_student_dashboard($myconnection, $row) {
 	echo "<tr>";
 	echo "<td>Student</td>";
 	echo "<td>Section</td>";
-	echo "<td><a href='sections_student.php'>View Sections</a></td>";
+	echo "<td><a href='all_classes.php'>View Sections</a></td>";
 	echo "</tr>";
 	get_mentor_row($myconnection, $row);
 	get_mentee_row($myconnection, $row);
@@ -311,7 +311,7 @@ function create_parent_dashboard($myconnection, $row) {
 	echo "<tr>";
 	echo "<td>Parent</td>";
 	echo "<td>Section</td>";
-	echo "<td><a href='sections_parent.php'>View Sections</a></td>";
+	echo "<td><a href='all_classes.php'>View Sections</a></td>";
 	echo "</tr>";
 	get_moderator_row($myconnection, $row);
 	echo "</table>";

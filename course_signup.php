@@ -11,11 +11,11 @@
 	$session_key = md5("database");
 	session_start();
 	if (empty($_SESSION[$session_key])) {
-		echo "Not logged in! Please <a href='index.html'>CLICK HERE</a> to return to the main page.";
+		echo "Not logged in! Please <a href='index.php'>CLICK HERE</a> to return to the main page.";
 		exit();
 	} elseif (intval($_SESSION[$session_key]) <= 0) {
 		unset($_SESSION[$session_key]);
-		echo "Invalid session key! Please <a href='index.html'>CLICK HERE</a> to return to the main page.";
+		echo "Invalid session key! Please <a href='index.php'>CLICK HERE</a> to return to the main page.";
 		exit();
 	} else {
 		$userid = $_SESSION[$session_key];
@@ -130,13 +130,11 @@ if(isset($_POST['register'])){
 					$errorMessage = "Already Registered for this Course";
 				}
 				else{
-					if($UserLevel >= $section[2] and $section[3] > 0){
 						$deltaMentor = True;
 						$enroll = "INSERT INTO mentorfor(mentorID,sectionID,courseID) VALUES (" . $mentorID . "," . $section[0] . "," . $section[1] .");";
 						$enrolled = mysqli_query($myconnection, $enroll) or die ("Failed to query database: " . mysqli_error($myconnection));
 						//$Update = "UPDATE sections SET capacity = capacity-1 WHERE sectionID = ". $section[0].";";
 						//$updated = mysqli_query($myconnection, $Update) or die ("Failed to query database: " . mysqli_error($myconnection));
-					}
 				}
 			}
 		}

@@ -17,7 +17,7 @@
 
 	$mydb = mysqli_select_db ($myconnection, 'db2') or die ('Could not select database');
 	
-	$GetSections = "SELECT sec.courseID, sec.sectionID, cou.title, sec.name, cou.description, sec.startDate, sec.endDate, sec.timeSlotID
+	$GetSections = "SELECT sec.courseID, sec.sectionID, cou.title, sec.name, cou.description, sec.startDate, sec.endDate, sec.timeSlotID, cou.mentorReq, cou.menteeReq
 				   FROM sections sec, courses cou
 				   WHERE cou.courseID = sec.courseID
 				   ORDER BY sec.courseID,sec.sectionID ASC;";
@@ -43,16 +43,19 @@
 <head>
 </head>
 <body>
-	<a href="index.php">Back to Start</a>
+	<a href="dashboard.php">Back to Start</a>
 	<h1>Class List</h1>
+	<p>To sign up for classes <a href="course_signup.php">CLICK HERE</a></p>
 	<table style="border:1px solid;border-collapse: collapse;">
 			<tr style = "border:1px solid;border-collapse: collapse;">
 				<th style="min-width:50px;border:1px solid;border-collapse: collapse;">ID</th>
 				<th style="min-width:125px;border:1px solid;border-collapse: collapse;">Course</th>
 				<th style="min-width:100px;border:1px solid;border-collapse: collapse;">Section</th>
 				<th style="min-width:175px;border:1px solid;border-collapse: collapse;">Time</th>
-				<th style="min-width:100px;border:1px solid;border-collapse: collapse;">startDate</th>
-				<th style="min-width:100px;border:1px solid;border-collapse: collapse;">endDate</th>
+				<th style="border:1px solid;border-collapse: collapse;">startDate</th>
+				<th style="border:1px solid;border-collapse: collapse;">endDate</th>
+				<th style="border:1px solid;border-collapse: collapse;">mentor Req.</th>
+				<th style="border:1px solid;border-collapse: collapse;">mentee Req.</th>
 				<th style="border:1px solid;border-collapse: collapse;">Description</th>
 			</tr>
 			<?php
@@ -85,6 +88,8 @@
 				echo(" - " . $currentTS[6] . "-" . $currentTS[7] . "</td>
 				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][5] . "</td>
 				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][6] . "</td>
+				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][8] . "</td>
+				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][9] . "</td>
 				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\"><span title = \"".$sections[$i][4]."\">" . substr($sections[$i][4],0,33) . "<span></td>
 				</tr>");
 				
