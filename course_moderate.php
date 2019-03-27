@@ -112,7 +112,7 @@
 <body>
 	<a href="dashboard.php">Back to Start</a>
 	<h1>Section Moderators</h1>
-	<form method="post" action="moderator.php">
+	<form method="post" action="course_moderate.php">
 		<table style="border:1px solid;border-collapse: collapse;">
 				<tr style = "border:1px solid;border-collapse: collapse;">
 					<th style="min-width:50px;border:1px solid;border-collapse: collapse;">ID</th>
