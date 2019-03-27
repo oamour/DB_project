@@ -41,7 +41,7 @@ function get_class_sections($userid) {
 	
   $mydb = mysqli_select_db ($myconnection, 'db2') or die ('Could not select database');
   
-  $query = "SELECT sectionID, courseID FROM mentorFor WHERE mentorID = $userid";
+  $query = "SELECT sectionID, courseID FROM menteeFor WHERE menteeID = $userid";
   $result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysql_error());
   
   if ($result->num_rows > 0) {
@@ -57,12 +57,12 @@ function get_class_sections($userid) {
 		  echo "<td>Student Grade</td>";
 		  echo "<td>Student Role</td>";
 		  echo "</tr>";
-		  get_mentees($myconnection, $sectionID);
-		  get_mentors($myconnection, $sectionID);
-		  echo "</table></div>";
+		  get_mentees($myconnection, $row["sectionID"]);
+		  get_mentors($myconnection, $row["sectionID"]);
+		  echo "</table>";
 	  }
-  } else { # no sections as mentor
-	echo "Sorry, you are not a mentor for any sections.";
+  } else { # no sections as mentee
+	echo "Sorry, you are not a mentee for any sections.";
   }
 }
 
@@ -81,7 +81,7 @@ $userid = check_session();
 	<body>
 	<?php if(isset($userid) and $userid != false) : ?>
 		<a href="dashboard.php">Back to Dashboard</a>
-		<h1>Mentor Section List</h1>
+		<h1>Mentee Section List</h1>
 		<?php get_class_sections($userid); ?>
 	<?php else : ?>
 		<span>"Not logged in! Please <a href='index.php'>CLICK HERE</a> to return to the main page."</span>

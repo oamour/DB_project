@@ -1,14 +1,6 @@
 <?php
 include 'functions.php';
 
-function get_grade_level($grade_level) {
-	if ($grade_level == 1) return "Freshman";
-	if ($grade_level == 2) return "Sophomore";
-	if ($grade_level == 3) return "Junior";
-	if ($grade_level == 4) return "Senior";
-	return "None";
-}
-
 function get_mentor_row($myconnection, $row) {
 	$query = "SELECT * FROM mentors WHERE userid = " . $row['userID'];
 	$result = mysqli_query($myconnection, $query);
@@ -46,7 +38,7 @@ function get_moderator_row($myconnection, $row) {
 }
 
 
-function mentee_conformation( $myconnection, $row){
+function mentee_confirmation( $myconnection, $row){
 	$GetMenteeID = "SELECT menteeID FROM mentees WHERE userID = " . $row[0] . ";";
 	$menteeID = mysqli_query($myconnection, $GetMenteeID) or die ("Failed to query database: " . mysqli_error($myconnection));
 	$menteeID = $menteeID->fetch_array()[0];
@@ -93,7 +85,7 @@ function mentee_conformation( $myconnection, $row){
 	}
 }
 
-function mentor_conformation( $myconnection, $row){
+function mentor_confirmation( $myconnection, $row){
 	$GetMentorID = "SELECT mentorID FROM mentors WHERE userID = " . $row[0] . ";";
 	$mentorID = mysqli_query($myconnection, $GetMentorID) or die ("Failed to query database: " . mysqli_error($myconnection));
 	$mentorID = $mentorID->fetch_array()[0];
@@ -280,8 +272,8 @@ function create_student_dashboard($myconnection, $row) {
 	get_mentee_row($myconnection, $row);
 	echo "</table>";
 	
-	echo("<h3>Attendance Conformation</h3>
-	<form method=\"post\" action=\"session_conformation.php\">
+	echo("<h3>Attendance confirmation</h3>
+	<form method=\"post\" action=\"session_confirmation.php\">
 		<table style=\"border:1px solid;border-collapse: collapse;\">
 			<tr style=\"border:1px solid;border-collapse: collapse;\">
 				<th style=\"border:1px solid;border-collapse: collapse;\">Course</th>
@@ -291,8 +283,8 @@ function create_student_dashboard($myconnection, $row) {
 				<th style=\"border:1px solid;border-collapse: collapse;\">Time</th>
 				<th style=\"border:1px solid;border-collapse: collapse;\">Participating</th>
 			</tr>");
-	mentee_conformation($myconnection, $row);
-	mentor_conformation($myconnection, $row);
+	mentee_confirmation($myconnection, $row);
+	mentor_confirmation($myconnection, $row);
 	get_mentor_notifications($myconnection, $row);
 	get_mentee_notifications($myconnection, $row);
 }

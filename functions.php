@@ -1,5 +1,19 @@
 <?php
 /*
+get_grade_leve()
+
+Takes an integer from 1-4 and returns the corresponding
+grade level, or a placeholder string if value is invalid.
+*/
+function get_grade_level($grade_level) {
+	if ($grade_level == 1) return "Freshman";
+	if ($grade_level == 2) return "Sophomore";
+	if ($grade_level == 3) return "Junior";
+	if ($grade_level == 4) return "Senior";
+	return "None";
+}
+
+/*
 get_user_info()
 
 Takes an open MySQL database connection and a valid userid, returns
@@ -33,7 +47,7 @@ get_course_info()
 Takes an open MySQL database connection and a valid courseID, returns
 the corresponding row in the courses table
 */
-function get_course_info($courseID) {
+function get_course_info($myconnection, $courseID) {
 	$query = "SELECT * FROM courses WHERE courseID = $courseID";
 	$result = mysqli_query($myconnection, $query);
 	if(mysqli_num_rows($result) == 0) die("FATAL ERROR: Missing userdata for account '$userid'");
