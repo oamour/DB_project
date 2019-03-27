@@ -111,6 +111,7 @@ if (isset($userid) and $userid != false and isset($childID) and $childID != fals
 <!DOCTYPE html>
 <html>
 <head>
+	<title>School Database</title>
 </head>
 <body>
 	<?php if (isset($userid) and $userid != false and $is_parent != false) : ?>

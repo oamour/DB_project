@@ -200,6 +200,7 @@ if(isset($_POST['register'])){
 <!DOCTYPE html>
 <html>
 <head>
+	<title>School Database</title>
 </head>
 <body>
 	<a href="dashboard.php">Back to Start</a>
