@@ -6,7 +6,7 @@ function get_mentees($myconnection, $sectionID, $courseID) {
 	$result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error());
 	
 	if($result->num_rows > 0) {
-		echo "<tr><td colspan=3 align='center'>MENTEES</td></tr>";
+		echo "<tr><th colspan=3>MENTEES</th></tr>";
 		while(($row = $result->fetch_array()) != NULL) {
 			$user_info = get_user_info($myconnection, $row['menteeID']);
 			$grade_level = get_grade_level($user_info['gradeLevel']);
@@ -24,7 +24,7 @@ function get_mentors($myconnection, $sectionID, $courseID) {
 	$result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error());
 	
 	if($result->num_rows > 0) {
-		echo "<tr><td colspan=3 align='center'>MENTORS</td></tr>";
+		echo "<tr><th colspan=3>MENTORS</th></tr>";
 		while(($row = $result->fetch_array()) != NULL) {
 			$user_info = get_user_info($myconnection, $row['mentorID']);
 			$grade_level = get_grade_level($user_info['gradeLevel']);
@@ -53,7 +53,7 @@ function get_class_sections($userid) {
 		  $course_info = get_course_info($myconnection, $row["courseID"]);
 		  
 		  echo "<table border=1>";
-		  echo "<tr><td colspan=3 align='center'>" . $section_info["name"] . "</td></tr>";
+		  echo "<tr><th colspan=3>" . $section_info["name"] . "</th></tr>";
 		  echo "<tr>"; # Header
 		  echo "<td>Student Name</td>";
 		  echo "<td>Student Grade</td>";
