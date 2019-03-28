@@ -40,6 +40,14 @@
 	$mod= mysqli_query($myconnection, $GetMod) or die ("Failed to query database: " . mysqli_error($myconnection));
 	$mod = $mod->fetch_row()[0];
 	
+	$GetMentor = "SELECT mentorID FROM mentors WHERE userID= ".$userid.";";
+	$mentor= mysqli_query($myconnection, $GetMentor) or die ("Failed to query database: " . mysqli_error($myconnection));
+	$mentor = $mentor->fetch_row()[0];
+	
+	$GetMentee = "SELECT menteeID FROM mentees WHERE userID= ".$userid.";";
+	$mentee= mysqli_query($myconnection, $GetMentee) or die ("Failed to query database: " . mysqli_error($myconnection));
+	$mentee = $mentee->fetch_row()[0];
+	
 	mysqli_close($myconnection);
 ?>
 <!DOCTYPE html>
@@ -49,10 +57,11 @@
 <body>
 	<a href="dashboard.php">Back to Start</a>
 	<h1>Class List</h1>
-	<?php if ($mod == NULL) :?>
+	<?php if ($mentor != NULL or $mentee != NULL) :?>
 	<p>To sign up for classes <a href="course_signup.php">CLICK HERE</a></p>
-	<?php else :?>
+	<?php elseif ($mod != NULL) :?>
 	<p>To sign up to moderate <a href="course_moderate.php">CLICK HERE</a></p>
+	<?php else :?>
 	<?php endif;?>
 	<table style="border:1px solid;border-collapse: collapse;">
 			<tr style = "border:1px solid;border-collapse: collapse;">
