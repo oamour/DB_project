@@ -200,6 +200,42 @@ function mentor_confirmation( $myconnection, $row){
 	}
 	
 }
+
+function enrolInSec($myconnection,$row){
+	if(isset($_POST['register'])){
+		$sel_sec = $_POST['register'];
+		$Session = "";
+		$Section = "";
+		$Course = "";
+		$offset = 0;
+		for($i = 2; $i<strlen($sel_sec);$i++){
+			if($sel_sec[$i] == '-'){
+				$offset = $i+1;
+				break;
+			}
+			$Course = $Course . $sel_sec[$i];
+		}
+		for($i=$offset;$i<strlen($sel_sec);$i++){
+			if($sel_sec[$i] == '-'){
+				$offset = $i+1;
+				break;
+			}
+			$Section = $Section . $sel_sec[$i];
+		}
+		for($i=$offset;$i<strlen($sel_sec);$i++){
+			$Session = $Session . $sel_sec[$i];
+		}
+		if($sel_sec[0] == "0" ){
+			$mentor =False;
+			$mentee = True;
+		} else{
+			$mentor =True;
+			$mentee = False;
+		}
+		$participate= "INSERT INTO participatingin (userID, sessionID, sectionID, courseID, mentor, mentee) VALUES (". $row[0]. ", ". $Session.", ". $Section. ", ". $Course . ", " . ($mentor ? '1' : '0') . ", " . ($mentee ? '1' : '0'). " );";
+		$update= mysqli_query($myconnection, $participate) or die ("Failed to query database: " . mysqli_error($myconnection));
+	}
+}
 	
 function create_student_dashboard($myconnection, $row) {
 	echo "<a href='dashboard.php'>Student Dashboard</a><br />";
@@ -227,7 +263,7 @@ function create_student_dashboard($myconnection, $row) {
 	echo "</table>";
 	
 	echo("<h3>Attendance confirmation</h3>
-	<form method=\"post\" action=\"session_confirmation.php\">
+	<form method=\"post\" action=\"dashboard.php\">
 		<table style=\"border:1px solid;border-collapse: collapse;\">
 			<tr style=\"border:1px solid;border-collapse: collapse;\">
 				<th style=\"border:1px solid;border-collapse: collapse;\">Course</th>
@@ -282,7 +318,8 @@ if (isset($userid) and $userid != false) {
 	class_cancel($myconnection);
 	
 	$row = get_user_info($myconnection, $userid);
-
+	enrolInSec($myconnection,$row);
+	
 	if($row['isStudent'] == 1) {
 		create_student_dashboard($myconnection, $row);
 	} elseif ($row['isParent'] == 1) {
