@@ -36,6 +36,10 @@
 		}
 	}
 	
+	$GetMod = "SELECT modID FROM moderators WHERE userID= ".$userid.";";
+	$mod= mysqli_query($myconnection, $GetMod) or die ("Failed to query database: " . mysqli_error($myconnection));
+	$mod = $mod->fetch_row()[0];
+	
 	mysqli_close($myconnection);
 ?>
 <!DOCTYPE html>
@@ -45,7 +49,11 @@
 <body>
 	<a href="dashboard.php">Back to Start</a>
 	<h1>Class List</h1>
+	<?php if ($mod == NULL) :?>
 	<p>To sign up for classes <a href="course_signup.php">CLICK HERE</a></p>
+	<?php else :?>
+	<p>To sign up to moderate <a href="course_moderate.php">CLICK HERE</a></p>
+	<?php endif;?>
 	<table style="border:1px solid;border-collapse: collapse;">
 			<tr style = "border:1px solid;border-collapse: collapse;">
 				<th style="min-width:50px;border:1px solid;border-collapse: collapse;">ID</th>
