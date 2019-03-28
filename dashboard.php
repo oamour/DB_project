@@ -38,6 +38,74 @@ function get_moderator_row($myconnection, $row) {
 }
 
 
+function class_cancel($myconnection){
+	$GetSessions = "SELECT sessionDate, sessionID, sectionID, courseID FROM sessions WHERE announcement != 'Cancelled' AND sessionDate != 'NULL';";
+	$sessions= mysqli_query($myconnection, $GetSessions) or die ("Failed to query database: " . mysqli_error($myconnection));
+	$sessions = $sessions->fetch_all();
+	
+	$today =  new DateTime();
+	if($today->format('N')>=5){
+		while($today->format('N')<7){
+			$today = $today ->add(new DateInterval("P1D"));
+		}
+		$plusWeek1 = new DateInterval("P7D");
+		$plusWeek =  new DateTime($today->add($plusWeek1)->format('Y-m-d'));
+		$today = $today->sub($plusWeek1);
+		
+		$CurrentWeekSessions= array();
+		
+		for($i=0;$i< count($sessions);$i++){
+			if($sessions[$i][0] != NULL){
+				$sesDate = new DateTime($sessions[$i][0]);
+				if($sesDate-> diff($today)->invert AND !$sesDate->diff($plusWeek)->invert){
+					$CurrentWeekSessions[]= array($sessions[$i][1],$sessions[$i][2],$sessions[$i][3],$sessions[$i][0]);
+				}
+			}
+		}
+		var_dump($CurrentWeekSessions);
+		for($i=0;$i<count($CurrentWeekSessions);$i++){
+			$menteeCount = "SELECT COUNT(mentee),COUNT(mentor) FROM participatingin WHERE sessionID =". $CurrentWeekSessions[$i][0]." AND sectionID = ". $CurrentWeekSessions[$i][1]." AND courseID =". $CurrentWeekSessions[$i][2]." ;";
+			$MenteeCount = mysqli_query($myconnection, $menteeCount) or die ("Failed to query database: " . mysqli_error($myconnection));
+			$MenteeCount = $MenteeCount->fetch_row();
+			
+			echo($MenteeCount[0] . "1");
+			
+			if($MenteeCount[0] < 3){
+				$menteeEmail = "SELECT usr.name,usr.email FROM participatingin p, users usr WHERE p.sessionID =". $CurrentWeekSessions[$i][0]." AND p.sectionID = ". $CurrentWeekSessions[$i][1]." AND p.courseID =". $CurrentWeekSessions[$i][2]." AND p.userID = usr.userID;";
+				$MenteeEmail = mysqli_query($myconnection, $menteeEmail) or die ("Failed to query database: " . mysqli_error($myconnection));
+				$MenteeEmail = $MenteeEmail->fetch_all();
+				
+				var_dump($MenteeEmail);
+				
+				$cancelSection = "UPDATE sessions SET announcement = 'Cancelled' WHERE courseID = ". $CurrentWeekSessions[$i][2]." AND sectionID = ".$CurrentWeekSessions[$i][1]." AND sessionID = ".$CurrentWeekSessions[$i][0].";";
+				$canceled = mysqli_query($myconnection, $cancelSection) or die ("Failed to query database: " . mysqli_error($myconnection));
+
+				$filename = "Cancel-".$CurrentWeekSessions[$i][0].".".$CurrentWeekSessions[$i][1].".".$CurrentWeekSessions[$i][2]." on ".$CurrentWeekSessions[$i][3].".txt";
+				$myfile = fopen($filename, "w") or die("Unable to open file!");
+				for($j =0; $j<count($MenteeEmail) and $MenteeCount != NULL;$j++){
+					$message = $MenteeEmail[$j][0]. " ". $MenteeEmail[$j][1]. "\n";
+					fwrite($myfile, $message);
+				}
+				fclose($myfile);
+				
+			}
+			else if($MenteeCount[1] < 2 ){
+				$mentorEmail = "SELECT usr.name,usr.email FROM modfor p, moderators m, users usr WHERE p.sectionID = ". $CurrentWeekSessions[$i][1]." AND p.courseID = ". $CurrentWeekSessions[$i][2]." AND p.modID = m.modID AND m.userID = usr.userID;";
+				$MentorEmail = mysqli_query($myconnection, $mentorEmail) or die ("Failed to query database: " . mysqli_error($myconnection));
+				$MentorEmail = $MentorEmail->fetch_all();
+				
+				$filename = "Alert-".$CurrentWeekSessions[$i][0].".".$CurrentWeekSessions[$i][1].".".$CurrentWeekSessions[$i][2]." on ".$CurrentWeekSessions[$i][3].".txt";
+				$myfile = fopen($filename, "w") or die("Unable to open file!");
+				for($j =0; $j<count($MentorEmail);$j++){
+					$message = $MentorEmail[$j][0]. " ". $MentorEmail[$j][1]. "\n";
+					fwrite($myfile, $message);
+				}
+				fclose($myfile);
+			}
+		}
+	}
+}
+
 function mentee_confirmation( $myconnection, $row){
 	$GetMenteeID = "SELECT menteeID FROM mentees WHERE userID = " . $row[0] . ";";
 	$menteeID = mysqli_query($myconnection, $GetMenteeID) or die ("Failed to query database: " . mysqli_error($myconnection));
@@ -56,7 +124,7 @@ function mentee_confirmation( $myconnection, $row){
 	$today = $today->sub($plusWeek1);
 	
 	if($menteeID != NULL){
-		$GetActiveMentee= "SELECT sec.name, sec.sectionID, sec.courseID, ses.sessionID,ses.sessionDate, ts.startTime,ts.endTime 
+		$GetActiveMentee= "SELECT sec.name, sec.sectionID, sec.courseID, ses.sessionID,ses.sessionDate, ts.startTime,ts.endTime, ses.announcement 
 		FROM sessions ses, sections sec,timeslot ts,menteefor mf 
 		WHERE mf.menteeID =" . $menteeID . " AND mf.courseID = sec.courseID AND mf.sectionID = sec.sectionID AND ses.sectionID = sec.sectionID AND ses.courseID = sec.courseID AND sec.timeSlotID = ts.timeSlotID;";
 		$activeMentee = mysqli_query($myconnection, $GetActiveMentee) or die ("Failed to query database: " . mysqli_error($myconnection));
@@ -77,7 +145,7 @@ function mentee_confirmation( $myconnection, $row){
 						echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\"><button type=\"submit\" name=\"register\" id=\"register\" value=\"0-". $activeMentee[$i][2]. "-" . $activeMentee[$i][1] . "-". $activeMentee[$i][3]."\">Participate</button></td>");
 					}
 					else{
-						echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">Confirmed</td>");
+						echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\"><span title = \"".$activeMentee[$i][7]."\">" . substr($activeMentee[$i][7],0,30) . "<span></td>");
 					}
 				echo("</tr>");
 			}
@@ -103,7 +171,7 @@ function mentor_confirmation( $myconnection, $row){
 	$today = $today->sub($plusWeek1);
 	
 	if($mentorID != NULL){
-		$GetActiveMentor= "SELECT sec.name, sec.sectionID, sec.courseID, ses.sessionID,ses.sessionDate, ts.startTime,ts.endTime 
+		$GetActiveMentor= "SELECT sec.name, sec.sectionID, sec.courseID, ses.sessionID,ses.sessionDate, ts.startTime,ts.endTime,ses.announcement 
 		FROM sessions ses, sections sec,timeslot ts,mentorfor mf 
 		WHERE mf.mentorID =" . $mentorID . " AND mf.courseID = sec.courseID AND mf.sectionID = sec.sectionID AND ses.sectionID = sec.sectionID AND ses.courseID = sec.courseID AND sec.timeSlotID = ts.timeSlotID;";
 		$activeMentor = mysqli_query($myconnection, $GetActiveMentor) or die ("Failed to query database: " . mysqli_error($myconnection));
@@ -124,7 +192,7 @@ function mentor_confirmation( $myconnection, $row){
 						echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\"><button type=\"submit\" name=\"register\" id=\"register\" value=\"1-". $activeMentor[$i][2]. "-" . $activeMentor[$i][1] . "-". $activeMentor[$i][3]."\">Participate</button></td>");
 					}
 					else{
-						echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\">Confirmed</td>");
+						echo("<td style=\"min-width:100px;border:1px solid;border-collapse: collapse;text-align:center\"><span title = \"".$activeMentor[$i][7]."\">" . substr($activeMentor[$i][7],0,30) . "<span></td>");
 					}
 				echo("</tr>");
 			}
@@ -323,9 +391,12 @@ $userid = check_session();
 
 if (isset($userid) and $userid != false) {
 	#start MySQL connection
+	
 	$myconnection = mysqli_connect('localhost', 'root', '') or die ('Could not connect: ' . mysql_error());
 	$mydb = mysqli_select_db ($myconnection, 'db2') or die ('Could not select database');
-
+	
+	class_cancel($myconnection);
+	
 	$row = get_user_info($myconnection, $userid);
 
 	if($row['isStudent'] == 1) {
