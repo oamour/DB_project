@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2019 at 10:54 PM
--- Server version: 10.1.38-MariaDB
--- PHP Version: 7.3.2
+-- Generation Time: Mar 28, 2019 at 04:24 AM
+-- Server version: 10.1.37-MariaDB
+-- PHP Version: 7.3.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -83,6 +83,7 @@ CREATE TABLE `materialfor` (
   `studyMaterialID` int(11) NOT NULL,
   `courseID` int(11) NOT NULL,
   `sectionID` int(11) NOT NULL,
+  `sessionID` int(11) NOT NULL,
   `assignedDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -182,7 +183,7 @@ CREATE TABLE `moderators` (
 --
 
 INSERT INTO `moderators` (`modID`, `userID`, `superMod`) VALUES
-(1, 1, 0),
+(1, 1, 1),
 (5, 5, 0);
 
 -- --------------------------------------------------------
@@ -220,7 +221,6 @@ CREATE TABLE `parentchild` (
 --
 
 INSERT INTO `parentchild` (`parentID`, `childID`) VALUES
-(1, 2),
 (1, 3),
 (5, 8),
 (5, 9),
@@ -279,7 +279,8 @@ CREATE TABLE `sections` (
   `courseID` int(11) NOT NULL,
   `sectionID` int(11) NOT NULL,
   `name` varchar(80) DEFAULT NULL,
-  `capacity` int(11) DEFAULT NULL,
+  `menteeCapacity` int(11) DEFAULT '6',
+  `mentorCapacity` int(11) NOT NULL DEFAULT '3',
   `startDate` date DEFAULT NULL,
   `endDate` date DEFAULT NULL,
   `timeSlotID` int(11) DEFAULT NULL
@@ -289,13 +290,13 @@ CREATE TABLE `sections` (
 -- Dumping data for table `sections`
 --
 
-INSERT INTO `sections` (`courseID`, `sectionID`, `name`, `capacity`, `startDate`, `endDate`, `timeSlotID`) VALUES
-(1, 1, 'FUNk 101', 9999, '2019-04-10', '2019-05-14', 1),
-(2, 1, 'The Dark Ages', 7, '2019-03-20', '2019-05-18', 1),
-(3, 1, 'Algebra I', 5, '2018-10-31', '2018-12-31', 4),
-(4, 1, 'Algebra II', 7, '2018-12-31', '2019-12-31', 15),
-(2, 2, 'The Dark Ages', 7, '2019-03-20', '2019-05-18', 1),
-(2, 3, 'The Dark Ages', 8, '2020-03-20', '2020-05-18', 18);
+INSERT INTO `sections` (`courseID`, `sectionID`, `name`, `menteeCapacity`, `mentorCapacity`, `startDate`, `endDate`, `timeSlotID`) VALUES
+(1, 1, 'FUNk 101', 5, 3, '2019-04-10', '2019-05-14', 1),
+(2, 1, 'The Dark Ages', 6, 3, '2019-03-20', '2019-05-18', 1),
+(3, 1, 'Algebra I', 5, 3, '2018-10-31', '2018-12-31', 4),
+(4, 1, 'Algebra II', 6, 3, '2018-12-31', '2019-12-31', 15),
+(2, 2, 'The Dark Ages', 6, 3, '2019-03-20', '2019-05-18', 1),
+(2, 3, 'The Dark Ages', 4, 3, '2020-03-20', '2020-05-18', 18);
 
 -- --------------------------------------------------------
 
@@ -317,10 +318,10 @@ CREATE TABLE `sessions` (
 
 INSERT INTO `sessions` (`courseID`, `sectionID`, `sessionDate`, `sessionID`, `announcement`) VALUES
 (2, 1, NULL, 1, 'Hello Class'),
-(2, 2, '2019-03-27', 1, 'Hello Class'),
-(2, 2, '2019-03-29', 2, 'Hello Class'),
+(2, 2, '2019-04-01', 1, 'Announcement I'),
+(2, 2, '2019-04-03', 2, 'Announcement II'),
 (3, 1, NULL, 1, 'No Announcements'),
-(4, 1, '2019-03-26', 1, 'No Announcements');
+(4, 1, '2019-04-06', 1, 'Announcement IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII');
 
 -- --------------------------------------------------------
 
