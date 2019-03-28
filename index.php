@@ -23,7 +23,7 @@ if (isset($_GET['logout']) and $_GET['logout'] == 1) {
 	<title>School Database</title>
 </head>
 <body>
-	<h1>Welcome to ____ University</h1>
+	<h1>Welcome to Database University</h1>
 	<?php if (isset($userid) and $userid != false) : ?>
 	<h2>Welcome, <?php echo $email; ?></h2>
 	<div>

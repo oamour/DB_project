@@ -295,7 +295,7 @@ if (isset($userid) and $userid != false) {
 
 <!DOCTYPE html>
 <html>
-<head></head>
+<head><title>School Database</title></head>
 <body>
 <?php if (!isset($userid) or $userid == false) : ?>
     <span>"Not logged in! Please <a href='index.php'>CLICK HERE</a> to return to the main page."</span>
