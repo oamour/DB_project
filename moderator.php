@@ -56,7 +56,7 @@ function generate_session_list($userid) {
 			}
 			echo "</td>"; # END TIMESLOT
 			
-			echo "<td>" . $section_info['capacity'] . "</td>";
+			echo "<td>" . $section_info['mentorCapacity'] + $section_info['menteeCapacity'] . "</td>";
 			echo "<td>" . get_grade_level($course_info['mentorReq']) . "</td>";
 			echo "<td>" . get_grade_level($course_info['menteeReq']) . "</td>";
 			
@@ -65,9 +65,9 @@ function generate_session_list($userid) {
 			$mentor_count = mysqli_query($myconnection, $query);
 			if($result->num_rows > 0) {
 				$mentor_count = $mentor_count->fetch_row()[0];
-				echo $mentor_count . "/3";
+				echo $mentor_count . "/" . $section_info['mentorCapacity'];
 			} else {
-				echo "0/3";
+				echo "0/" . $section_info['mentorCapacity'];
 			}
 			echo "</td>"; # END MENTOR COUNT
 			
@@ -76,9 +76,9 @@ function generate_session_list($userid) {
 			$mentee_count = mysqli_query($myconnection, $query);
 			if($result->num_rows > 0) {
 				$mentee_count = $mentee_count->fetch_row()[0];
-				echo $mentee_count . "/3";
+				echo $mentee_count . "/" . $section_info['menteeCapacity'];
 			} else {
-				echo "0/3";
+				echo "0/" . $section_info['menteeCapacity'];
 			}
 			echo "</td>"; # END MENTEE COUNT
 			echo "<td>";
