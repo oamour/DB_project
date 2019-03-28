@@ -62,6 +62,48 @@ function get_class_sections($userid) {
 		  get_mentees($myconnection, $row["sectionID"], $row["courseID"]);
 		  get_mentors($myconnection, $row["sectionID"], $row["courseID"]);
 		  echo "</table>";
+		  
+		  # STUDY MATERIALS FOR SECTION
+		  $query = "SELECT * FROM materialFor WHERE courseID = " . $row["courseID"] . " AND sectionID = " . $row["sectionID"];
+		  $material_for = mysqli_query($myconnection, $query);
+		  
+		  if ($material_for != false and $material_for->num_rows > 0) {
+			echo "<h2>Study Materials</h2>";
+			echo "<table border=1>";
+			echo "<tr>"; # Header
+			echo "<td>Session Name</td>";
+			echo "<td>Session Date</td>";
+			echo "<td>Announcement</td>";
+			echo "<td>Material Title</td>";
+			echo "<td>Author</td>";
+			echo "<td>Type</td>";
+			echo "<td>URL</td>";
+			echo "<td>Assigned Date</td>";
+			echo "<td>Notes</td>";
+			echo "</tr>";
+			
+			while (($materials_for_session = $material_for->fetch_array()) != NULL) {
+				$query = "SELECT * FROM sessions WHERE sessionID = " . $materials_for_session['sessionID'] . " AND sectionID = " . $row["sectionID"] . " AND courseID = " . $row["courseID"];
+				$session_info = mysqli_query($myconnection, $query);
+				$session_info = $session_info->fetch_array();
+				
+				$query = "SELECT * FROM studyMaterials WHERE studyMaterialID = " . $materials_for_session['studyMaterialID'];
+				$study_material_info = mysqli_query($myconnection, $query);
+				$study_material_info = $study_material_info->fetch_array();
+				
+				echo "<tr>";
+				echo "<td>" . $session_info['sessionID'] . "</td>";
+				echo "<td>" . $session_info['sessionDate'] . "</td>";
+				echo "<td>" . $session_info['announcement'] . "</td>";
+				echo "<td>" . $study_material_info['title'] . "</td>";
+				echo "<td>" . $study_material_info['author'] . "</td>";
+				echo "<td>" . $study_material_info['materialType'] . "</td>";
+				echo "<td>" . $study_material_info['url'] . "</td>";
+				echo "<td>" . $materials_for_session['assignedDate'] . "</td>";
+				echo "<td>" . $study_material_info['notes'] . "</td>";
+				echo "</tr>";
+			}
+		  }
 	  }
   } else { # no sections as mentee
 	echo "Sorry, you are not a mentee for any sections.";
