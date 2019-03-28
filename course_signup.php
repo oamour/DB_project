@@ -281,10 +281,12 @@ if(isset($_POST['register'])){
 								$currentEnd = new DateTime($answer[$i][16]);
 								
 								for ($j=0;$j<count($NonConflictList);$j++){
-									if(in_array(array($NonConflictList[$j][1]),$MenteeIn)or in_array(array($NonConflictList[$j][1]),$MentorIn)){
+									if(in_array(array($NonConflictList[$j][0],$NonConflictList[$j][1]),$MenteeIn)or in_array(array($NonConflictList[$j][0],$NonConflictList[$j][1]),$MentorIn)){
 										$checkStart = new DateTime($NonConflictList[$j][2]);
 										$checkEnd = new DateTime($NonConflictList[$j][3]);
+										
 										if(!($currentStart->diff($checkStart)->invert and $currentStart->diff($checkEnd)->invert and $currentEnd ->diff($checkStart)->invert) and !(!$currentStart->diff($checkStart)->invert and !$currentStart->diff($checkEnd)->invert and !$currentEnd ->diff($checkStart)->invert)){
+											
 											$conflict = True;
 											break;
 										}
@@ -314,7 +316,7 @@ if(isset($_POST['register'])){
 								$currentEnd = new DateTime($answer[$i][16]);
 								
 								for ($j=0;$j<count($NonConflictList);$j++){
-									if(in_array(array($NonConflictList[$j][1]),$MentorIn) or in_array(array($NonConflictList[$j][1]),$MenteeIn)){
+									if(in_array(array($NonConflictList[$j][0],$NonConflictList[$j][1]),$MentorIn) or in_array(array($NonConflictList[$j][0],$NonConflictList[$j][1]),$MenteeIn)){
 										$checkStart = new DateTime($NonConflictList[$j][2]);
 										$checkEnd = new DateTime($NonConflictList[$j][3]);
 										if(!($currentStart->diff($checkStart)->invert and $currentStart->diff($checkEnd)->invert and $currentEnd ->diff($checkStart)->invert) and !(!$currentStart->diff($checkStart)->invert and !$currentStart->diff($checkEnd)->invert and !$currentEnd ->diff($checkStart)->invert)){
