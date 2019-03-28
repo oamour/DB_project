@@ -56,7 +56,7 @@ function generate_session_list($userid) {
 			}
 			echo "</td>"; # END TIMESLOT
 			
-			echo "<td>" . $section_info['mentorCapacity'] + $section_info['menteeCapacity'] . "</td>";
+			echo "<td>" . ($section_info['mentorCapacity'] + $section_info['menteeCapacity']) . "</td>";
 			echo "<td>" . get_grade_level($course_info['mentorReq']) . "</td>";
 			echo "<td>" . get_grade_level($course_info['menteeReq']) . "</td>";
 			
