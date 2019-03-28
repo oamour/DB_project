@@ -25,7 +25,7 @@
 
 	$mydb = mysqli_select_db ($myconnection, 'db2') or die ('Could not select database');
 
-	$findcourses = "SELECT cou.title,sec.sectionID,ts.startTime,ts.endTime,ts.m,ts.t,ts.w,ts.th,ts.f,ts.sa,cou.menteeReq,cou.mentorReq,sec.capacity,sec.courseID,sec.timeSlotID,sec.startDate,sec.endDate FROM sections sec, courses cou, timeslot ts WHERE sec.courseID = cou.courseID AND ts.timeSlotID = sec.timeSlotID;";
+	$findcourses = "SELECT cou.title,sec.sectionID,ts.startTime,ts.endTime,ts.m,ts.t,ts.w,ts.th,ts.f,ts.sa,cou.menteeReq,cou.mentorReq,sec.mentorCapacity,sec.courseID,sec.timeSlotID,sec.startDate,sec.endDate,sec.menteeCapacity FROM sections sec, courses cou, timeslot ts WHERE sec.courseID = cou.courseID AND ts.timeSlotID = sec.timeSlotID;";
 	$result = mysqli_query($myconnection, $findcourses) or die ("Failed to query database: " . mysqli_error($myconnection));
 
 	$answer = $result->fetch_all();
@@ -90,8 +90,8 @@ if(isset($_POST['register'])){
 				}
 				else{
 					$deltaMentee = True;
-					$enroll = "INSERT INTO menteefor(menteeID,sectionID,courseID) VALUES (" . $menteeID . "," . $Section . "," . $Course .");";
-					$enrolled = mysqli_query($myconnection, $enroll) or die ("Failed to query database: " . mysqli_error($myconnection));
+					$Enrole = "INSERT INTO menteefor(menteeID,sectionID,courseID) VALUES (" . $menteeID . "," . $Section . "," . $Course .");";
+					$enroled = mysqli_query($myconnection, $Enrole) or die ("Failed to query database: " . mysqli_error($myconnection));
 				}
 			}
 		}
@@ -130,11 +130,11 @@ if(isset($_POST['register'])){
 					$errorMessage = "Already Registered for this Course";
 				}
 				else{
-						$deltaMentor = True;
-						$enroll = "INSERT INTO mentorfor(mentorID,sectionID,courseID) VALUES (" . $mentorID . "," . $section[0] . "," . $section[1] .");";
-						$enrolled = mysqli_query($myconnection, $enroll) or die ("Failed to query database: " . mysqli_error($myconnection));
-						//$Update = "UPDATE sections SET capacity = capacity-1 WHERE sectionID = ". $section[0].";";
-						//$updated = mysqli_query($myconnection, $Update) or die ("Failed to query database: " . mysqli_error($myconnection));
+					$deltaMentor = True;
+					$Enrole = "INSERT INTO mentorfor(mentorID,sectionID,courseID) VALUES (" . $mentorID . "," . $section[0] . "," . $section[1] .");";
+					$enroled = mysqli_query($myconnection, $Enrole) or die ("Failed to query database: " . mysqli_error($myconnection));
+					//$Update = "UPDATE sections SET capacity = capacity-1 WHERE sectionID = ". $section[0].";";
+					//$updated = mysqli_query($myconnection, $Update) or die ("Failed to query database: " . mysqli_error($myconnection));
 				}
 			}
 		}
@@ -200,7 +200,6 @@ if(isset($_POST['register'])){
 <!DOCTYPE html>
 <html>
 <head>
-	<title>School Database</title>
 </head>
 <body>
 	<a href="dashboard.php">Back to Start</a>
@@ -249,14 +248,14 @@ if(isset($_POST['register'])){
 					echo(" - " . $answer[$i][2] . "-" . $answer[$i][3] . "</td>");
 					$temp= array($answer[$i][13],$answer[$i][1]);
 					$TS = array($answer[$i][14]);
-					$CurrentMenteeCount = 6;
+					$CurrentMenteeCount = $answer[$i][17];
 					for ($j = 0; $j < count($menteeCount);$j++){
 						if($menteeCount[$j][0] == $answer[$i][13] and $menteeCount[$j][1] == $answer[$i][1]){
 							$CurrentMenteeCount -= $menteeCount[$j][2];
 							break;
 						}
 					}
-					$CurrentMentorCount = 3;
+					$CurrentMentorCount = $answer[$i][12];
 					for ($j = 0; $j < count($mentorCount);$j++){
 						if($mentorCount[$j][0] == $answer[$i][13] and $mentorCount[$j][1] == $answer[$i][1]){
 							$CurrentMentorCount -= $mentorCount[$j][2];
