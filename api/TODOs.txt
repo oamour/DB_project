@@ -1,0 +1,12 @@
+TODO:
+Give IDs auto-increment property to userID
+Add ON DELETE CASCADE to foreign keys 
+Username = email = primary key of accounts table
+add check to check_session to confirm userid is in users table
+
+COURSE_SIGNUP:
+course_signup needs grade level requirements
+mentee signup not working; invalid indices 2 and 3
+
+DASHBOARD:
+headers should only show up if there are notifications

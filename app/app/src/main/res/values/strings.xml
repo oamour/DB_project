@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">School Database</string>
+    <string name="edit_message">Demo message!</string>
+    <string name="button_send">Send</string>
+    <string name="index_title">Welcome to Database University</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="password_confirm_hint">Confirm Password</string>
+    <string name="select_role">Select Role</string>
+    <string name="none">None</string>
+    <string name="mod">Moderator</string>
+    <string name="name_entry">Name</string>
+    <string name="phone_entry">Phone</string>
+    <string name="city_entry">City</string>
+    <string name="state_entry">State</string>
+    <string name="register">Register</string>
+</resources>

@@ -1,0 +1,161 @@
+TEST CASES:
+Parents:
+---- EMAIL ----
+-- missing @, domain
+test_p1
+testtest1
+testtest1
+None
+Test1 Jones
+123-456-7890
+Town
+MA
+-- missing TLD
+test_p1@gmail.
+testtest1
+testtest1
+None
+Test1 Jones
+123-456-7890
+Town
+MA
+-- No whitespace in email
+test p1@gmail.com
+testtest1
+testtest1
+None
+Test1 Jones
+123-456-7890
+Town
+MA
+-- Valid
+test_p1@gmail.com
+testtest1
+testtest1
+None
+Test1 Jones
+123-456-7890
+Town
+MA
+-- Email already in database
+test_p1@gmail.com
+testtest1
+testtest1
+None
+Test1 James
+123-456-7890
+Town
+MA
+---- PASSWORD ----
+-- < 8 characters
+test_p2@gmail.com
+testtes
+testtes
+Mod
+Test2 Smith
+123-456-7890
+Town
+MA
+-- Both passwords don't match
+test_p2@gmail.com
+testtest1
+testtest2
+Mod
+Test2 Smith
+123-456-7890
+Town
+MA
+-- Valid input
+test_p2@gmail.com
+testtest2
+testtest2
+Mod
+Test2 Smith
+123-456-7890
+Town
+MA
+---- PHONE ----
+-- Too few numbers
+test_p3@gmail.com
+testtest3
+testtest3
+None
+Test3 Rogers
+123
+Town
+MA
+-- Too many numbers
+test_p3@gmail.com
+testtest3
+testtest3
+None
+Test3 Rogers
+123-456-789-101112
+Town
+MA
+-- Valid, raw
+test_p3@gmail.com
+testtest3
+testtest3
+None
+Test3 Rogers
+1234567890
+Town
+MA
+-- Valid, symbols
+test_p4@gmail.com
+testtest4
+testtest4
+None
+Test4 Stevens
+(123) 456-7890
+Town
+MA
+
+
+Students:
+---- EMAIL ----
+-- Parent email not in database
+test_p5@gmail.com
+test_gone@gmail.com
+testtest5
+testtest5
+None
+Freshman
+Test5 Foley
+1234567890
+Town
+MA
+-- Valid parent email
+test_p5@gmail.com
+test_p1@gmail.com
+testtest5
+testtest5
+None
+Freshman
+Test5 Foley
+1234567890
+Town
+MA
+-- Parent email actually maps to student
+test_p6@gmail.com
+test_p5@gmail.com
+testtest6
+testtest6
+Both
+Sophomore
+Test6 Masterson
+1234567890
+Town
+MA
+-- Valid, both mentor and mentee
+test_p6@gmail.com
+test_p2@gmail.com
+testtest6
+testtest6
+Both
+Sophomore
+Test6 Masterson
+1234567890
+Town
+MA
