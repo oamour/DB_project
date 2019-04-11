@@ -1,6 +1,7 @@
 package com.example.schooldatabase;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,7 +36,7 @@ public class RegisterParent extends AppCompatActivity {
 
     public void postRegisterParent(View view) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://10.209.25.133/code/project/api/register_parent.php";
+        String url = "http://192.168.56.1/code/project/api/register_parent.php";
         JSONObject requestContent = getParams();
         System.out.println("creating request");
         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, requestContent,
@@ -46,11 +47,57 @@ public class RegisterParent extends AppCompatActivity {
                         // response
                         Log.d("Response", response.toString());
                         Context context = getApplicationContext();
-                        CharSequence text = "Received response!";
-                        int duration = Toast.LENGTH_LONG;
+                        /* ERROR CODES:
+                         * 0 - successfully added user
+                         * 1 - email not valid
+                         * 2 - email already registered
+                         * 3 - password does not meet requirements
+                         * 4 - password confirmation failure
+                         * 5 - phone number invalid
+                         * 6 - Database error
+                         */
+                        try {
+                            int result = Integer.parseInt(response.get("result").toString());
 
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                            String message;
+                            switch (result) {
+                                case 0:
+                                    message = "Successfully registered!";
+                                    break;
+                                case 1:
+                                    message = "Invalid email address!";
+                                    break;
+                                case 2:
+                                    message = "Email already registered!";
+                                    break;
+                                case 3:
+                                    message = "Password must be at least 8 characters long!";
+                                    break;
+                                case 4:
+                                    message = "Passwords do not match!";
+                                    break;
+                                case 5:
+                                    message = "Invalid phone number entered!";
+                                    break;
+                                case 6:
+                                    message = "Failed to write user info to database!";
+                                    break;
+                                default:
+                                    // should not get here
+                                    message = "Unknown error!";
+                                    break;
+                            }
+                            int duration = Toast.LENGTH_LONG;
+
+                            Toast toast = Toast.makeText(context, message, duration);
+                            toast.show();
+                            //if case 0, redirect to main view
+                            if (result == 0) {
+                                RegisterParent.super.finish();
+                            }
+                        } catch (JSONException e) {
+                            Log.d("JsonException", e.toString());
+                        }
                     }
                 },
                 new Response.ErrorListener()
