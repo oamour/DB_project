@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">School Database</string>
-    <string name="edit_message">Demo message!</string>
-    <string name="button_send">Send</string>
     <string name="index_title">Welcome to Database University</string>
+    <string name="index_register_header">Register</string>
+    <string name="index_register_parent">Register as Parent</string>
+    <string name="index_register_student">Register as Student</string>
+    <string name="index_login_header">Login</string>
+    <string name="index_login_parent">Login as Parent</string>
+    <string name="index_login_student">Login as Student</string>
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
     <string name="password_confirm_hint">Confirm Password</string>
