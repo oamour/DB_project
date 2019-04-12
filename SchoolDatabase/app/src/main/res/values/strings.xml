@@ -8,11 +8,15 @@
     <string name="index_login_parent">Login as Parent</string>
     <string name="index_login_student">Login as Student</string>
     <string name="email_hint">Email</string>
+    <string name="parent_email_hint">Parent Email</string>
     <string name="password_hint">Password</string>
     <string name="password_confirm_hint">Confirm Password</string>
     <string name="select_role">Select Role</string>
     <string name="none">None</string>
     <string name="mod">Moderator</string>
+    <string name="mentee">Mentee</string>
+    <string name="mentor">Mentor</string>
+    <string name="mm_both">Both Mentee and Mentor</string>
     <string name="name_entry">Name</string>
     <string name="phone_entry">Phone</string>
     <string name="city_entry">City</string>

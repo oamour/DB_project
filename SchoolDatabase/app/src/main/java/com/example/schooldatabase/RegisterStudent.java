@@ -20,17 +20,16 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RegisterParent extends AppCompatActivity {
+public class RegisterStudent extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_parent);
+        setContentView(R.layout.activity_register_student);
     }
-
-    public void postRegisterParent(View view) {
+    public void postRegisterStudent(View view) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.56.1/code/project/api/register_parent.php";
+        String url = "http://192.168.56.1/code/project/api/register_student.php";
         JSONObject requestContent = getParams();
         System.out.println("creating request");
         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, requestContent,
@@ -87,7 +86,7 @@ public class RegisterParent extends AppCompatActivity {
                             toast.show();
                             //if case 0, redirect to main view
                             if (result == 0) {
-                                RegisterParent.super.finish();
+                                RegisterStudent.super.finish();
                             }
                         } catch (JSONException e) {
                             Log.d("JsonException", e.toString());
@@ -125,6 +124,11 @@ public class RegisterParent extends AppCompatActivity {
             editText = (EditText) findViewById(R.id.email_reg);
             val = editText.getText().toString();
             params.put("email", val);
+
+            //PARENT EMAIL
+            editText = (EditText) findViewById(R.id.parent_email_reg);
+            val = editText.getText().toString();
+            params.put("parent_email", val);
 
             //PASSWORD
             editText = (EditText) findViewById(R.id.pass_reg);
