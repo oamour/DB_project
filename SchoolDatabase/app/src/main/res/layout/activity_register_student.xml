@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="@string/email_hint"
             android:inputType="textEmailAddress"
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:ems="10"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:ems="10"
             android:hint="@string/password_confirm_hint"
             android:inputType="textPassword"
@@ -49,10 +49,10 @@
         <RadioGroup
             android:id="@+id/role_select_reg"
             android:layout_width="wrap_content"
-            android:layout_height="88dp"
+            android:layout_height="90dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:checkedButton="@+id/none_button_reg"
+            android:layout_marginTop="12dp"
+            android:checkedButton="@+id/mentee_button_reg"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/pass_confirm_reg">
 
@@ -130,7 +130,7 @@
             android:hint="@string/name_entry"
             android:inputType="textPersonName"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/role_select_reg" />
+            app:layout_constraintTop_toBottomOf="@+id/grade_reg" />
 
         <TextView
             android:id="@+id/textView8"
@@ -157,7 +157,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:ems="10"
             android:hint="@string/phone_entry"
             android:inputType="phone"
@@ -169,7 +169,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:ems="10"
             android:hint="@string/city_entry"
             android:inputType="textPersonName"
@@ -181,7 +181,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:ems="10"
             android:hint="@string/state_entry"
             android:inputType="textPersonName"
@@ -231,7 +231,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:ems="10"
             android:hint="@string/parent_email_hint"
             android:inputType="textEmailAddress"
@@ -247,5 +247,54 @@
             android:textAlignment="textEnd"
             app:layout_constraintBaseline_toBaselineOf="@+id/parent_email_reg"
             app:layout_constraintEnd_toStartOf="@+id/guideline2" />
+
+        <RadioGroup
+            android:id="@+id/grade_reg"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/role_select_reg">
+
+            <RadioButton
+                android:id="@+id/freshman_grade_reg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/freshman" />
+
+            <RadioButton
+                android:id="@+id/sophomore_grade_reg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/sophomore" />
+
+            <RadioButton
+                android:id="@+id/junior_grade_reg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/junior" />
+
+            <RadioButton
+                android:id="@+id/senior_grade_reg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/senior" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/select_grade"
+            android:textAlignment="textEnd"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
     </android.support.constraint.ConstraintLayout>
 </android.widget.ScrollView>

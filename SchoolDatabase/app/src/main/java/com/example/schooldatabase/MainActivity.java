@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    public void gotoRegisterStudent(View view) {
-//        Intent intent = new Intent(this, RegisterStudent.class);
-//        startActivity(intent);
-//    }
+    public void gotoRegisterStudent(View view) {
+        Intent intent = new Intent(this, RegisterStudent.class);
+        startActivity(intent);
+    }
 }

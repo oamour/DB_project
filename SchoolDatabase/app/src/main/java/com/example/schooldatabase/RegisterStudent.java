@@ -48,6 +48,7 @@ public class RegisterStudent extends AppCompatActivity {
                          * 4 - password confirmation failure
                          * 5 - phone number invalid
                          * 6 - Database error
+                         * 7 - parent email not mapped to parent
                          */
                         try {
                             int result = Integer.parseInt(response.get("result").toString());
@@ -75,6 +76,9 @@ public class RegisterStudent extends AppCompatActivity {
                                 case 6:
                                     message = "Failed to write user info to database!";
                                     break;
+                                case 7:
+                                    message = "Parent email does not map to a parent account!";
+                                    break;
                                 default:
                                     // should not get here
                                     message = "Unknown error!";
@@ -84,6 +88,7 @@ public class RegisterStudent extends AppCompatActivity {
 
                             Toast toast = Toast.makeText(context, message, duration);
                             toast.show();
+
                             //if case 0, redirect to main view
                             if (result == 0) {
                                 RegisterStudent.super.finish();
@@ -147,6 +152,13 @@ public class RegisterStudent extends AppCompatActivity {
             val = radioButton.getText().toString();
             params.put("role", val);
 
+            //GRADE
+            radioGroup = (RadioGroup) findViewById(R.id.grade_reg);
+            radioButton = (RadioButton) findViewById(
+                    radioGroup.getCheckedRadioButtonId());
+            val = radioButton.getText().toString();
+            params.put("grade", val);
+            
             //PHONE
             editText = (EditText) findViewById(R.id.phone_reg);
             val = editText.getText().toString();

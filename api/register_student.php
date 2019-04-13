@@ -1,4 +1,7 @@
 <?php
+
+$value = json_decode(file_get_contents('php://input'));
+
 # default values for each field
 $student_email = "";
 $parent_email = "";
@@ -12,7 +15,7 @@ $city = "";
 $state = "";
 
 # Submission handler
-if(isset($_POST['register'])){
+if($value != NULL){
   $myconnection = mysqli_connect('localhost', 'root', '') 
     or die ('Could not connect: ' . mysql_error());
 	
@@ -21,10 +24,10 @@ if(isset($_POST['register'])){
   mysqli_query($myconnection, "START TRANSACTION");
   
   # Receive data from POST header
-  $student_email = $_POST['student_email'];
-  $parent_email = $_POST['parent_email'];
-  $pass = $_POST['password'];
-  $pass_confirm = $_POST['pass_confirm'];
+  $student_email = $value->email;
+  $parent_email = $value->parent_email;
+  $pass = $value->pass;
+  $pass_confirm = $value->pass_confirm;
   $role = $_POST['role'];
   $grade = $_POST['grade'];
   $name = $_POST['name'];

@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RegisterStudent"></activity>
+        <activity android:name=".Login"></activity>
+        <activity android:name=".RegisterStudent" />
         <activity
             android:name=".RegisterParent"
             android:parentActivityName=".MainActivity" />

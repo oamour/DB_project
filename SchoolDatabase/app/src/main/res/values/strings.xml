@@ -17,6 +17,11 @@
     <string name="mentee">Mentee</string>
     <string name="mentor">Mentor</string>
     <string name="mm_both">Both Mentee and Mentor</string>
+    <string name="select_grade">Select Grade</string>
+    <string name="freshman">Freshman</string>
+    <string name="sophomore">Sophomore</string>
+    <string name="junior">Junior</string>
+    <string name="senior">Senior</string>
     <string name="name_entry">Name</string>
     <string name="phone_entry">Phone</string>
     <string name="city_entry">City</string>
