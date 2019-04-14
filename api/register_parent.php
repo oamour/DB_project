@@ -99,6 +99,7 @@ if ($value != null){
 	} else {
 		mysqli_close($myconnection);
 	}
+	
 	# ERROR CODES:
 	# 1 - email not valid
 	# 2 - email already registered
@@ -123,7 +124,7 @@ if ($value != null){
 	} elseif (isset($success) and $success == 0) {
 		$result_json->result = "6";
 	} else {
-		$result_json->result = "7";
+		$result_json->result = "-1";
 	}
 	
 	header('Content-Type: application/json');

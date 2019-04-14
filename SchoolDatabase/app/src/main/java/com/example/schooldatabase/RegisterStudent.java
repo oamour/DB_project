@@ -158,7 +158,7 @@ public class RegisterStudent extends AppCompatActivity {
                     radioGroup.getCheckedRadioButtonId());
             val = radioButton.getText().toString();
             params.put("grade", val);
-            
+
             //PHONE
             editText = (EditText) findViewById(R.id.phone_reg);
             val = editText.getText().toString();
