@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -16,13 +17,13 @@ public class LoginActivity extends AppCompatActivity {
 
         //get intent, extract string
         Intent intent = getIntent();
-        String login_type = (intent.getStringExtra(MainActivity.LOGIN_TYPE));
-        Log.d("login_type", login_type);
-        if (login_type == "student") {
+        String loginType = (intent.getStringExtra(MainActivity.LOGIN_TYPE));
+        //Log.d("login_type", login_type);
+        if (loginType.equals("student")) {
             Button registerButton = findViewById(R.id.login_register_button);
-            registerButton.setText("@string/index_register_student");
+            registerButton.setText(getResources().getString(R.string.index_login_student));
             TextView registerText = findViewById(R.id.login_register_text);
-            registerText.setText("@string/login_register_student");
+            registerText.setText(getResources().getString(R.string.login_register_student));
         } else {
             // leave as default (parent items)
         }
