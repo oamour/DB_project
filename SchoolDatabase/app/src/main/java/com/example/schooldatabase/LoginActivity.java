@@ -28,4 +28,17 @@ public class LoginActivity extends AppCompatActivity {
             // leave as default (parent items)
         }
     }
+
+    public void gotoRegisterPage(View view) {
+        Intent intent = getIntent();
+        String loginType =  (intent.getStringExtra(MainActivity.LOGIN_TYPE));
+
+        if (loginType.equals("student")) {
+            Intent newIntent = new Intent(this, RegisterStudent.class);
+            startActivity(newIntent);
+        } else {
+            Intent newIntent = new Intent(this, RegisterParent.class);
+            startActivity(newIntent);
+        }
+    }
 }
