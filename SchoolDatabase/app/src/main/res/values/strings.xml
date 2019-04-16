@@ -27,4 +27,7 @@
     <string name="city_entry">City</string>
     <string name="state_entry">State</string>
     <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="login_register_parent">Click here to Register as Parent</string>
+    <string name="login_register_student">Click here to Register as Student</string>
 </resources>
