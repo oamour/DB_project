@@ -8,6 +8,7 @@ import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.schooldatabase.MESSAGE";
+    public static final String LOGIN_TYPE = "com.example.schooldatabase.LOGIN_TYPE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,17 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }*/
+    public void gotoLoginParent(View view) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra(LOGIN_TYPE, "parent");
+        startActivity(intent);
+    }
+
+    public void gotoLoginStudent(View view) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra(LOGIN_TYPE, "parent");
+        startActivity(intent);
+    }
 
     public void gotoRegisterParent(View view) {
         Intent intent = new Intent(this, RegisterParent.class);
