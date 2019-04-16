@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void gotoLoginStudent(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
-        intent.putExtra(LOGIN_TYPE, "parent");
+        intent.putExtra(LOGIN_TYPE, "student");
         startActivity(intent);
     }
 
