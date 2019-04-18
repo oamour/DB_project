@@ -31,6 +31,7 @@ public class SessionManager {
         mEditor.putString(KEY_ID, id);
         Date date = new Date();
 
+        // Session is valid for 1 day
         long ms = date.getTime() + (24*60*60*1000);
         mEditor.putLong(KEY_EXPIRES, ms);
 
