@@ -87,12 +87,13 @@ public class LoginActivity extends AppCompatActivity {
                                 String name = response.getString("name");
                                 String userID = response.getString("userID");
                                 String email = response.getString("email");
+                                int grade = response.getInt("gradeLevel");
                                 boolean parent = response.getBoolean("isParent");
                                 boolean mentor = response.getBoolean("isMentor");
                                 boolean mentee = response.getBoolean("isMentee");
                                 boolean moderator = response.getBoolean("isModerator");
-                                session.loginUser(email, name, userID, parent,
-                                        mentor, mentee, moderator);
+                                session.loginUser(email, name, userID, grade,
+                                        parent, mentor, mentee, moderator);
                                 gotoDashboard();
                             } else {
                                 Context context = getApplicationContext();

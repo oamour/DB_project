@@ -19,7 +19,7 @@ function check_credentials ($username, $pass) {
 			$user_info->success = 1;
 			$userid = $row["userID"];
 			//get user info
-			$query = "SELECT userID, name, email, isParent FROM users WHERE userID = " . $userid;
+			$query = "SELECT userID, name, email, gradeLevel, isParent FROM users WHERE userID = " . $userid;
 			$result = mysqli_query($myconnection, $query) or die("Failed to retrieve user info for " . $username);
 			
 			if(mysqli_num_rows($result) > 0) {
@@ -27,6 +27,7 @@ function check_credentials ($username, $pass) {
 				$user_info->name = $row["name"];
 				$user_info->userID = $row["userID"];
 				$user_info->email = $row["email"];
+				$user_info->gradeLevel = $row["gradeLevel"];
 				if($row["isParent"] == 1) {
 					$user_info->isParent = true;
 				} else {

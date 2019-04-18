@@ -7,6 +7,7 @@ public class User {
     String ID;
     String name;
     Date expirationDate;
+    int grade;
     boolean parent;
     boolean mentor;
     boolean mentee;
@@ -27,6 +28,8 @@ public class User {
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
     }
+
+    public void setGrade(int grade) { this.grade = grade;}
 
     public void setParent(boolean parent) { this.parent = parent;}
 
@@ -50,6 +53,10 @@ public class User {
 
     public Date getExpDate() {
         return expirationDate;
+    }
+
+    public int getGrade() {
+        return grade;
     }
 
     public boolean isParent() {
