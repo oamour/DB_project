@@ -83,5 +83,18 @@ public class DashboardActivity extends AppCompatActivity {
             button.setVisibility(View.VISIBLE);
         }
     }
+
+    public void logoutButton(View view) {
+        session.logoutUser();
+        Context context = getApplicationContext();
+        CharSequence message = "You have been successfully logged out.";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, message, duration);
+
+        toast.show();
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
