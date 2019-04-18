@@ -36,4 +36,8 @@
     <string name="login">Login</string>
     <string name="login_register_parent">Click here to Register as Parent</string>
     <string name="login_register_student">Click here to Register as Student</string>
+
+    <!--Dashboard-->
+    <string name="welcome">Welcome, </string>
+    <string name="grade">Your grade level is </string>
 </resources>
