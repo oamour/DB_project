@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -27,8 +30,58 @@ public class DashboardActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+
         //get user info
         //get whether user is parent, moderator, mentor, mentee
         //show buttons based on that
+        User user = session.getUserDetails();
+
+        TextView textView = (TextView) findViewById(R.id.dashboard_welcome);
+        textView.append(" " + user.getName());
+
+        // Show grade level at top of page, if applicable
+        textView = (TextView) findViewById(R.id.dashboard_grade_level);
+        if(!user.isParent()) {
+            int grade = user.getGrade();
+            switch (grade) {
+                case 1:
+                    textView.append(" " + getResources().getText(R.string.freshman));
+                    break;
+                case 2:
+                    textView.append(" " + getResources().getText(R.string.sophomore));
+                    break;
+                case 3:
+                    textView.append(" " + getResources().getText(R.string.junior));
+                    break;
+                case 4:
+                    textView.append(" " + getResources().getText(R.string.senior));
+                    break;
+                default:
+                    textView.append(" None");
+            }
+        } else {
+            textView.setVisibility(View.GONE);
+        }
+
+        if(user.isParent()) {
+            Button button = (Button) findViewById(R.id.dashboard_change_child_profile);
+            button.setVisibility(View.VISIBLE);
+        }
+
+        if(user.isMentor()) {
+            Button button = (Button) findViewById(R.id.dashboard_view_mentor);
+            button.setVisibility(View.VISIBLE);
+        }
+
+        if(user.isMentee()) {
+            Button button = (Button) findViewById(R.id.dashboard_view_mentee);
+            button.setVisibility(View.VISIBLE);
+        }
+
+        if(user.isModerator()) {
+            Button button = (Button) findViewById(R.id.dashboard_view_moderator);
+            button.setVisibility(View.VISIBLE);
+        }
+    }
     }
 }
