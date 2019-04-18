@@ -79,21 +79,31 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         // response
-                        Log.d("Response", response.toString());
-                        Context context = getApplicationContext();
-                        /* ERROR CODES:
-                         * 0 - successfully added user
-                         * 1 - email not valid
-                         * 2 - email already registered
-                         * 3 - password does not meet requirements
-                         * 4 - password confirmation failure
-                         * 5 - phone number invalid
-                         * 6 - Database error
-                         */
                         try {
-                            int result = Integer.parseInt(response.get("result").toString());
+                            int success = Integer.parseInt(response.getString("success"));
+                            if(success == 1) {
+                                String name = response.getString("name");
+                                String userID = response.getString("userID");
+                                String email = response.getString("email");
+
+                                session.loginUser(email, name, userID);
+                                gotoDashboard();
+                            } else {
+                                Context context = getApplicationContext();
+                                CharSequence error = "Failed to login: Invalid Credentials";
+                                int duration = Toast.LENGTH_LONG;
+
+                                Toast toast = Toast.makeText(context, error, duration);
+                                toast.show();
+                            }
                         } catch (JSONException e) {
                             Log.d("JsonException", e.toString());
+                            Context context = getApplicationContext();
+                            CharSequence error = "An error occurred, please try again later";
+                            int duration = Toast.LENGTH_SHORT;
+
+                            Toast toast = Toast.makeText(context, error, duration);
+                            toast.show();
                         }
                     }
                 },
@@ -104,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                         // error
                         Log.d("Error.Response", error.toString());
                         Context context = getApplicationContext();
-                        CharSequence text = "Error response!" + error.toString();
+                        CharSequence text = "An error occurred, please try again later";
                         int duration = Toast.LENGTH_LONG;
 
                         Toast toast = Toast.makeText(context, text, duration);
@@ -119,12 +129,12 @@ public class LoginActivity extends AppCompatActivity {
     {
         JSONObject params = new JSONObject();
         try {
-            //NAME
+            // EMAIL
             EditText editText = (EditText) findViewById(R.id.login_email);
             String val = editText.getText().toString();
             params.put("email", val);
 
-            //EMAIL
+            // PASS
             editText = (EditText) findViewById(R.id.login_pass);
             val = editText.getText().toString();
             params.put("pass", val);
