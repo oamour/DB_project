@@ -7,6 +7,10 @@ public class User {
     String ID;
     String name;
     Date expirationDate;
+    boolean parent;
+    boolean mentor;
+    boolean mentee;
+    boolean moderator;
 
     public void setEmail(String email) {
         this.email = email;
@@ -24,6 +28,14 @@ public class User {
         this.expirationDate = expirationDate;
     }
 
+    public void setParent(boolean parent) { this.parent = parent;}
+
+    public void setMentor(boolean mentor) { this.mentor = mentor;}
+
+    public void setMentee(boolean mentee) { this.mentee = mentee;}
+
+    public void setModerator(boolean moderator) { this.moderator = moderator;}
+
     public String getEmail() {
         return email;
     }
@@ -38,5 +50,21 @@ public class User {
 
     public Date getExpDate() {
         return expirationDate;
+    }
+
+    public boolean isParent() {
+        return parent;
+    }
+
+    public boolean isMentee() {
+        return mentee;
+    }
+
+    public boolean isMentor() {
+        return mentor;
+    }
+
+    public boolean isModerator() {
+        return moderator;
     }
 }
