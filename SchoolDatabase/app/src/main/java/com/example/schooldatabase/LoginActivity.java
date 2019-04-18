@@ -34,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // if logged in, go straight to dashboard
         if (session.isLoggedIn()) {
-            session.logoutUser();
             gotoDashboard();
         }
 
@@ -52,9 +51,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     public void gotoDashboard() {
-        Intent intent = getIntent();
+        Intent intent = new Intent(this, DashboardActivity.class);
         Log.d("Login", "Login successful!");
-        // TODO: write dashboard activity
+        startActivity(intent);
+        finish();
     }
 
     public void gotoRegisterPage(View view) {
