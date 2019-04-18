@@ -14,6 +14,10 @@ public class SessionManager {
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_EXPIRES = "expires";
+    private static final String KEY_PARENT = "parent";
+    private static final String KEY_MENTOR = "mentor";
+    private static final String KEY_MENTEE = "mentee";
+    private static final String KEY_MODERATOR = "moderator";
     private static final String KEY_EMPTY = "";
     private Context mContext;
     private SharedPreferences.Editor mEditor;
@@ -25,10 +29,16 @@ public class SessionManager {
         this.mEditor = mPreferences.edit();
     }
 
-    public void loginUser(String email, String name, String id) {
+    public void loginUser(String email, String name, String id, boolean parent,
+                          boolean mentor, boolean mentee, boolean moderator) {
         mEditor.putString(KEY_EMAIL, email);
         mEditor.putString(KEY_NAME, name);
         mEditor.putString(KEY_ID, id);
+        mEditor.putBoolean(KEY_PARENT, parent);
+        mEditor.putBoolean(KEY_MENTOR, mentor);
+        mEditor.putBoolean(KEY_MENTEE, mentee);
+        mEditor.putBoolean(KEY_MODERATOR, moderator);
+
         Date date = new Date();
 
         // Session is valid for 1 day
@@ -60,6 +70,12 @@ public class SessionManager {
         user.setID(mPreferences.getString(KEY_ID, KEY_EMPTY));
         user.setName(mPreferences.getString(KEY_NAME, KEY_EMPTY));
         user.setExpirationDate(new Date(mPreferences.getLong(KEY_EXPIRES, 0)));
+
+        // set flags
+        user.setParent(mPreferences.getBoolean(KEY_PARENT, false));
+        user.setMentor(mPreferences.getBoolean(KEY_MENTOR, false));
+        user.setMentee(mPreferences.getBoolean(KEY_MENTEE, false));
+        user.setModerator(mPreferences.getBoolean(KEY_MODERATOR, false));
 
         return user;
     }

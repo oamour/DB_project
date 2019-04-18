@@ -88,7 +88,8 @@ public class LoginActivity extends AppCompatActivity {
                                 String userID = response.getString("userID");
                                 String email = response.getString("email");
 
-                                session.loginUser(email, name, userID);
+                                session.loginUser(email, name, userID, false,
+                                        false, false, false);
                                 gotoDashboard();
                             } else {
                                 Context context = getApplicationContext();
