@@ -48,6 +48,8 @@ if ($value != null) {
 	$pass = $value->pass;
 	
 	$user_info = check_credentials($email, $pass);
+	
+	header('Content-Type: application/json');
 	echo $user_info;
 }
 ?>
