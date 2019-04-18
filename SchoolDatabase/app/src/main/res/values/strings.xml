@@ -39,5 +39,12 @@
 
     <!--Dashboard-->
     <string name="welcome">Welcome, </string>
-    <string name="grade">Your grade level is </string>
+    <string name="dashboard_grade">Your grade level is </string>
+    <string name="change_profile">Change Profile</string>
+    <string name="change_profile_child">Change Child\'s Profile</string>
+    <string name="view_sections">View Sections</string>
+    <string name="moderator_status">View Moderator Status</string>
+    <string name="mentor_status">View Mentor Status</string>
+    <string name="mentee_status">View Mentee Status</string>
+    <string name="logout">Logout</string>
 </resources>
