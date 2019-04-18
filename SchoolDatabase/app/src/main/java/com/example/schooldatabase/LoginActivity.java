@@ -67,4 +67,72 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(newIntent);
         }
     }
+
+    public void postLoginDetails(View view) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "http://192.168.56.1/code/project/api/login.php";
+        JSONObject requestContent = getParams();
+
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, requestContent,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // response
+                        Log.d("Response", response.toString());
+                        Context context = getApplicationContext();
+                        /* ERROR CODES:
+                         * 0 - successfully added user
+                         * 1 - email not valid
+                         * 2 - email already registered
+                         * 3 - password does not meet requirements
+                         * 4 - password confirmation failure
+                         * 5 - phone number invalid
+                         * 6 - Database error
+                         */
+                        try {
+                            int result = Integer.parseInt(response.get("result").toString());
+                        } catch (JSONException e) {
+                            Log.d("JsonException", e.toString());
+                        }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                        Context context = getApplicationContext();
+                        CharSequence text = "Error response!" + error.toString();
+                        int duration = Toast.LENGTH_LONG;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+                }
+        );
+        queue.add(postRequest);
+    }
+
+    private JSONObject getParams()
+    {
+        JSONObject params = new JSONObject();
+        try {
+            //NAME
+            EditText editText = (EditText) findViewById(R.id.login_email);
+            String val = editText.getText().toString();
+            params.put("email", val);
+
+            //EMAIL
+            editText = (EditText) findViewById(R.id.login_pass);
+            val = editText.getText().toString();
+            params.put("pass", val);
+
+        } catch (JSONException e) {
+            Log.d("Json", "Failed to get parameter list");
+            params = null;
+        }
+        return params;
+    }
 }
