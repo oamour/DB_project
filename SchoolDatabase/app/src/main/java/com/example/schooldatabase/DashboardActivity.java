@@ -97,4 +97,28 @@ public class DashboardActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    public void gotoChangeProfile(View view) {
+        // TODO: implement ChangeProfileActivity
+    }
+
+    public void gotoChangeChildProfile(View view) {
+        // TODO: implement ChangeChildProfileActivity
+    }
+
+    public void gotoViewSections(View view) {
+        // TODO: implement ViewSectionsActivity
+    }
+
+    public void gotoMentorStatus(View view) {
+        // TODO: implement MentorStatusActivity
+    }
+
+    public void gotoMenteeStatus(View view) {
+        // TODO: implement MenteeStatusActivity
+    }
+
+    public void gotoModeratorStatus(View view) {
+        // TODO: implement ModeratorStatusActivity
+    }
 }
