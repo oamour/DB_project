@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">School Database</string>
+
+    <!--Index Page-->
     <string name="index_title">Welcome to Database University</string>
     <string name="index_register_header">Register</string>
     <string name="index_register_parent">Register as Parent</string>
@@ -7,6 +9,8 @@
     <string name="index_login_header">Login</string>
     <string name="index_login_parent">Login as Parent</string>
     <string name="index_login_student">Login as Student</string>
+
+    <!--Registration Page-->
     <string name="email_hint">Email</string>
     <string name="parent_email_hint">Parent Email</string>
     <string name="password_hint">Password</string>
@@ -27,6 +31,8 @@
     <string name="city_entry">City</string>
     <string name="state_entry">State</string>
     <string name="register">Register</string>
+
+    <!--Login Page-->
     <string name="login">Login</string>
     <string name="login_register_parent">Click here to Register as Parent</string>
     <string name="login_register_student">Click here to Register as Student</string>
