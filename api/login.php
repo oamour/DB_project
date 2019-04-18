@@ -69,11 +69,11 @@ function check_credentials ($username, $pass) {
 $value = json_decode(file_get_contents('php://input'));
 
 //DEBUG
-/*if ($value == null) {
+if ($value == null) {
 	$value = (object)[];
 	$value->email = "nickbishop97@gmail.com";
 	$value->pass = "testtest";
-}*/
+}
 
 if ($value != null) {
 	$email = $value->email;

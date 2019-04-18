@@ -87,7 +87,12 @@ public class LoginActivity extends AppCompatActivity {
                                 String name = response.getString("name");
                                 String userID = response.getString("userID");
                                 String email = response.getString("email");
-                                int grade = response.getInt("gradeLevel");
+                                int grade;
+                                try {
+                                    grade = response.getInt("gradeLevel");
+                                } catch (JSONException e) {
+                                    grade = 0;
+                                }
                                 boolean parent = response.getBoolean("isParent");
                                 boolean mentor = response.getBoolean("isMentor");
                                 boolean mentee = response.getBoolean("isMentee");
