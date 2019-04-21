@@ -1,12 +1,23 @@
 <?php
 include 'functions.php';
 
-session_start();
+$value = json_decode(file_get_contents('php://input'));
 
-$userid = check_session();
+// DEBUG
+/*if($value == null){
+	$value = (object)[];
+	$value->userID = 41;
+	$value->email = "nickbishop97@gmail.com";
+	$value->pass = "testtest";
+	$value->pass_confirm = "testtest";
+	$value->role = "Moderator";
+	$value->name = "Nick Bishop";
+	$value->phone = "7777777777";
+	$value->city = "Nahant";
+	$value->state = "MA";
+}*/
 
-# Submission handler
-if(isset($_POST['update']) and isset($userid) and $userid != false){
+if ($value != null){
   $myconnection = mysqli_connect('localhost', 'root', '') 
     or die ('Could not connect: ' . mysql_error());
 	
@@ -15,12 +26,13 @@ if(isset($_POST['update']) and isset($userid) and $userid != false){
   mysqli_query($myconnection, "START TRANSACTION");
   
   # Receive data from POST header
-  $pass = $_POST['password'];
-  $pass_confirm = $_POST['pass_confirm'];
-  $name = $_POST['name'];
-  $phone_num = $_POST['phone_num'];
-  $city = $_POST['city'];
-  $state = $_POST['state'];
+  $userid = $value->userID;
+  $pass = $value->pass;
+  $pass_confirm = $value->pass_confirm;
+  $name = $value->name;
+  $phone_num = $value->phone;
+  $city = $value->city;
+  $state = $value->state;
 
   $input_valid = 1;
   
@@ -42,7 +54,7 @@ if(isset($_POST['update']) and isset($userid) and $userid != false){
   
   if($input_valid == 1) {
 	# update user
-	$query = "UPDATE users SET name = '$name', phone = '$phone_num', city = '$city', state = '$state' WHERE userID = $userid";
+	$query = "UPDATE users SET name = '$name', phone = '$phone_num_sanitized', city = '$city', state = '$state' WHERE userID = $userid";
     $result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error($myconnection));
 	
 	#update password if set
@@ -56,29 +68,45 @@ if(isset($_POST['update']) and isset($userid) and $userid != false){
 	if($result == false) {
 	  # Close connection rolls back transaction
 	  mysqli_close($myconnection);
-	  echo "Failed to update user info. Please try again.";
+	  $success = 0;
 	} else {
 	  # User creation succeeded; commit transaction
 	  mysqli_query($myconnection, "COMMIT;");
-	  $message = "Success! Profile updated.";  
+	  $success = 1;
 	  mysqli_close($myconnection);
 	}
   } else {
+	$success = 0;
 	mysqli_close($myconnection);
-	$message = "Failure! Invalid input.";
   }
+  
+  # ERROR CODES:
+	# 1 - email not valid
+	# 2 - email already registered
+	# 3 - password does not meet requirements
+	# 4 - password confirmation failure
+	# 5 - phone number invalid
+	# 6 - Database error
+	
+	$result_json = (object)[];
+	if(isset($success) and $success == 1) {
+		$result_json->result = "0";
+	} elseif (isset($pass_error_code) and $pass_error_code == 1) {
+		$result_json->result = "3";
+	} elseif (isset($pass_error_code) and $pass_error_code == 2) {
+		$result_json->result = "4";
+	} elseif (isset($phone_num_matches) and $phone_num_matches == 0) {
+		$result_json->result = "5";
+	} elseif (isset($success) and $success == 0) {
+		$result_json->result = "6";
+	} else {
+		$result_json->result = "-1";
+	}
+	
+	header('Content-Type: application/json');
+	$encoded = json_encode($result_json);
+	
+	echo $encoded;
 }
 
-if (isset($userid) and $userid != false) {
-  #start MySQL connection
-  $myconnection = mysqli_connect('localhost', 'root', '') or die ('Could not connect: ' . mysql_error());
-  $mydb = mysqli_select_db ($myconnection, 'db2') or die ('Could not select database');
-  
-  $row = get_user_info($myconnection, $userid);
-  
-  $name = $row['name'];
-  $phone_num = $row['phone'];
-  $city = $row['city'];
-  $state = $row['state'];
-}
 ?>
