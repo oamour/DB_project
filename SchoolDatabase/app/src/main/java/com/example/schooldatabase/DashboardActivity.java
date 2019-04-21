@@ -84,6 +84,15 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        User user = session.getUserDetails();
+        TextView welcome = (TextView) findViewById(R.id.dashboard_welcome);
+        welcome.setText(R.string.welcome);
+        welcome.append(" " + user.getName());
+    }
+
     public void logoutButton(View view) {
         session.logoutUser();
         Context context = getApplicationContext();
