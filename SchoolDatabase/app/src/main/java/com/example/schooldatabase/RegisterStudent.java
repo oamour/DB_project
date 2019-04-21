@@ -29,7 +29,7 @@ public class RegisterStudent extends AppCompatActivity {
     }
     public void postRegisterStudent(View view) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.56.1/code/project/api/register_student.php";
+        String url = MainActivity.HREF + "/code/project/api/register_student.php";
         JSONObject requestContent = getParams();
         System.out.println("creating request");
         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, requestContent,

@@ -30,7 +30,7 @@ public class RegisterParent extends AppCompatActivity {
 
     public void postRegisterParent(View view) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.56.1/code/project/api/register_parent.php";
+        String url = MainActivity.HREF + "/code/project/api/register_parent.php";
         JSONObject requestContent = getParams();
         System.out.println("creating request");
         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, requestContent,

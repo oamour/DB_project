@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void postLoginDetails(View view) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.56.1/code/project/api/login.php";
+        String url = MainActivity.HREF + "/code/project/api/login.php";
         JSONObject requestContent = getParams();
 
         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, requestContent,

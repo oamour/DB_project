@@ -57,13 +57,14 @@ public class ChangeProfileActivity extends AppCompatActivity {
 
     public void getProfileInfo() {
         User user = session.getUserDetails();
-        String url = "http://192.168.56.1/code/project/api/user_info.php";
+        String url = MainActivity.HREF + "/code/project/api/user_info.php";
         JSONObject requestContent = new JSONObject();
         try {
             requestContent.put("userID", user.getID());
         } catch (JSONException e) {
-            Log.d("JsonException", e.toString());
+            Log.d("ChangeProfile", e.toString());
         }
+        Log.d("ChangeProfile", "requestContent = " + requestContent.toString());
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, requestContent,
                 new Response.Listener<JSONObject>()
                 {
@@ -121,7 +122,7 @@ public class ChangeProfileActivity extends AppCompatActivity {
 
     public void postChangeProfile(View view) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.56.1/code/project/api/change_profile.php";
+        String url = MainActivity.HREF + "/code/project/api/change_profile.php";
         JSONObject requestContent = getParams();
         System.out.println("creating request");
         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, requestContent,
