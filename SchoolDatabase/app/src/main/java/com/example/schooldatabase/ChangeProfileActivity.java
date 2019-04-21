@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -48,26 +50,9 @@ public class ChangeProfileActivity extends AppCompatActivity {
             finish();
         }
 
-        //get user info
+        //get user info, update editText elements
         getProfileInfo();
 
-        // Set text boxes to hold current values
-        EditText editText = (EditText) findViewById(R.id.name_change);
-        editText.setText(name);
-
-        editText = (EditText) findViewById(R.id.phone_change);
-        if(phone.length() == 10) {
-            CharSequence phone_fmt = phone.substring(0,3) + "-"
-                    + phone.substring(3,6) + "-"
-                    + phone.substring(6,10);
-            editText.setText(phone_fmt);
-        }
-
-        editText = (EditText) findViewById(R.id.city_change);
-        editText.setText(city);
-
-        editText = (EditText) findViewById(R.id.state_change);
-        editText.setText(state);
     }
 
     public void getProfileInfo() {
@@ -92,6 +77,24 @@ public class ChangeProfileActivity extends AppCompatActivity {
                             phone = response.getString("phone");
                             city = response.getString("city");
                             state = response.getString("state");
+
+                            // Set text boxes to hold current values
+                            EditText editText = (EditText) findViewById(R.id.name_change);
+                            editText.setText(name, TextView.BufferType.EDITABLE);
+
+                            editText = (EditText) findViewById(R.id.phone_change);
+                            if(phone.length() == 10) {
+                                CharSequence phone_fmt = phone.substring(0,3) + "-"
+                                        + phone.substring(3,6) + "-"
+                                        + phone.substring(6,10);
+                                editText.setText(phone_fmt, TextView.BufferType.EDITABLE);
+                            }
+
+                            editText = (EditText) findViewById(R.id.city_change);
+                            editText.setText(city, TextView.BufferType.EDITABLE);
+
+                            editText = (EditText) findViewById(R.id.state_change);
+                            editText.setText(state, TextView.BufferType.EDITABLE);
 
                         } catch (JSONException e) {
                             Log.d("JsonException", e.toString());
