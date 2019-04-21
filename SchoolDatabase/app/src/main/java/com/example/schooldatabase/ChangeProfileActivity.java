@@ -32,7 +32,43 @@ public class ChangeProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_profile);
-        
+
+        session = new SessionManager(getApplicationContext());
+        queue = Volley.newRequestQueue(this);
+
+        if(!session.isLoggedIn()) {
+            Context context = getApplicationContext();
+            CharSequence message = "You do not have permission to access this page";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, message, duration);
+            toast.show();
+
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+        //get user info
+        User user = session.getUserDetails();
+        getProfileInfo();
+
+        // Set text boxes to hold current values
+        EditText editText = (EditText) findViewById(R.id.name_change);
+        editText.setText(name);
+
+        editText = (EditText) findViewById(R.id.phone_change);
+        if(phone.length() == 10) {
+            CharSequence phone_fmt = "(" + phone.substring(0,3) + ") "
+                    + phone.substring(3,6) + "-"
+                    + phone.substring(6,10);
+            editText.setText(phone_fmt);
+        }
+
+        editText = (EditText) findViewById(R.id.city_change);
+        editText.setText(city);
+
+        editText = (EditText) findViewById(R.id.state_change);
+        editText.setText(state);
     }
 
     public void getProfileInfo() {
