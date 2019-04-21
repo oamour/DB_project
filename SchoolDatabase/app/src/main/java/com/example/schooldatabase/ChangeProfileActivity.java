@@ -49,7 +49,6 @@ public class ChangeProfileActivity extends AppCompatActivity {
         }
 
         //get user info
-        User user = session.getUserDetails();
         getProfileInfo();
 
         // Set text boxes to hold current values
@@ -58,7 +57,7 @@ public class ChangeProfileActivity extends AppCompatActivity {
 
         editText = (EditText) findViewById(R.id.phone_change);
         if(phone.length() == 10) {
-            CharSequence phone_fmt = "(" + phone.substring(0,3) + ") "
+            CharSequence phone_fmt = phone.substring(0,3) + "-"
                     + phone.substring(3,6) + "-"
                     + phone.substring(6,10);
             editText.setText(phone_fmt);
@@ -72,10 +71,14 @@ public class ChangeProfileActivity extends AppCompatActivity {
     }
 
     public void getProfileInfo() {
+        User user = session.getUserDetails();
         String url = "http://192.168.56.1/code/project/api/user_info.php";
         JSONObject requestContent = new JSONObject();
-        requestContent.put("userID", user.getID());
-
+        try {
+            requestContent.put("userID", user.getID());
+        } catch (JSONException e) {
+            Log.d("JsonException", e.toString());
+        }
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, requestContent,
                 new Response.Listener<JSONObject>()
                 {
@@ -83,16 +86,7 @@ public class ChangeProfileActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         // response
                         Log.d("Response", response.toString());
-                        Context context = getApplicationContext();
-                        /* ERROR CODES:
-                         * 0 - successfully added user
-                         * 1 - email not valid
-                         * 2 - email already registered
-                         * 3 - password does not meet requirements
-                         * 4 - password confirmation failure
-                         * 5 - phone number invalid
-                         * 6 - Database error
-                         */
+
                         try {
                             name = response.getString("name");
                             phone = response.getString("phone");
