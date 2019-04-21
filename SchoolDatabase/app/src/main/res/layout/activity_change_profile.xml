@@ -89,8 +89,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:onClick="postRegisterParent"
-            android:text="@string/register"
+            android:onClick="postChangeProfile"
+            android:text="@string/change_profile"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/state_change" />
 

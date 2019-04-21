@@ -121,7 +121,7 @@ public class ChangeProfileActivity extends AppCompatActivity {
 
     public void postChangeProfile(View view) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.56.1/code/project/api/register_parent.php";
+        String url = "http://192.168.56.1/code/project/api/change_profile.php";
         JSONObject requestContent = getParams();
         System.out.println("creating request");
         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, requestContent,
@@ -147,13 +147,7 @@ public class ChangeProfileActivity extends AppCompatActivity {
                             String message;
                             switch (result) {
                                 case 0:
-                                    message = "Successfully registered!";
-                                    break;
-                                case 1:
-                                    message = "Invalid email address!";
-                                    break;
-                                case 2:
-                                    message = "Email already registered!";
+                                    message = "Profile updated!";
                                     break;
                                 case 3:
                                     message = "Password must be at least 8 characters long!";
@@ -178,7 +172,7 @@ public class ChangeProfileActivity extends AppCompatActivity {
                             toast.show();
                             //if case 0, redirect to main view
                             if (result == 0) {
-                                //RegisterParent.super.finish();
+                                finish();
                             }
                         } catch (JSONException e) {
                             Log.d("JsonException", e.toString());
@@ -207,9 +201,17 @@ public class ChangeProfileActivity extends AppCompatActivity {
     {
         JSONObject params = new JSONObject();
         try {
+            User user = session.getUserDetails();
+
+            //USERID
+            params.put("userID", user.getID());
+
             //NAME
             EditText editText = (EditText) findViewById(R.id.name_change);
             String val = editText.getText().toString();
+            if(val.equals("")) {
+                val = name;
+            }
             params.put("name", val);
 
             //PASSWORD
@@ -225,16 +227,25 @@ public class ChangeProfileActivity extends AppCompatActivity {
             //PHONE
             editText = (EditText) findViewById(R.id.phone_change);
             val = editText.getText().toString();
+            if(val.equals("")) {
+                val = phone;
+            }
             params.put("phone", val);
 
             //CITY
             editText = (EditText) findViewById(R.id.city_change);
             val = editText.getText().toString();
+            if(val.equals("")) {
+                val = city;
+            }
             params.put("city", val);
 
             //STATE
             editText = (EditText) findViewById(R.id.state_change);
             val = editText.getText().toString();
+            if(val.equals("")) {
+                val = state;
+            }
             params.put("state", val);
         } catch (JSONException e) {
             Log.d("Json", "Failed to get parameter list");
