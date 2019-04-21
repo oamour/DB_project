@@ -25,6 +25,7 @@ import org.json.JSONObject;
 public class ChangeProfileActivity extends AppCompatActivity {
     private SessionManager session;
     private RequestQueue queue;
+    private String userID = "";
     private String name = "";
     private String phone = "";
     private String city = "";
@@ -50,9 +51,39 @@ public class ChangeProfileActivity extends AppCompatActivity {
             finish();
         }
 
-        //get user info, update editText elements
-        getProfileInfo();
+        if(getIntent() != null && getIntent().getExtras() != null) {
+            Intent intent = getIntent();
+            userID = intent.getStringExtra("userID");
+            name = intent.getStringExtra("name");
+            phone = intent.getStringExtra("phone");
+            city = intent.getStringExtra("city");
+            state = intent.getStringExtra("state");
 
+            setTextBoxes();
+        } else {
+            //get user info, update editText elements
+            getProfileInfo();
+        }
+    }
+
+    public void setTextBoxes() {
+        // Set text boxes to hold current values
+        EditText editText = (EditText) findViewById(R.id.name_change);
+        editText.setText(name, TextView.BufferType.EDITABLE);
+
+        editText = (EditText) findViewById(R.id.phone_change);
+        if(phone.length() == 10) {
+            CharSequence phone_fmt = phone.substring(0,3) + "-"
+                    + phone.substring(3,6) + "-"
+                    + phone.substring(6,10);
+            editText.setText(phone_fmt, TextView.BufferType.EDITABLE);
+        }
+
+        editText = (EditText) findViewById(R.id.city_change);
+        editText.setText(city, TextView.BufferType.EDITABLE);
+
+        editText = (EditText) findViewById(R.id.state_change);
+        editText.setText(state, TextView.BufferType.EDITABLE);
     }
 
     public void getProfileInfo() {
@@ -79,23 +110,7 @@ public class ChangeProfileActivity extends AppCompatActivity {
                             city = response.getString("city");
                             state = response.getString("state");
 
-                            // Set text boxes to hold current values
-                            EditText editText = (EditText) findViewById(R.id.name_change);
-                            editText.setText(name, TextView.BufferType.EDITABLE);
-
-                            editText = (EditText) findViewById(R.id.phone_change);
-                            if(phone.length() == 10) {
-                                CharSequence phone_fmt = phone.substring(0,3) + "-"
-                                        + phone.substring(3,6) + "-"
-                                        + phone.substring(6,10);
-                                editText.setText(phone_fmt, TextView.BufferType.EDITABLE);
-                            }
-
-                            editText = (EditText) findViewById(R.id.city_change);
-                            editText.setText(city, TextView.BufferType.EDITABLE);
-
-                            editText = (EditText) findViewById(R.id.state_change);
-                            editText.setText(state, TextView.BufferType.EDITABLE);
+                            setTextBoxes();
 
                         } catch (JSONException e) {
                             Log.d("JsonException", e.toString());
@@ -174,7 +189,9 @@ public class ChangeProfileActivity extends AppCompatActivity {
                             //if case 0, redirect to main view
                             if (result == 0) {
                                 // Update stored name if changed
-                                session.updateName(name);
+                                if (userID.equals("")) {
+                                    session.updateName(name);
+                                }
                                 finish();
                             }
                         } catch (JSONException e) {
@@ -207,8 +224,11 @@ public class ChangeProfileActivity extends AppCompatActivity {
             User user = session.getUserDetails();
 
             //USERID
-            params.put("userID", user.getID());
-
+            if(userID.equals("")) {
+                params.put("userID", user.getID());
+            } else {
+                params.put("userID", userID);
+            }
             //NAME
             EditText editText = (EditText) findViewById(R.id.name_change);
             String val = editText.getText().toString();
