@@ -32,7 +32,9 @@ function generate_child_rows($userid) {
   }
   return json_encode($child_array);
 }
+
 $value = json_decode(file_get_contents('php://input'));
+echo $value;
 
 //DEBUG
 if($value == null) {
@@ -42,7 +44,7 @@ if($value == null) {
 }
 
 if ($value != null) {
-	$child_array = generate_child_rows($value->userID);
+	$child_array = generate_child_rows($value[0]);
 	
 	header("Content-Type: application/json");
 	echo $child_array;
