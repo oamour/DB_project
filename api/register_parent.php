@@ -43,7 +43,6 @@ if ($value != null){
 		$input_valid = 0;
 	} else {
 		# Check whether email address exists in database
-		file_put_contents($file, "Email does match!\r\n", FILE_APPEND | LOCK_EX);
 		$result = mysqli_query($myconnection, "SELECT * FROM accounts WHERE username = '" . $email . "'");
 		if($result->num_rows > 0) {
 			$email_already_exists = 1;
