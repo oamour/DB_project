@@ -172,6 +172,8 @@ public class ChangeProfileActivity extends AppCompatActivity {
                             toast.show();
                             //if case 0, redirect to main view
                             if (result == 0) {
+                                // Update stored name if changed
+                                session.updateName(name);
                                 finish();
                             }
                         } catch (JSONException e) {
@@ -211,6 +213,8 @@ public class ChangeProfileActivity extends AppCompatActivity {
             String val = editText.getText().toString();
             if(val.equals("")) {
                 val = name;
+            } else {
+                name = val;
             }
             params.put("name", val);
 
