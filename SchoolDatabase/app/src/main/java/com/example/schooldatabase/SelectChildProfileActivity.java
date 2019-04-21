@@ -159,8 +159,26 @@ public class SelectChildProfileActivity extends AppCompatActivity {
     }
 
     public void gotoChangeChildProfile(View view) {
-        //TODO: Implement changeChildProfile functionality
-        Log.d("SelectChildProfile", "Going to ChangeProfile " + view.getId());
+        //TODO: Implement changeProfile functionality to handle children
+        int response_index = -((int)view.getId() + 100);
+        if(children != null && !children.isNull(response_index)) {
+            try {
+                JSONObject child = children.getJSONObject(response_index);
+
+                // Load ChangeProfileActivity with child's info instead of current user info
+                Intent intent = new Intent(this, ChangeProfileActivity.class);
+                intent.putExtra("userID", child.getString("userID"));
+                intent.putExtra("name", child.getString("name"));
+                intent.putExtra("phone", child.getString("phone"));
+                intent.putExtra("city", child.getString("city"));
+                intent.putExtra("state", child.getString("state"));
+
+                Log.d("SelectChildProfile", "Going to ChangeProfile " + view.getId());
+                startActivity(intent);
+            } catch(JSONException e) {
+                Log.d("JsonException", e.toString());
+            }
+        }
     }
 
 }
