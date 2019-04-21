@@ -1,6 +1,8 @@
 package com.example.schooldatabase;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,12 +22,72 @@ import org.json.JSONObject;
 
 public class ChangeProfileActivity extends AppCompatActivity {
     private SessionManager session;
+    private RequestQueue queue;
+    private String name = "";
+    private String phone = "";
+    private String city = "";
+    private String state = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_profile);
         
+    }
+
+    public void getProfileInfo() {
+        String url = "http://192.168.56.1/code/project/api/user_info.php";
+        JSONObject requestContent = new JSONObject();
+        requestContent.put("userID", user.getID());
+
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, requestContent,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // response
+                        Log.d("Response", response.toString());
+                        Context context = getApplicationContext();
+                        /* ERROR CODES:
+                         * 0 - successfully added user
+                         * 1 - email not valid
+                         * 2 - email already registered
+                         * 3 - password does not meet requirements
+                         * 4 - password confirmation failure
+                         * 5 - phone number invalid
+                         * 6 - Database error
+                         */
+                        try {
+                            name = response.getString("name");
+                            phone = response.getString("phone");
+                            city = response.getString("city");
+                            state = response.getString("state");
+
+                            //if case 0, redirect to main view
+                            if (result == 0) {
+                                //RegisterParent.super.finish();
+                            }
+                        } catch (JSONException e) {
+                            Log.d("JsonException", e.toString());
+                        }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                        Context context = getApplicationContext();
+                        CharSequence text = "Error response!" + error.toString();
+                        int duration = Toast.LENGTH_LONG;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+                }
+        );
+        queue.add(getRequest);
     }
 
     public void postChangeProfile(View view) {
