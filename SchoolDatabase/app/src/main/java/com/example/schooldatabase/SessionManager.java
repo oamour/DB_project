@@ -83,6 +83,11 @@ public class SessionManager {
         return user;
     }
 
+    public void updateName(String name) {
+        mEditor.putString(KEY_NAME, name);
+        mEditor.commit();
+    }
+
     public void logoutUser() {
         mEditor.clear();
         mEditor.commit();
