@@ -99,10 +99,6 @@ public class ChangeProfileActivity extends AppCompatActivity {
                             city = response.getString("city");
                             state = response.getString("state");
 
-                            //if case 0, redirect to main view
-                            if (result == 0) {
-                                //RegisterParent.super.finish();
-                            }
                         } catch (JSONException e) {
                             Log.d("JsonException", e.toString());
                         }
