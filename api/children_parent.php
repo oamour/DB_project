@@ -10,60 +10,40 @@ function generate_child_rows($userid) {
   $query = "SELECT childID FROM parentchild WHERE parentID = $userid";
   $result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysql_error());
   
+  $child_array = [];
+  
   if ($result->num_rows > 0) {
 	  # At least one child
+	  $i = 0;
 	  while (($row = $result->fetch_row()) != NULL) {
 		  $childID = $row[0];
 		  $child_data = get_user_info($myconnection, $childID);
+		  $child_row = (object)[];
+		  $child_row->userID = $child_data["userID"];
+		  $child_row->email = $child_data["email"];
+		  $child_row->name = $child_data["name"];
+		  $child_row->phone = $child_data["phone"];
+		  $child_row->city = $child_data["city"];
+		  $child_row->state = $child_data["state"];
 		  
-		  echo "<tr>";
-		  echo "<td>" . $child_data["userID"] . "</td>";
-		  echo "<td>" . $child_data["email"] . "</td>";
-		  echo "<td>" . $child_data["name"] . "</td>";
-		  echo "<td>" . $child_data["phone"] . "</td>";
-		  echo "<td>" . $child_data["city"] . "</td>";
-		  echo "<td>" . $child_data["state"] . "</td>";
-		  echo "<td><form method='get' action='child_profile_parent.php'>";
-		  echo "<input type='hidden' name='childID' value=$childID>";
-		  echo "<input type='submit' value='Change Profile'>";
-		  echo "</form></td>";
-		  echo "</tr>";
+		  $child_array[$i] = $child_row;
+		  $i += 1;
 	  }
   }
+  return json_encode($child_array);
 }
+$value = json_decode(file_get_contents('php://input'));
 
-session_start();
+//DEBUG
+/*if($value == null) {
+	$value = (object)[];
+	$value->userID = 41;
+}*/
 
-$userid = check_session();
+if ($value != null) {
+	$child_array = generate_child_rows($value->userID);
+	
+	header("Content-Type: application/json");
+	echo $child_array;
+}
 ?>
-
-<!--HTML-->
-
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>School Database</title>
-	</head>
-	<body>
-	<?php if(isset($userid) and $userid != false) : ?>
-		<a href="dashboard.php">Back to Dashboard</a>
-		<h1>List of Children</h1>
-		<table border=1>
-			<tr>
-				<td>User ID</td>
-				<td>Email</td>
-				<td>Name</td>
-				<td>Phone</td>
-				<td>City</td>
-				<td>State</td>
-				<td>Change Profile</td>
-			</tr>
-			<?php
-			generate_child_rows($userid);
-			?>
-		</table>
-	<?php else : ?>
-		<span>"Not logged in! Please <a href='index.php'>CLICK HERE</a> to return to the main page."</span>
-	<?php endif; ?>
-	</body>
-</html>
