@@ -7,7 +7,7 @@ function get_user_info($userID) {
 	
 	mysqli_query($myconnection, "START TRANSACTION");
 	
-	$query = "SELECT * FROM accounts WHERE userID = " . $userID;
+	$query = "SELECT * FROM users WHERE userID = " . $userID;
 	$result = mysqli_query($myconnection, $query) or die("Failed to retrieve account info!");
 	
 	$user_info = (object)[];
@@ -29,7 +29,7 @@ $value = json_decode(file_get_contents('php://input'));
 //DEBUG
 if ($value == null) {
 	$value = (object)[];
-	$value->userID = "43";
+	$value->userID = "41";
 }
 
 if ($value != null) {
