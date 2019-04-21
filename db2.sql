@@ -717,14 +717,14 @@ ALTER TABLE `accounts`
 --
 ALTER TABLE `materialfor`
   ADD CONSTRAINT `materialfor_ibfk_1` FOREIGN KEY (`studyMaterialID`) REFERENCES `studymaterials` (`studyMaterialID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `materialfor_ibfk_2` FOREIGN KEY (`courseID`,`sectionID`) REFERENCES `sections` (``courseID`,`sectionID`) ON DELETE CASCADE;
+  ADD CONSTRAINT `materialfor_ibfk_2` FOREIGN KEY (`courseID`,`sectionID`) REFERENCES `sections` (`courseID`,`sectionID`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `menteefor`
 --
 ALTER TABLE `menteefor`
   ADD CONSTRAINT `menteefor_ibfk_1` FOREIGN KEY (`menteeID`) REFERENCES `mentees` (`menteeID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `menteefor_ibfk_2` FOREIGN KEY `courseID`,`sectionID`) REFERENCES `sections` (``courseID`,`sectionID`) ON DELETE CASCADE;
+  ADD CONSTRAINT `menteefor_ibfk_2` FOREIGN KEY (`courseID`,`sectionID`) REFERENCES `sections` (`courseID`,`sectionID`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `mentees`
