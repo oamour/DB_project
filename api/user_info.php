@@ -29,7 +29,7 @@ $value = json_decode(file_get_contents('php://input'));
 //DEBUG
 if ($value == null) {
 	$value = (object)[];
-	$value->userID = "41";
+	$value->userID = "13";
 }
 
 if ($value != null) {

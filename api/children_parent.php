@@ -35,10 +35,11 @@ function generate_child_rows($userid) {
 $value = json_decode(file_get_contents('php://input'));
 
 //DEBUG
-/*if($value == null) {
-	$value = (object)[];
-	$value->userID = 41;
-}*/
+if($value == null) {
+	$value = [];
+	$value[0] = 13;
+	
+}
 
 if ($value != null) {
 	$child_array = generate_child_rows($value->userID);
