@@ -112,7 +112,7 @@ public class DashboardActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void gotoChangeChildProfile(View view) {
+    public void gotoSelectChildProfile(View view) {
         Intent intent = new Intent(this, SelectChildProfileActivity.class);
         startActivity(intent);
     }
