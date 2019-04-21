@@ -47,4 +47,7 @@
     <string name="mentor_status">View Mentor Status</string>
     <string name="mentee_status">View Mentee Status</string>
     <string name="logout">Logout</string>
+
+    <!--Select Child Profile-->
+    <string name="no_children_found">No children found</string>
 </resources>
