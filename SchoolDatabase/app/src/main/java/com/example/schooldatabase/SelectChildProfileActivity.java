@@ -57,14 +57,14 @@ public class SelectChildProfileActivity extends AppCompatActivity {
         String url = MainActivity.HREF + "/code/project/api/children_parent.php";
         JSONArray requestContent = new JSONArray();
         try {
-            requestContent.put(0, user.getID());
+            requestContent.put(0,  Integer.parseInt(user.getID()));
         } catch (JSONException e) {
             Log.d("JsonException", e.toString());
         }
 
         Log.d("SelectChildProfile", requestContent.toString());
 
-        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url, requestContent,
+        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.POST, url, requestContent,
                 new Response.Listener<JSONArray>()
                 {
                     @Override

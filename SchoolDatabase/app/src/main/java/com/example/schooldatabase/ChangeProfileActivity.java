@@ -60,12 +60,12 @@ public class ChangeProfileActivity extends AppCompatActivity {
         String url = MainActivity.HREF + "/code/project/api/user_info.php";
         JSONObject requestContent = new JSONObject();
         try {
-            requestContent.put("userID", user.getID());
+            requestContent.put("userID", Integer.parseInt(user.getID()));
         } catch (JSONException e) {
             Log.d("ChangeProfile", e.toString());
         }
         Log.d("ChangeProfile", "requestContent = " + requestContent.toString());
-        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, requestContent,
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.POST, url, requestContent,
                 new Response.Listener<JSONObject>()
                 {
                     @Override
