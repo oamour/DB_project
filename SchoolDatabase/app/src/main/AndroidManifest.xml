@@ -13,14 +13,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SelectChildProfileActivity"
+        <activity android:name=".ViewSectionsActivity"
+            android:label="View Sections"
+            android:parentActivityName=".DashboardActivity" />
+        <activity
+            android:name=".SelectChildProfileActivity"
             android:label="Select Child"
-            android:parentActivityName=".DashboardActivity"></activity>
+            android:parentActivityName=".DashboardActivity" />
         <activity
             android:name=".ChangeProfileActivity"
             android:label="Change Profile"
             android:parentActivityName=".DashboardActivity" />
-        <activity android:name=".DashboardActivity" />
+        <activity android:name=".DashboardActivity"
+            android:label="Dashboard"/>
         <activity
             android:name=".LoginActivity"
             android:label="Login"

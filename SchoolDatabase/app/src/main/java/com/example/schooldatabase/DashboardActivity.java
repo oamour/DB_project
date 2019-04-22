@@ -118,7 +118,8 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     public void gotoViewSections(View view) {
-        // TODO: implement ViewSectionsActivity
+        Intent intent = new Intent(this, ViewSectionsActivity.class);
+        startActivity(intent);
     }
 
     public void gotoMentorStatus(View view) {
