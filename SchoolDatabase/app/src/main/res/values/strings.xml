@@ -50,4 +50,7 @@
 
     <!--Select Child Profile-->
     <string name="no_children_found">No children found</string>
+
+    <!--Mentor Status-->
+    <string name="mentor_no_sections">You are not currently a mentor for any sections.</string>
 </resources>
