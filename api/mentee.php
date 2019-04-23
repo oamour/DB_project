@@ -5,36 +5,42 @@ function get_mentees($myconnection, $sectionID, $courseID) {
 	$query = "SELECT menteeID FROM menteeFor WHERE courseID = $courseID AND sectionID = $sectionID";
 	$result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error());
 	
+	$mentee_arr = [];
+	
 	if($result->num_rows > 0) {
-		echo "<tr><th colspan=3>MENTEES</th></tr>";
+		$i = 0;
 		while(($row = $result->fetch_array()) != NULL) {
+			$mentee_arr[$i] = (object)[];
 			$user_info = get_user_info($myconnection, $row['menteeID']);
 			$grade_level = get_grade_level($user_info['gradeLevel']);
-			echo "<tr>"; # Start printing info
-			echo "<td>" . $user_info['name'] . "</td>";
-			echo "<td>" . $grade_level . "</td>";
-			echo "<td>Mentee</td>";
-			echo "</tr>";
+			
+			$mentee_arr[$i]->name = $user_info['name'];
+			$mentee_arr[$i]->grade = $grade_level;
 		}
 	}
+	
+	return $mentee_arr;
 }
 
 function get_mentors($myconnection, $sectionID, $courseID) {
 	$query = "SELECT mentorID FROM mentorFor WHERE courseID = $courseID AND sectionID = $sectionID";
 	$result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysqli_error());
 	
+	$mentor_arr = [];
+	
 	if($result->num_rows > 0) {
-		echo "<tr><th colspan=3>MENTORS</th></tr>";
+		$i = 0;
 		while(($row = $result->fetch_array()) != NULL) {
+			$mentor_arr[$i] = (object)[];
 			$user_info = get_user_info($myconnection, $row['mentorID']);
 			$grade_level = get_grade_level($user_info['gradeLevel']);
-			echo "<tr>"; # Start printing info
-			echo "<td>" . $user_info['name'] . "</td>";
-			echo "<td>" . $grade_level . "</td>";
-			echo "<td>Mentor</td>";
-			echo "</tr>";
+			
+			$mentor_arr[$i]->name = $user_info['name'];
+			$mentor_arr[$i]->grade = $grade_level;
 		}
 	}
+	
+	return $mentor_arr;
 }
 
 function get_class_sections($userid) {
@@ -62,7 +68,7 @@ function get_class_sections($userid) {
 		  get_mentees($myconnection, $row["sectionID"], $row["courseID"]);
 		  get_mentors($myconnection, $row["sectionID"], $row["courseID"]);
 		  echo "</table>";
-		  
+		  /*
 		  # STUDY MATERIALS FOR SECTION
 		  $query = "SELECT * FROM materialFor WHERE courseID = " . $row["courseID"] . " AND sectionID = " . $row["sectionID"];
 		  $material_for = mysqli_query($myconnection, $query);
@@ -104,6 +110,7 @@ function get_class_sections($userid) {
 				echo "</tr>";
 			}
 		  }
+		  */
 	  }
   } else { # no sections as mentee
 	echo "Sorry, you are not a mentee for any sections.";

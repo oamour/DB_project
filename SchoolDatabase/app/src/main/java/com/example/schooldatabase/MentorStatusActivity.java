@@ -50,6 +50,7 @@ public class MentorStatusActivity extends AppCompatActivity {
         }
 
         //get info for classes
+        getMentorInfo();
     }
 
     public void getMentorInfo() {
@@ -62,7 +63,7 @@ public class MentorStatusActivity extends AppCompatActivity {
             Log.d("JsonException", e.toString());
         }
 
-        Log.d("SelectChildProfile", requestContent.toString());
+        Log.d("MentorStatusActivity", requestContent.toString());
 
         JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.POST, url, requestContent,
                 new Response.Listener<JSONArray>()
@@ -72,9 +73,8 @@ public class MentorStatusActivity extends AppCompatActivity {
                         // response
                         Log.d("Response", response.toString());
 
-
                         try {
-                            int i = 0;
+                            /*int i = 0;
                             ConstraintLayout layout = findViewById(R.id.selectChildProfile_layout);
                             ConstraintSet set = new ConstraintSet();
 
@@ -129,8 +129,8 @@ public class MentorStatusActivity extends AppCompatActivity {
 
                                 set.applyTo(layout);
                                 i++;
-                            }
-                        } catch (JSONException e) {
+                            }*/
+                        } catch (Exception e) {
                             Log.d("JsonException", e.toString());
                         }
                     }

@@ -110,25 +110,19 @@ function get_class_sections($userid) {
   }
 }
 
-session_start();
+$value = json_decode(file_get_contents('php://input'));
 
-$userid = check_session();
+// DEBUG
+/*if ($value == null) {
+	$value = [];
+	$value[0] = 23;
+}*/
+
+if ($value != null) {
+	$userid = $value[0];
+	$result = get_class_sections($userid);
+	
+	header("Content-Type: application/json");
+	echo $result;
+}
 ?>
-
-<!--HTML-->
-
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>School Database</title>
-	</head>
-	<body>
-	<?php if(isset($userid) and $userid != false) : ?>
-		<a href="dashboard.php">Back to Dashboard</a>
-		<h1>Mentor Section List</h1>
-		<?php get_class_sections($userid); ?>
-	<?php else : ?>
-		<span>"Not logged in! Please <a href='index.php'>CLICK HERE</a> to return to the main page."</span>
-	<?php endif; ?>
-	</body>
-</html>
