@@ -52,23 +52,22 @@ function get_class_sections($userid) {
   $query = "SELECT sectionID, courseID FROM mentorFor WHERE mentorID = $userid";
   $result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysql_error());
   
+  $section_arr = [];
+  
   if ($result->num_rows > 0) {
 	  # At least one section
+	  $i = 0;
 	  while (($row = $result->fetch_array()) != NULL) {
+		  $section = (object)[];
+		  
 		  $section_info = get_section_info($myconnection, $row["sectionID"], $row["courseID"]);
 		  $course_info = get_course_info($myconnection, $row["courseID"]);
 		  
-		  echo "<table border=1>";
-		  echo "<th><td colspan=3>" . $section_info["name"] . "</th></tr>";
-		  echo "<tr>"; # Header
-		  echo "<td>Student Name</td>";
-		  echo "<td>Student Grade</td>";
-		  echo "<td>Student Role</td>";
-		  echo "</tr>";
-		  get_mentees($myconnection, $row["sectionID"], $row["courseID"]);
-		  get_mentors($myconnection, $row["sectionID"], $row["courseID"]);
-		  echo "</table></div>";
+		  $section->name = $section_info["name"];
+		  $section->mentees = get_mentees($myconnection, $row["sectionID"], $row["courseID"]); 
+		  $section->mentors = get_mentors($myconnection, $row["sectionID"], $row["courseID"]);
 		  
+		  /* Ignoring implementation for now
 		  # STUDY MATERIALS FOR SECTION
 		  $query = "SELECT * FROM materialFor WHERE courseID = " . $row["courseID"] . " AND sectionID = " . $row["sectionID"];
 		  $material_for = mysqli_query($myconnection, $query);
@@ -109,11 +108,11 @@ function get_class_sections($userid) {
 				echo "<td>" . $study_material_info['notes'] . "</td>";
 				echo "</tr>";
 			}
-		  }
+		  }*/
+		  $section_arr[$i] = $section;
 	  }
-  } else { # no sections as mentor
-	echo "Sorry, you are not a mentor for any sections.";
-  }
+  } 
+  return json_encode($section_arr);
 }
 
 $value = json_decode(file_get_contents('php://input'));
