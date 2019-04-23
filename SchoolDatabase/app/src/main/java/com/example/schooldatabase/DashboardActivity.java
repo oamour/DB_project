@@ -122,7 +122,8 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     public void gotoMentorStatus(View view) {
-        // TODO: implement MentorStatusActivity
+        Intent intent = new Intent(this, MentorStatusActivity.class);
+        startActivity(intent);
     }
 
     public void gotoMenteeStatus(View view) {

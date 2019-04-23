@@ -13,9 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SelectChildProfileActivity"
-            android:label="Select Child"
+        <activity android:name=".MentorStatusActivity"
+            android:label="Mentor Status"
             android:parentActivityName=".DashboardActivity"></activity>
+        <activity
+            android:name=".SelectChildProfileActivity"
+            android:label="Select Child"
+            android:parentActivityName=".DashboardActivity" />
         <activity
             android:name=".ChangeProfileActivity"
             android:label="Change Profile"
