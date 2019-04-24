@@ -243,7 +243,7 @@ public class MentorStatusActivity extends AppCompatActivity {
                     sectionSet.connect(mentee_grade.getId(), ConstraintSet.BASELINE, mentee_name.getId(), ConstraintSet.BASELINE);
                 } else {
                     //attach to previous mentee element
-                    sectionSet.connect(mentee_name.getId(), ConstraintSet.TOP, mentee_name.getId() - 1, ConstraintSet.BOTTOM);
+                    sectionSet.connect(mentee_name.getId(), ConstraintSet.TOP, (int) mentee_name.getId() - 1, ConstraintSet.BOTTOM);
                     sectionSet.createHorizontalChain(sectionInfo.getId(), ConstraintSet.LEFT,
                             sectionInfo.getId(), ConstraintSet.RIGHT,
                             new int[] {mentee_name.getId(), mentee_grade.getId()}, null, ConstraintSet.CHAIN_SPREAD);
@@ -271,7 +271,7 @@ public class MentorStatusActivity extends AppCompatActivity {
             sectionSet.clone(sectionInfo);
 
             //bind to last mentee name
-            sectionSet.connect(mentorHeader.getId(), ConstraintSet.TOP, IdValues.MENTEE_NAME + i*10 + mentee_index-1, ConstraintSet.BOTTOM, 24);
+            sectionSet.connect(mentorHeader.getId(), ConstraintSet.TOP, (int) IdValues.MENTEE_NAME + i*10 + mentee_index-1, ConstraintSet.BOTTOM, 24);
             sectionSet.connect(mentorHeader.getId(), ConstraintSet.LEFT, sectionInfo.getId(), ConstraintSet.LEFT);
             sectionSet.connect(mentorHeader.getId(), ConstraintSet.RIGHT, sectionInfo.getId(), ConstraintSet.RIGHT);
 
@@ -304,7 +304,7 @@ public class MentorStatusActivity extends AppCompatActivity {
                     sectionSet.connect(mentor_grade.getId(), ConstraintSet.BASELINE, mentor_name.getId(), ConstraintSet.BASELINE);
                 } else {
                     //attach to previous mentor element
-                    sectionSet.connect(mentor_name.getId(), ConstraintSet.TOP, mentor_name.getId() - 1, ConstraintSet.BOTTOM);
+                    sectionSet.connect(mentor_name.getId(), ConstraintSet.TOP, (int) mentor_name.getId() - 1, ConstraintSet.BOTTOM);
                     sectionSet.createHorizontalChain(sectionInfo.getId(), ConstraintSet.LEFT,
                             sectionInfo.getId(), ConstraintSet.RIGHT,
                             new int[] {mentor_name.getId(), mentor_grade.getId()}, null, ConstraintSet.CHAIN_SPREAD);
