@@ -16,6 +16,7 @@ function get_mentees($myconnection, $sectionID, $courseID) {
 			
 			$mentee_arr[$i]->name = $user_info['name'];
 			$mentee_arr[$i]->grade = $grade_level;
+			$i += 1;
 		}
 	}
 	
@@ -37,6 +38,8 @@ function get_mentors($myconnection, $sectionID, $courseID) {
 			
 			$mentor_arr[$i]->name = $user_info['name'];
 			$mentor_arr[$i]->grade = $grade_level;
+			
+			$i += 1;
 		}
 	}
 	
@@ -110,6 +113,7 @@ function get_class_sections($userid) {
 			}
 		  }*/
 		  $section_arr[$i] = $section;
+		  $i += 1;
 	  }
   } 
   return json_encode($section_arr);
