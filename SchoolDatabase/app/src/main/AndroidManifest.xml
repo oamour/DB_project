@@ -14,20 +14,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MentorStatusActivity"
-            android:label="Mentor Status"
+            android:label="@string/mentor_status"
             android:parentActivityName=".DashboardActivity"></activity>
         <activity
             android:name=".SelectChildProfileActivity"
-            android:label="Select Child"
+            android:label="@string/select_child"
             android:parentActivityName=".DashboardActivity" />
         <activity
             android:name=".ChangeProfileActivity"
-            android:label="Change Profile"
+            android:label="@string/change_profile"
             android:parentActivityName=".DashboardActivity" />
         <activity android:name=".DashboardActivity" />
         <activity
             android:name=".LoginActivity"
-            android:label="Login"
+            android:label="@string/login"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".RegisterStudent"

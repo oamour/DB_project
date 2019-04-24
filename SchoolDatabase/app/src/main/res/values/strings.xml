@@ -44,13 +44,17 @@
     <string name="change_profile_child">Change Child\'s Profile</string>
     <string name="view_sections">View Sections</string>
     <string name="moderator_status">View Moderator Status</string>
-    <string name="mentor_status">View Mentor Status</string>
-    <string name="mentee_status">View Mentee Status</string>
+    <string name="view_mentor_status">View Mentor Status</string>
+    <string name="view_mentee_status">View Mentee Status</string>
     <string name="logout">Logout</string>
 
     <!--Select Child Profile-->
+    <string name="select_child">Select Child</string>
     <string name="no_children_found">No children found</string>
 
-    <!--Mentor Status-->
+    <!--Mentor/Mentee Status-->
+    <string name="mentor_status">Mentor Status</string>
     <string name="mentor_no_sections">You are not currently a mentor for any sections.</string>
+    <string name="mentee_status">Mentee Status</string>
+    <string name="mentee_no_sections">You are not currently a mentee for any sections.</string>
 </resources>
