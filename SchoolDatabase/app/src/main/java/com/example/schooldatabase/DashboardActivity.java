@@ -123,11 +123,16 @@ public class DashboardActivity extends AppCompatActivity {
 
     public void gotoMentorStatus(View view) {
         Intent intent = new Intent(this, MentorStatusActivity.class);
+        intent.putExtra("url", "/code/project/api/mentor.php");
+        intent.putExtra("type", "mentor");
         startActivity(intent);
     }
 
     public void gotoMenteeStatus(View view) {
-        // TODO: implement MenteeStatusActivity
+        Intent intent = new Intent(this, MentorStatusActivity.class);
+        intent.putExtra("url", "/code/project/api/mentee.php");
+        intent.putExtra("type", "mentee");
+        startActivity(intent);
     }
 
     public void gotoModeratorStatus(View view) {
