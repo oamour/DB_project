@@ -32,7 +32,7 @@ public class MentorStatusActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mentor_status);
+        setContentView(R.layout.activity_class_status);
 
         session = new SessionManager(getApplicationContext());
         queue = Volley.newRequestQueue(this);
