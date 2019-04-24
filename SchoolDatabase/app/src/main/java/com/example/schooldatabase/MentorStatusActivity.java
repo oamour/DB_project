@@ -1,6 +1,5 @@
 package com.example.schooldatabase;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
@@ -10,8 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.R.drawable;
@@ -107,10 +104,12 @@ public class MentorStatusActivity extends AppCompatActivity {
         public static final int TITLE = 100;
         public static final int CARET = 200;
         public static final int CONSTRAINT_LAYOUT = 300;
-        public static final int MENTEEHEADER = 400;
-        public static final int MENTORHEADER = 500;
-        public static final int MENTEE = 1000;
-        public static final int MENTOR = 2000;
+        public static final int MENTEE_HEADER = 400;
+        public static final int MENTOR_HEADER = 500;
+        public static final int MENTEE_NAME = 1000;
+        public static final int MENTEE_GRADE = 2000;
+        public static final int MENTOR_NAME = 3000;
+        public static final int MENTOR_GRADE = 4000;
     };
 
     public void buildSectionListing(JSONArray sectionList) throws JSONException {
@@ -153,7 +152,7 @@ public class MentorStatusActivity extends AppCompatActivity {
             ConstraintLayout sectionInfo = new ConstraintLayout(getApplicationContext());
             sectionInfo.setVisibility(View.GONE);
             sectionInfo.setId(IdValues.CONSTRAINT_LAYOUT + i);
-            sectionInfo.setMinWidth(800);
+            sectionInfo.setMinWidth(1000);
             sectionInfo.setMinHeight(250);
             sectionInfo.setBackgroundResource(drawable.editbox_background);
 
@@ -164,9 +163,9 @@ public class MentorStatusActivity extends AppCompatActivity {
             //position title for section
             if(i == 0) {
                 //first element, constrain to top
-                set.connect(title.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP, 60);
-                set.connect(title.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, 60);
-                set.connect(title.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, 60);
+                set.connect(title.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP, 8);
+                set.connect(title.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, 8);
+                set.connect(title.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, 8);
 
             } else {
                 //not first element, constrain to previous
@@ -176,26 +175,27 @@ public class MentorStatusActivity extends AppCompatActivity {
                 set.connect(title.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, 60);
             }
             //position sectionInfo constraintLayout
-            set.connect(sectionInfo.getId(), ConstraintSet.TOP, title.getId(), ConstraintSet.BOTTOM, 60);
-            set.connect(sectionInfo.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, 60);
-            set.connect(sectionInfo.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, 60);
+            set.connect(sectionInfo.getId(), ConstraintSet.TOP, title.getId(), ConstraintSet.BOTTOM, 0);
+            set.connect(sectionInfo.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, 8);
+            set.connect(sectionInfo.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, 8);
 
             set.applyTo(layout);
 
 
-            //work on sectionInfo
+            // work on sectionInfo
             ConstraintSet sectionSet = new ConstraintSet();
 
+            // Create mentee header
             TextView menteeHeader = new TextView(getApplicationContext());
             menteeHeader.setText(R.string.mentee);
             menteeHeader.setTextSize(20);
-            menteeHeader.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            menteeHeader.setLayoutParams(
+                    new ConstraintLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
             menteeHeader.setBackgroundResource(R.drawable.drawable_bottom_border);
-            menteeHeader.setId(IdValues.MENTEEHEADER + i);
+            menteeHeader.setId(IdValues.MENTEE_HEADER + i);
 
-            //create mentee elements
-            JSONArray menteeList = section.getJSONArray("mentees");
-            
             sectionInfo.addView(menteeHeader);
             sectionSet.clone(sectionInfo);
 
@@ -204,6 +204,107 @@ public class MentorStatusActivity extends AppCompatActivity {
             sectionSet.connect(menteeHeader.getId(), ConstraintSet.RIGHT, sectionInfo.getId(), ConstraintSet.RIGHT);
 
             sectionSet.applyTo(sectionInfo);
+
+            // create mentee elements
+            JSONArray menteeList = section.getJSONArray("mentees");
+            int mentee_index = 0;
+            while(!menteeList.isNull(mentee_index)) {
+                JSONObject mentee = menteeList.getJSONObject(mentee_index);
+                
+                TextView mentee_name = new TextView(getApplicationContext());
+                mentee_name.setText(mentee.getString("name"));
+                mentee_name.setId(IdValues.MENTEE_NAME + 10*i + mentee_index);
+                
+                TextView mentee_grade = new TextView(getApplicationContext());
+                mentee_grade.setText(mentee.getString("grade"));
+                mentee_grade.setId(IdValues.MENTEE_GRADE + 10*i + mentee_index);
+
+                sectionInfo.addView(mentee_name);
+                sectionInfo.addView(mentee_grade);
+                sectionSet.clone(sectionInfo);
+
+                if(mentee_index == 0) {
+                    //attach to header
+                    sectionSet.connect(mentee_name.getId(), ConstraintSet.TOP, menteeHeader.getId(), ConstraintSet.BOTTOM, 16);
+                    sectionSet.createHorizontalChain(sectionInfo.getId(), ConstraintSet.LEFT,
+                            sectionInfo.getId(), ConstraintSet.RIGHT,
+                            new int[] {mentee_name.getId(), mentee_grade.getId()}, null, ConstraintSet.CHAIN_SPREAD);
+                    sectionSet.connect(mentee_grade.getId(), ConstraintSet.BASELINE, mentee_name.getId(), ConstraintSet.BASELINE);
+                } else {
+                    //attach to previous mentee element
+                    sectionSet.connect(mentee_name.getId(), ConstraintSet.TOP, mentee_name.getId() - 1, ConstraintSet.BOTTOM);
+                    sectionSet.createHorizontalChain(sectionInfo.getId(), ConstraintSet.LEFT,
+                            sectionInfo.getId(), ConstraintSet.RIGHT,
+                            new int[] {mentee_name.getId(), mentee_grade.getId()}, null, ConstraintSet.CHAIN_SPREAD);
+                    sectionSet.connect(mentee_grade.getId(), ConstraintSet.BASELINE, mentee_name.getId(), ConstraintSet.BASELINE);
+
+                }
+
+                mentee_index++;
+
+                sectionSet.applyTo(sectionInfo);
+            }
+
+            // create mentor header
+            TextView mentorHeader = new TextView(getApplicationContext());
+            mentorHeader.setText(getResources().getText(R.string.mentor));
+            mentorHeader.setTextSize(20);
+            mentorHeader.setLayoutParams(
+                    new ConstraintLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+            mentorHeader.setBackgroundResource(R.drawable.drawable_bottom_border);
+            mentorHeader.setId(IdValues.MENTOR_HEADER + i);
+
+            sectionInfo.addView(mentorHeader);
+            sectionSet.clone(sectionInfo);
+
+            //bind to last mentee name
+            sectionSet.connect(mentorHeader.getId(), ConstraintSet.TOP, IdValues.MENTEE_NAME + i*10 + mentee_index-1, ConstraintSet.BOTTOM, 24);
+            sectionSet.connect(mentorHeader.getId(), ConstraintSet.LEFT, sectionInfo.getId(), ConstraintSet.LEFT);
+            sectionSet.connect(mentorHeader.getId(), ConstraintSet.RIGHT, sectionInfo.getId(), ConstraintSet.RIGHT);
+
+            sectionSet.applyTo(sectionInfo);
+
+            //create mentor elements
+            JSONArray mentorList = section.getJSONArray("mentors");
+            int mentor_index = 0;
+            while(!mentorList.isNull(mentor_index)) {
+                JSONObject mentor = mentorList.getJSONObject(mentor_index);
+
+                TextView mentor_name = new TextView(getApplicationContext());
+                mentor_name.setText(mentor.getString("name"));
+                mentor_name.setId(IdValues.MENTOR_NAME + 10*i + mentor_index);
+
+                TextView mentor_grade = new TextView(getApplicationContext());
+                mentor_grade.setText(mentor.getString("grade"));
+                mentor_grade.setId(IdValues.MENTOR_GRADE + 10*i + mentor_index);
+
+                sectionInfo.addView(mentor_name);
+                sectionInfo.addView(mentor_grade);
+                sectionSet.clone(sectionInfo);
+
+                if(mentor_index == 0) {
+                    //attach to header
+                    sectionSet.connect(mentor_name.getId(), ConstraintSet.TOP, mentorHeader.getId(), ConstraintSet.BOTTOM, 16);
+                    sectionSet.createHorizontalChain(sectionInfo.getId(), ConstraintSet.LEFT,
+                            sectionInfo.getId(), ConstraintSet.RIGHT,
+                            new int[] {mentor_name.getId(), mentor_grade.getId()}, null, ConstraintSet.CHAIN_SPREAD);
+                    sectionSet.connect(mentor_grade.getId(), ConstraintSet.BASELINE, mentor_name.getId(), ConstraintSet.BASELINE);
+                } else {
+                    //attach to previous mentor element
+                    sectionSet.connect(mentor_name.getId(), ConstraintSet.TOP, mentor_name.getId() - 1, ConstraintSet.BOTTOM);
+                    sectionSet.createHorizontalChain(sectionInfo.getId(), ConstraintSet.LEFT,
+                            sectionInfo.getId(), ConstraintSet.RIGHT,
+                            new int[] {mentor_name.getId(), mentor_grade.getId()}, null, ConstraintSet.CHAIN_SPREAD);
+                    sectionSet.connect(mentor_grade.getId(), ConstraintSet.BASELINE, mentor_name.getId(), ConstraintSet.BASELINE);
+
+                }
+
+                mentor_index++;
+
+                sectionSet.applyTo(sectionInfo);
+            }
         }
     }
 
