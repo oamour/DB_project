@@ -27,6 +27,7 @@ import org.json.JSONObject;
 public class MentorStatusActivity extends AppCompatActivity {
     private SessionManager session;
     private RequestQueue queue;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +51,23 @@ public class MentorStatusActivity extends AppCompatActivity {
             finish();
         }
 
+        if(getIntent() != null && getIntent().getExtras() != null) {
+            url = MainActivity.HREF + getIntent().getStringExtra("url");
+            Log.d("ClassStatusActivity", url);
+            if(getIntent().getStringExtra("type").equals("mentee")) {
+                //change title, placeholder message
+                setTitle(R.string.mentee_status);
+                TextView textView = findViewById(R.id.mentor_no_sections);
+                textView.setText(R.string.mentee_no_sections);
+            }
+        }
+
         //get info for classes
-        getMentorInfo();
+        getClassInfo();
     }
 
-    public void getMentorInfo() {
+    public void getClassInfo() {
         User user = session.getUserDetails();
-        String url = MainActivity.HREF + "/code/project/api/mentor.php";
         JSONArray requestContent = new JSONArray();
         try {
             requestContent.put(0,  Integer.parseInt(user.getID()));
