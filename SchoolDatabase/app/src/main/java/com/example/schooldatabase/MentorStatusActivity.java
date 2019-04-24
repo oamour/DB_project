@@ -99,6 +99,110 @@ public class MentorStatusActivity extends AppCompatActivity {
     }
 
     public void buildSectionListing(JSONArray sectionList) throws JSONException {
-        
+        ConstraintLayout layout = findViewById(R.id.mentorStatus_layout);
+        ConstraintSet set = new ConstraintSet();
+        if(!sectionList.isNull(0)) {
+            //hide default text
+            TextView textView = (TextView) findViewById(R.id.mentor_no_sections);
+            textView.setVisibility(View.GONE);
+        }
+        for (int i = 0; !sectionList.isNull(i); i++) {
+            JSONObject section = sectionList.getJSONObject(i);
+            Log.d("buildSectionListing", section.toString());
+            Log.d("buildSectionListing", section.getString("name"));
+
+            // STRUCTURE:
+            // - TITLE (clickable, reveals ConstraintLayout
+            // - CONSTRAINTLAYOUT (holds student info)
+            // --- MENTEES (header for mentees)
+            // --- (generated mentees)
+            // --- MENTORS (header for mentors)
+            // --- (generated mentors)
+            TextView title = new TextView(getApplicationContext());
+            title.setText(section.getString("name"));
+            title.setTextSize(24);
+            title.setClickable(true);
+            title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toggleSectionInfo(v);
+                }
+            });
+            title.setId(IdValues.TITLE + i);
+
+            title.setCompoundDrawablesWithIntrinsicBounds(drawable.arrow_down_float, 0, 0, 0);
+            //ImageView caret = new ImageView(getApplicationContext());
+            //caret.setImageResource(drawable.arrow_down_float);
+            //title.setId(IdValues.CARET + i);
+
+            ConstraintLayout sectionInfo = new ConstraintLayout(getApplicationContext());
+            sectionInfo.setVisibility(View.GONE);
+            sectionInfo.setId(IdValues.CONSTRAINT_LAYOUT + i);
+            sectionInfo.setMinWidth(800);
+            sectionInfo.setMinHeight(250);
+            sectionInfo.setBackgroundResource(drawable.editbox_background);
+
+            layout.addView(title, 0);
+            layout.addView(sectionInfo);
+            set.clone(layout);
+
+            //position title for section
+            if(i == 0) {
+                //first element, constrain to top
+                set.connect(title.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP, 60);
+                set.connect(title.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, 60);
+                set.connect(title.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, 60);
+
+            } else {
+                //not first element, constrain to previous
+                ConstraintLayout prev_view = findViewById(IdValues.CONSTRAINT_LAYOUT + i - 1);
+                set.connect(title.getId(), ConstraintSet.TOP, prev_view.getId(), ConstraintSet.BOTTOM, 60);
+                set.connect(title.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, 60);
+                set.connect(title.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, 60);
+            }
+            //position sectionInfo constraintLayout
+            set.connect(sectionInfo.getId(), ConstraintSet.TOP, title.getId(), ConstraintSet.BOTTOM, 60);
+            set.connect(sectionInfo.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, 60);
+            set.connect(sectionInfo.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, 60);
+
+            set.applyTo(layout);
+
+
+            //work on sectionInfo
+            ConstraintSet sectionSet = new ConstraintSet();
+
+            TextView menteeHeader = new TextView(getApplicationContext());
+            menteeHeader.setText(R.string.mentee);
+            menteeHeader.setTextSize(20);
+            menteeHeader.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            menteeHeader.setBackgroundResource(R.drawable.drawable_bottom_border);
+            menteeHeader.setId(IdValues.MENTEEHEADER + i);
+
+            //create mentee elements
+            JSONArray menteeList = section.getJSONArray("mentees");
+            
+            sectionInfo.addView(menteeHeader);
+            sectionSet.clone(sectionInfo);
+
+            sectionSet.connect(menteeHeader.getId(), ConstraintSet.TOP, sectionInfo.getId(), ConstraintSet.TOP);
+            sectionSet.connect(menteeHeader.getId(), ConstraintSet.LEFT, sectionInfo.getId(), ConstraintSet.LEFT);
+            sectionSet.connect(menteeHeader.getId(), ConstraintSet.RIGHT, sectionInfo.getId(), ConstraintSet.RIGHT);
+
+            sectionSet.applyTo(sectionInfo);
+        }
+    }
+
+    public void toggleSectionInfo(View view) {
+        int sectionInfoId = view.getId() - IdValues.TITLE + IdValues.CONSTRAINT_LAYOUT;
+        ConstraintLayout sectionInfo = findViewById(sectionInfoId);
+        Log.d("toggleSectionInfo", "Triggered!");
+        TextView textView = (TextView) view;
+        if(sectionInfo.isShown()) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(drawable.arrow_down_float, 0, 0, 0);
+            sectionInfo.setVisibility(View.GONE);
+        } else {
+            textView.setCompoundDrawablesWithIntrinsicBounds(drawable.arrow_up_float, 0, 0, 0);
+            sectionInfo.setVisibility(View.VISIBLE);
+        }
     }
 }
