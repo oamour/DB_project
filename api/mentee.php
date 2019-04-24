@@ -16,6 +16,7 @@ function get_mentees($myconnection, $sectionID, $courseID) {
 			
 			$mentee_arr[$i]->name = $user_info['name'];
 			$mentee_arr[$i]->grade = $grade_level;
+			$i += 1;
 		}
 	}
 	
@@ -37,6 +38,8 @@ function get_mentors($myconnection, $sectionID, $courseID) {
 			
 			$mentor_arr[$i]->name = $user_info['name'];
 			$mentor_arr[$i]->grade = $grade_level;
+			
+			$i += 1;
 		}
 	}
 	
@@ -52,22 +55,21 @@ function get_class_sections($userid) {
   $query = "SELECT sectionID, courseID FROM menteeFor WHERE menteeID = $userid";
   $result = mysqli_query($myconnection, $query) or die ("Failed to query database: " . mysql_error());
   
+  $section_arr = [];
+  
   if ($result->num_rows > 0) {
 	  # At least one section
+	  $i = 0;
 	  while (($row = $result->fetch_array()) != NULL) {
+		  $section = (object)[];
+		  
 		  $section_info = get_section_info($myconnection, $row["sectionID"], $row['courseID']);
 		  $course_info = get_course_info($myconnection, $row["courseID"]);
 		  
-		  echo "<table border=1>";
-		  echo "<tr><th colspan=3>" . $section_info["name"] . "</th></tr>";
-		  echo "<tr>"; # Header
-		  echo "<td>Student Name</td>";
-		  echo "<td>Student Grade</td>";
-		  echo "<td>Student Role</td>";
-		  echo "</tr>";
-		  get_mentees($myconnection, $row["sectionID"], $row["courseID"]);
-		  get_mentors($myconnection, $row["sectionID"], $row["courseID"]);
-		  echo "</table>";
+		  $section->name = $section_info["name"];
+		  $section->mentees = get_mentees($myconnection, $row["sectionID"], $row["courseID"]); 
+		  $section->mentors = get_mentors($myconnection, $row["sectionID"], $row["courseID"]);
+		  
 		  /*
 		  # STUDY MATERIALS FOR SECTION
 		  $query = "SELECT * FROM materialFor WHERE courseID = " . $row["courseID"] . " AND sectionID = " . $row["sectionID"];
@@ -111,31 +113,26 @@ function get_class_sections($userid) {
 			}
 		  }
 		  */
+		  $section_arr[$i] = $section;
+		  $i += 1;
 	  }
-  } else { # no sections as mentee
-	echo "Sorry, you are not a mentee for any sections.";
-  }
+  } 
+  return json_encode($section_arr);
 }
 
-session_start();
+$value = json_decode(file_get_contents('php://input'));
 
-$userid = check_session();
+// DEBUG
+if ($value == null) {
+	$value = [];
+	$value[0] = 23;
+}
+
+if($value != null) {
+	$userid = $value[0];
+	$result = get_class_sections($userid);
+	
+	header("Content-Type: application/json");
+	echo $result;
+}
 ?>
-
-<!--HTML-->
-
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>School Database</title>
-	</head>
-	<body>
-	<?php if(isset($userid) and $userid != false) : ?>
-		<a href="dashboard.php">Back to Dashboard</a>
-		<h1>Mentee Section List</h1>
-		<?php get_class_sections($userid); ?>
-	<?php else : ?>
-		<span>"Not logged in! Please <a href='index.php'>CLICK HERE</a> to return to the main page."</span>
-	<?php endif; ?>
-	</body>
-</html>
