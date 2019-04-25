@@ -53,7 +53,6 @@ public class MentorStatusActivity extends AppCompatActivity {
 
         if(getIntent() != null && getIntent().getExtras() != null) {
             url = MainActivity.HREF + getIntent().getStringExtra("url");
-            Log.d("ClassStatusActivity", url);
             if(getIntent().getStringExtra("type").equals("mentee")) {
                 //change title, placeholder message
                 setTitle(R.string.mentee_status);
@@ -74,8 +73,6 @@ public class MentorStatusActivity extends AppCompatActivity {
         } catch (JSONException e) {
             Log.d("JsonException", e.toString());
         }
-
-        Log.d("MentorStatusActivity", requestContent.toString());
 
         JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.POST, url, requestContent,
                 new Response.Listener<JSONArray>()
@@ -132,8 +129,6 @@ public class MentorStatusActivity extends AppCompatActivity {
         }
         for (int i = 0; !sectionList.isNull(i); i++) {
             JSONObject section = sectionList.getJSONObject(i);
-            Log.d("buildSectionListing", section.toString());
-            Log.d("buildSectionListing", section.getString("name"));
 
             // STRUCTURE:
             // - TITLE (clickable, reveals ConstraintLayout
