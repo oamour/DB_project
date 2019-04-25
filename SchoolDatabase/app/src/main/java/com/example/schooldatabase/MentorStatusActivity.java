@@ -131,12 +131,14 @@ public class MentorStatusActivity extends AppCompatActivity {
             JSONObject section = sectionList.getJSONObject(i);
 
             // STRUCTURE:
-            // - TITLE (clickable, reveals ConstraintLayout
+            // - TITLE (clickable, reveals ConstraintLayout)
             // - CONSTRAINTLAYOUT (holds student info)
             // --- MENTEES (header for mentees)
             // --- (generated mentees)
             // --- MENTORS (header for mentors)
             // --- (generated mentors)
+
+            //generate title
             TextView title = new TextView(getApplicationContext());
             title.setText(section.getString("name"));
             title.setTextSize(24);
@@ -147,13 +149,10 @@ public class MentorStatusActivity extends AppCompatActivity {
                     toggleSectionInfo(v);
                 }
             });
+            title.setCompoundDrawablesWithIntrinsicBounds(drawable.arrow_down_float, 0, 0, 0);
             title.setId(IdValues.TITLE + i);
 
-            title.setCompoundDrawablesWithIntrinsicBounds(drawable.arrow_down_float, 0, 0, 0);
-            //ImageView caret = new ImageView(getApplicationContext());
-            //caret.setImageResource(drawable.arrow_down_float);
-            //title.setId(IdValues.CARET + i);
-
+            //generate info container
             ConstraintLayout sectionInfo = new ConstraintLayout(getApplicationContext());
             sectionInfo.setVisibility(View.GONE);
             sectionInfo.setId(IdValues.CONSTRAINT_LAYOUT + i);
@@ -179,13 +178,13 @@ public class MentorStatusActivity extends AppCompatActivity {
                 set.connect(title.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, 8);
                 set.connect(title.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, 8);
             }
+
             //position sectionInfo constraintLayout
             set.connect(sectionInfo.getId(), ConstraintSet.TOP, title.getId(), ConstraintSet.BOTTOM, 0);
             set.connect(sectionInfo.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, 8);
             set.connect(sectionInfo.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, 8);
 
             set.applyTo(layout);
-
 
             // work on sectionInfo
             ConstraintSet sectionSet = new ConstraintSet();
@@ -204,6 +203,7 @@ public class MentorStatusActivity extends AppCompatActivity {
             sectionInfo.addView(menteeHeader);
             sectionSet.clone(sectionInfo);
 
+            // position mentee header at top of info container
             sectionSet.connect(menteeHeader.getId(), ConstraintSet.TOP, sectionInfo.getId(), ConstraintSet.TOP);
             sectionSet.connect(menteeHeader.getId(), ConstraintSet.LEFT, sectionInfo.getId(), ConstraintSet.LEFT);
             sectionSet.connect(menteeHeader.getId(), ConstraintSet.RIGHT, sectionInfo.getId(), ConstraintSet.RIGHT);
@@ -212,8 +212,10 @@ public class MentorStatusActivity extends AppCompatActivity {
 
             // create mentee elements
             JSONArray menteeList = section.getJSONArray("mentees");
+
             int mentee_index = 0;
             while(!menteeList.isNull(mentee_index)) {
+                // For each mentee: produce a mentee_name and mentee_grade element
                 JSONObject mentee = menteeList.getJSONObject(mentee_index);
                 
                 TextView mentee_name = new TextView(getApplicationContext());
@@ -275,6 +277,7 @@ public class MentorStatusActivity extends AppCompatActivity {
             JSONArray mentorList = section.getJSONArray("mentors");
             int mentor_index = 0;
             while(!mentorList.isNull(mentor_index)) {
+                // For each mentor: produce a mentor_name and a mentor_list
                 JSONObject mentor = mentorList.getJSONObject(mentor_index);
 
                 TextView mentor_name = new TextView(getApplicationContext());
