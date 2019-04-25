@@ -24,7 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MentorStatusActivity extends AppCompatActivity {
+public class ClassStatusActivity extends AppCompatActivity {
     private SessionManager session;
     private RequestQueue queue;
     private String url;

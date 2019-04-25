@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MentorStatusActivity"
+        <activity android:name=".ClassStatusActivity"
             android:label="@string/mentor_status"
             android:parentActivityName=".DashboardActivity"></activity>
         <activity
