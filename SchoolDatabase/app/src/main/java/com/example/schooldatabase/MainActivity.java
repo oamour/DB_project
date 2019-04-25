@@ -9,7 +9,7 @@ import android.widget.EditText;
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.schooldatabase.MESSAGE";
     public static final String LOGIN_TYPE = "com.example.schooldatabase.LOGIN_TYPE";
-    public static final String HREF = "http://192.168.56.1";
+    public static final String HREF = "http://10.253.26.185";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
