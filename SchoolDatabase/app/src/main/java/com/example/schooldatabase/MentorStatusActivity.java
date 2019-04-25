@@ -230,21 +230,18 @@ public class MentorStatusActivity extends AppCompatActivity {
                 sectionInfo.addView(mentee_grade);
                 sectionSet.clone(sectionInfo);
 
+                //chain mentee_name, mentee_grade together
+                sectionSet.createHorizontalChain(sectionInfo.getId(), ConstraintSet.LEFT,
+                        sectionInfo.getId(), ConstraintSet.RIGHT,
+                        new int[] {mentee_name.getId(), mentee_grade.getId()}, null, ConstraintSet.CHAIN_SPREAD);
+                sectionSet.connect(mentee_grade.getId(), ConstraintSet.BASELINE, mentee_name.getId(), ConstraintSet.BASELINE);
+
                 if(mentee_index == 0) {
                     //attach to header
                     sectionSet.connect(mentee_name.getId(), ConstraintSet.TOP, menteeHeader.getId(), ConstraintSet.BOTTOM, 16);
-                    sectionSet.createHorizontalChain(sectionInfo.getId(), ConstraintSet.LEFT,
-                            sectionInfo.getId(), ConstraintSet.RIGHT,
-                            new int[] {mentee_name.getId(), mentee_grade.getId()}, null, ConstraintSet.CHAIN_SPREAD);
-                    sectionSet.connect(mentee_grade.getId(), ConstraintSet.BASELINE, mentee_name.getId(), ConstraintSet.BASELINE);
                 } else {
                     //attach to previous mentee element
                     sectionSet.connect(mentee_name.getId(), ConstraintSet.TOP, (int) mentee_name.getId() - 1, ConstraintSet.BOTTOM, 4);
-                    sectionSet.createHorizontalChain(sectionInfo.getId(), ConstraintSet.LEFT,
-                            sectionInfo.getId(), ConstraintSet.RIGHT,
-                            new int[] {mentee_name.getId(), mentee_grade.getId()}, null, ConstraintSet.CHAIN_SPREAD);
-                    sectionSet.connect(mentee_grade.getId(), ConstraintSet.BASELINE, mentee_name.getId(), ConstraintSet.BASELINE);
-
                 }
 
                 mentee_index++;
@@ -292,21 +289,18 @@ public class MentorStatusActivity extends AppCompatActivity {
                 sectionInfo.addView(mentor_grade);
                 sectionSet.clone(sectionInfo);
 
+                // chain mentor_name, mentor_grade together
+                sectionSet.createHorizontalChain(sectionInfo.getId(), ConstraintSet.LEFT,
+                        sectionInfo.getId(), ConstraintSet.RIGHT,
+                        new int[] {mentor_name.getId(), mentor_grade.getId()}, null, ConstraintSet.CHAIN_SPREAD);
+                sectionSet.connect(mentor_grade.getId(), ConstraintSet.BASELINE, mentor_name.getId(), ConstraintSet.BASELINE);
+
                 if(mentor_index == 0) {
                     //attach to header
                     sectionSet.connect(mentor_name.getId(), ConstraintSet.TOP, mentorHeader.getId(), ConstraintSet.BOTTOM, 16);
-                    sectionSet.createHorizontalChain(sectionInfo.getId(), ConstraintSet.LEFT,
-                            sectionInfo.getId(), ConstraintSet.RIGHT,
-                            new int[] {mentor_name.getId(), mentor_grade.getId()}, null, ConstraintSet.CHAIN_SPREAD);
-                    sectionSet.connect(mentor_grade.getId(), ConstraintSet.BASELINE, mentor_name.getId(), ConstraintSet.BASELINE);
                 } else {
                     //attach to previous mentor element
                     sectionSet.connect(mentor_name.getId(), ConstraintSet.TOP, (int) mentor_name.getId() - 1, ConstraintSet.BOTTOM, 4);
-                    sectionSet.createHorizontalChain(sectionInfo.getId(), ConstraintSet.LEFT,
-                            sectionInfo.getId(), ConstraintSet.RIGHT,
-                            new int[] {mentor_name.getId(), mentor_grade.getId()}, null, ConstraintSet.CHAIN_SPREAD);
-                    sectionSet.connect(mentor_grade.getId(), ConstraintSet.BASELINE, mentor_name.getId(), ConstraintSet.BASELINE);
-
                 }
 
                 mentor_index++;
