@@ -24,7 +24,8 @@
             android:name=".ChangeProfileActivity"
             android:label="@string/change_profile"
             android:parentActivityName=".DashboardActivity" />
-        <activity android:name=".DashboardActivity" />
+        <activity android:name=".DashboardActivity"
+            android:label="@string/dashboard"/>
         <activity
             android:name=".LoginActivity"
             android:label="@string/login"
