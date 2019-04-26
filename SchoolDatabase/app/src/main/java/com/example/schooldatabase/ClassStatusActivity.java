@@ -58,6 +58,10 @@ public class ClassStatusActivity extends AppCompatActivity {
                 setTitle(R.string.mentee_status);
                 TextView textView = findViewById(R.id.mentor_no_sections);
                 textView.setText(R.string.mentee_no_sections);
+            } else if (getIntent().getStringExtra("type").equals("moderator")) {
+                setTitle(R.string.mod_status);
+                TextView textView = findViewById(R.id.mentor_no_sections);
+                textView.setText(R.string.mod_no_sections);
             }
         }
 

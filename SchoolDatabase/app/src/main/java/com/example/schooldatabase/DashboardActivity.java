@@ -136,6 +136,9 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     public void gotoModeratorStatus(View view) {
-        // TODO: implement ModeratorStatusActivity
+        Intent intent = new Intent(this, ClassStatusActivity.class);
+        intent.putExtra("url", "/code/project/api/moderator.php");
+        intent.putExtra("type", "moderator");
+        startActivity(intent);
     }
 }

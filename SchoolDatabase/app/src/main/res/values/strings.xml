@@ -58,4 +58,6 @@
     <string name="mentor_no_sections">You are not currently a mentor for any sections.</string>
     <string name="mentee_status">Mentee Status</string>
     <string name="mentee_no_sections">You are not currently a mentee for any sections.</string>
+    <string name="mod_status">Moderator Status</string>
+    <string name="mod_no_sections">You are not currently a moderator for any sections.</string>
 </resources>
