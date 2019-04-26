@@ -117,10 +117,12 @@ public class ClassStatusActivity extends AppCompatActivity {
         private static final int CONSTRAINT_LAYOUT = 300;
         private static final int MENTEE_HEADER = 400;
         private static final int MENTOR_HEADER = 500;
+        private static final int MODERATOR_HEADER = 600;
         private static final int MENTEE_NAME = 1000;
         private static final int MENTEE_GRADE = 2000;
         private static final int MENTOR_NAME = 3000;
         private static final int MENTOR_GRADE = 4000;
+        private static final int MODERATOR_NAME = 5000;
     };
 
     public void buildSectionListing(JSONArray sectionList) throws JSONException {
@@ -308,6 +310,44 @@ public class ClassStatusActivity extends AppCompatActivity {
                 }
 
                 mentor_index++;
+
+                sectionSet.applyTo(sectionInfo);
+            }
+
+            if(!section.isNull("moderator")) {
+                // create mentor header
+                TextView modHeader = new TextView(getApplicationContext());
+                modHeader.setText(getResources().getText(R.string.mod));
+                modHeader.setTextSize(20);
+                modHeader.setLayoutParams(
+                        new ConstraintLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                modHeader.setBackgroundResource(R.drawable.drawable_bottom_border);
+                modHeader.setId(IdValues.MODERATOR_HEADER + i);
+
+                sectionInfo.addView(modHeader);
+                sectionSet.clone(sectionInfo);
+
+                //bind to last mentee name
+                sectionSet.connect(modHeader.getId(), ConstraintSet.TOP, (int) IdValues.MENTOR_NAME + i*10 + mentor_index-1, ConstraintSet.BOTTOM, 24);
+                sectionSet.connect(modHeader.getId(), ConstraintSet.LEFT, sectionInfo.getId(), ConstraintSet.LEFT);
+                sectionSet.connect(modHeader.getId(), ConstraintSet.RIGHT, sectionInfo.getId(), ConstraintSet.RIGHT);
+
+                sectionSet.applyTo(sectionInfo);
+
+
+                //show message telling user that no mentors were found
+                TextView mod_name = new TextView(getApplicationContext());
+                mod_name.setText(section.getString("moderator"));
+                mod_name.setId(IdValues.MODERATOR_NAME + 10*i);
+
+                sectionInfo.addView(mod_name);
+                sectionSet.clone(sectionInfo);
+
+                sectionSet.connect(mod_name.getId(), ConstraintSet.TOP, modHeader.getId(), ConstraintSet.BOTTOM, 16);
+                sectionSet.connect(mod_name.getId(), ConstraintSet.LEFT, sectionInfo.getId(), ConstraintSet.LEFT, 16);
+                sectionSet.connect(mod_name.getId(), ConstraintSet.RIGHT, sectionInfo.getId(), ConstraintSet.RIGHT, 16);
 
                 sectionSet.applyTo(sectionInfo);
             }
