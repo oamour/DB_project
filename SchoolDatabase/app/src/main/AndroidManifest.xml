@@ -13,9 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ClassStatusActivity"
+        <activity
+            android:name=".ClassStatusActivity"
             android:label="@string/mentor_status"
-            android:parentActivityName=".DashboardActivity"></activity>
+            android:parentActivityName=".DashboardActivity" />
         <activity
             android:name=".SelectChildProfileActivity"
             android:label="@string/select_child"
@@ -24,7 +25,8 @@
             android:name=".ChangeProfileActivity"
             android:label="@string/change_profile"
             android:parentActivityName=".DashboardActivity" />
-        <activity android:name=".DashboardActivity"
+        <activity
+            android:name=".DashboardActivity"
             android:label="@string/dashboard"/>
         <activity
             android:name=".LoginActivity"
@@ -48,7 +50,6 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
