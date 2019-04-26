@@ -66,6 +66,8 @@ public class DashboardActivity extends AppCompatActivity {
         if(user.isParent()) {
             Button button = (Button) findViewById(R.id.dashboard_change_child_profile);
             button.setVisibility(View.VISIBLE);
+            button = findViewById(R.id.dashboard_view_schedule);
+            button.setVisibility(View.GONE);
         }
 
         if(user.isMentor()) {
@@ -119,6 +121,11 @@ public class DashboardActivity extends AppCompatActivity {
 
     public void gotoViewSections(View view) {
         // TODO: implement ViewSectionsActivity
+    }
+
+    public void gotoViewSchedule(View view) {
+        Intent intent = new Intent(this, ViewScheduleActivity.class);
+        startActivity(intent);
     }
 
     public void gotoMentorStatus(View view) {
