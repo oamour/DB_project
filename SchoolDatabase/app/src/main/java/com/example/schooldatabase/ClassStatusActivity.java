@@ -133,6 +133,7 @@ public class ClassStatusActivity extends AppCompatActivity {
             TextView textView = (TextView) findViewById(R.id.mentor_no_sections);
             textView.setVisibility(View.GONE);
         }
+
         for (int i = 0; !sectionList.isNull(i); i++) {
             JSONObject section = sectionList.getJSONObject(i);
 
@@ -220,6 +221,23 @@ public class ClassStatusActivity extends AppCompatActivity {
             JSONArray menteeList = section.getJSONArray("mentees");
 
             int mentee_index = 0;
+            if(menteeList.isNull(0)) {
+                //show message telling user that no mentors were found
+                TextView no_mentee_found = new TextView(getApplicationContext());
+                no_mentee_found.setText(R.string.no_mentees_found);
+                no_mentee_found.setId(IdValues.MENTEE_NAME + 10*i);
+
+                sectionInfo.addView(no_mentee_found);
+                sectionSet.clone(sectionInfo);
+
+                sectionSet.connect(no_mentee_found.getId(), ConstraintSet.TOP, menteeHeader.getId(), ConstraintSet.BOTTOM, 16);
+                sectionSet.connect(no_mentee_found.getId(), ConstraintSet.LEFT, sectionInfo.getId(), ConstraintSet.LEFT, 16);
+                sectionSet.connect(no_mentee_found.getId(), ConstraintSet.RIGHT, sectionInfo.getId(), ConstraintSet.RIGHT, 16);
+
+                mentee_index++;
+
+                sectionSet.applyTo(sectionInfo);
+            }
             while(!menteeList.isNull(mentee_index)) {
                 // For each mentee: produce a mentee_name and mentee_grade element
                 JSONObject mentee = menteeList.getJSONObject(mentee_index);
@@ -279,6 +297,23 @@ public class ClassStatusActivity extends AppCompatActivity {
             //create mentor elements
             JSONArray mentorList = section.getJSONArray("mentors");
             int mentor_index = 0;
+            if(mentorList.isNull(0)) {
+                //show message telling user that no mentors were found
+                TextView no_mentor_found = new TextView(getApplicationContext());
+                no_mentor_found.setText(R.string.no_mentors_found);
+                no_mentor_found.setId(IdValues.MENTOR_NAME + 10*i);
+
+                sectionInfo.addView(no_mentor_found);
+                sectionSet.clone(sectionInfo);
+
+                sectionSet.connect(no_mentor_found.getId(), ConstraintSet.TOP, mentorHeader.getId(), ConstraintSet.BOTTOM, 16);
+                sectionSet.connect(no_mentor_found.getId(), ConstraintSet.LEFT, sectionInfo.getId(), ConstraintSet.LEFT, 16);
+                sectionSet.connect(no_mentor_found.getId(), ConstraintSet.RIGHT, sectionInfo.getId(), ConstraintSet.RIGHT, 16);
+
+                mentor_index++;
+
+                sectionSet.applyTo(sectionInfo);
+            }
             while(!mentorList.isNull(mentor_index)) {
                 // For each mentor: produce a mentor_name and a mentor_list
                 JSONObject mentor = mentorList.getJSONObject(mentor_index);
