@@ -1,6 +1,6 @@
 <?php
 /*
-get_grade_leve()
+get_grade_level()
 
 Takes an integer from 1-4 and returns the corresponding
 grade level, or a placeholder string if value is invalid.
