@@ -84,4 +84,7 @@
     <string name="time_5pm">5:00 PM</string>
     <string name="time_6pm">6:00 PM</string>
     <string name="time_7pm">7:00 PM</string>
+
+    <!--View Section Info-->
+    <string name="section">Section</string>
 </resources>

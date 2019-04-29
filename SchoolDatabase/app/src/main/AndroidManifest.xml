@@ -15,11 +15,11 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ScheduleSectionActivity"
-            android:label="Section"
+            android:label="@string/section"
             android:parentActivityName=".ViewScheduleActivity"/>
         <activity
             android:name=".ViewScheduleActivity"
-            android:label="Schedule"
+            android:label="@string/schedule_header"
             android:parentActivityName=".DashboardActivity" />
         <activity
             android:name=".ClassStatusActivity"
