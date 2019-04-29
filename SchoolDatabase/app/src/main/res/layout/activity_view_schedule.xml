@@ -144,77 +144,99 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_bottom_border" />
+                    android:background="@drawable/drawable_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/mon_900"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/mon_1000"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/mon_1100"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/mon_1200"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/mon_1300"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/mon_1400"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/mon_1500"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/mon_1600"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/mon_1700"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/mon_1800"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
             </LinearLayout>
 
@@ -241,49 +263,63 @@
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/drawable_bottom_border" />
+                    android:background="@drawable/drawable_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/tue_930"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/tue_1100"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/tue_1230"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/tue_1400"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/tue_1530"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/tue_1700"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
             </LinearLayout>
 
@@ -310,77 +346,99 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_bottom_border" />
+                    android:background="@drawable/drawable_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/wed_900"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/wed_1000"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/wed_1100"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/wed_1200"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/wed_1300"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/wed_1400"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/wed_1500"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/wed_1600"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/wed_1700"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/wed_1800"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
             </LinearLayout>
 
@@ -407,49 +465,63 @@
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/drawable_bottom_border" />
+                    android:background="@drawable/drawable_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/thu_930"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/thu_1100"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/thu_1230"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/thu_1400"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/thu_1530"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/thu_1700"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
             </LinearLayout>
 
@@ -476,77 +548,99 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_bottom_border" />
+                    android:background="@drawable/drawable_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/fri_900"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/fri_1000"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/fri_1100"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/fri_1200"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/fri_1300"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/fri_1400"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/fri_1500"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/fri_1600"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/fri_1700"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/fri_1800"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
             </LinearLayout>
 
@@ -575,21 +669,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="170dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_bottom_border" />
+                    android:background="@drawable/drawable_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/sat_1100"
                     android:layout_width="match_parent"
                     android:layout_height="170dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/sat_1400"
                     android:layout_width="match_parent"
                     android:layout_height="170dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/drawable_top_bottom_border" />
+                    android:background="@drawable/drawable_top_bottom_border"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center" />
 
             </LinearLayout>
         </android.support.constraint.ConstraintLayout>
