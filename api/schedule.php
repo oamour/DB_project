@@ -21,13 +21,14 @@ function get_class_sections($userid) {
 		  $section_info = get_section_info($myconnection, $row["sectionID"], $row["courseID"]);
 		  $course_info = get_course_info($myconnection, $row["courseID"]);
 		  
-		  $section->courseName = $course_info["name"];
-		  $section->courseDesc = $course_info["desc"];
+		  $section->courseName = $course_info["title"];
+		  $section->courseDesc = $course_info["description"];
 		  $section->sectionID = $section_info["sectionID"];
 		  $section->sectionName = $section_info["name"];
-		  $section->timeslot = $section_info["timeslot"];
+		  $section->timeslot = $section_info["timeSlotID"];
 		  $section->startDate = $section_info["startDate"];
 		  $section->endDate = $section_info["endDate"];
+		  $section->userType = "mentor";
 		  
 		  $section_arr[$i] = $section;
 		  $i += 1;
@@ -45,13 +46,14 @@ function get_class_sections($userid) {
 		  $section_info = get_section_info($myconnection, $row["sectionID"], $row["courseID"]);
 		  $course_info = get_course_info($myconnection, $row["courseID"]);
 		  
-		  $section->courseName = $course_info["name"];
-		  $section->courseDesc = $course_info["desc"];
+		  $section->courseName = $course_info["title"];
+		  $section->courseDesc = $course_info["description"];
 		  $section->sectionID = $section_info["sectionID"];
 		  $section->sectionName = $section_info["name"];
-		  $section->timeslot = $section_info["timeslot"];
+		  $section->timeslot = $section_info["timeSlotID"];
 		  $section->startDate = $section_info["startDate"];
 		  $section->endDate = $section_info["endDate"];
+		  $section->userType = "mentee";
 		  
 		  $section_arr[$i] = $section;
 		  $i += 1;
@@ -69,13 +71,14 @@ function get_class_sections($userid) {
 		  $section_info = get_section_info($myconnection, $row["sectionID"], $row["courseID"]);
 		  $course_info = get_course_info($myconnection, $row["courseID"]);
 		  
-		  $section->courseName = $course_info["name"];
-		  $section->courseDesc = $course_info["desc"];
+		  $section->courseName = $course_info["title"];
+		  $section->courseDesc = $course_info["description"];
 		  $section->sectionID = $section_info["sectionID"];
 		  $section->sectionName = $section_info["name"];
-		  $section->timeslot = $section_info["timeslot"];
+		  $section->timeslot = $section_info["timeSlotID"];
 		  $section->startDate = $section_info["startDate"];
 		  $section->endDate = $section_info["endDate"];
+		  $section->userType = "moderator";
 		  
 		  $section_arr[$i] = $section;
 		  $i += 1;
