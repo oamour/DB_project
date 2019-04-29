@@ -46,7 +46,7 @@ public class ScheduleSectionActivity extends AppCompatActivity {
                 courseName.setText(section.getString("courseName"));
 
                 TextView sectionID = findViewById(R.id.sectionID);
-                sectionID.setText(sectionID.getText() + section.getString("sectionID") + ":");
+                sectionID.setText(sectionID.getText() + " " + section.getString("sectionID") + ":");
 
                 TextView sectionName = findViewById(R.id.sectionName);
                 sectionName.setText(section.getString("sectionName"));

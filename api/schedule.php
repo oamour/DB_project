@@ -28,7 +28,7 @@ function get_class_sections($userid) {
 		  $section->timeSlot = $section_info["timeSlotID"];
 		  $section->startDate = $section_info["startDate"];
 		  $section->endDate = $section_info["endDate"];
-		  $section->userType = "mentor";
+		  $section->userType = "Mentor";
 		  
 		  $section_arr[$i] = $section;
 		  $i += 1;
@@ -53,7 +53,7 @@ function get_class_sections($userid) {
 		  $section->timeSlot = $section_info["timeSlotID"];
 		  $section->startDate = $section_info["startDate"];
 		  $section->endDate = $section_info["endDate"];
-		  $section->userType = "mentee";
+		  $section->userType = "Mentee";
 		  
 		  $section_arr[$i] = $section;
 		  $i += 1;
@@ -78,7 +78,7 @@ function get_class_sections($userid) {
 		  $section->timeSlot = $section_info["timeSlotID"];
 		  $section->startDate = $section_info["startDate"];
 		  $section->endDate = $section_info["endDate"];
-		  $section->userType = "moderator";
+		  $section->userType = "Moderator";
 		  
 		  $section_arr[$i] = $section;
 		  $i += 1;
