@@ -25,7 +25,7 @@ function get_class_sections($userid) {
 		  $section->courseDesc = $course_info["description"];
 		  $section->sectionID = $section_info["sectionID"];
 		  $section->sectionName = $section_info["name"];
-		  $section->timeslot = $section_info["timeSlotID"];
+		  $section->timeSlot = $section_info["timeSlotID"];
 		  $section->startDate = $section_info["startDate"];
 		  $section->endDate = $section_info["endDate"];
 		  $section->userType = "mentor";
@@ -50,7 +50,7 @@ function get_class_sections($userid) {
 		  $section->courseDesc = $course_info["description"];
 		  $section->sectionID = $section_info["sectionID"];
 		  $section->sectionName = $section_info["name"];
-		  $section->timeslot = $section_info["timeSlotID"];
+		  $section->timeSlot = $section_info["timeSlotID"];
 		  $section->startDate = $section_info["startDate"];
 		  $section->endDate = $section_info["endDate"];
 		  $section->userType = "mentee";
@@ -75,7 +75,7 @@ function get_class_sections($userid) {
 		  $section->courseDesc = $course_info["description"];
 		  $section->sectionID = $section_info["sectionID"];
 		  $section->sectionName = $section_info["name"];
-		  $section->timeslot = $section_info["timeSlotID"];
+		  $section->timeSlot = $section_info["timeSlotID"];
 		  $section->startDate = $section_info["startDate"];
 		  $section->endDate = $section_info["endDate"];
 		  $section->userType = "moderator";
