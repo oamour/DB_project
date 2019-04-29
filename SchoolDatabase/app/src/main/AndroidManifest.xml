@@ -14,6 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ScheduleSectionActivity"
+            android:label="Section"
+            android:parentActivityName=".ViewScheduleActivity"/>
+        <activity
             android:name=".ViewScheduleActivity"
             android:label="Schedule"
             android:parentActivityName=".DashboardActivity" />
@@ -54,6 +58,7 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

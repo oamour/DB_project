@@ -247,8 +247,9 @@ public class ViewScheduleActivity extends AppCompatActivity {
         try {
             Log.d("showClassInfo", "Triggered!");
             // send class info to new activity
-            Intent intent = new Intent();
+            Intent intent = new Intent(this, ScheduleSectionActivity.class);
             intent.putExtra("section", sections.getJSONObject(sectionIndex).toString());
+            startActivity(intent);
         } catch (JSONException e){
             Log.d("JsonException", e.toString());
         }
