@@ -87,4 +87,9 @@
 
     <!--View Section Info-->
     <string name="section">Section</string>
+    <string name="description">Description</string>
+    <string name="user_type">User Type</string>
+    <string name="time_slot">Time Slot</string>
+    <string name="date_range">Dates</string>
+    <string name="unknown">Unknown</string>
 </resources>
