@@ -1,10 +1,12 @@
 package com.example.schooldatabase;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.R.drawable;
@@ -187,34 +189,52 @@ public class ViewScheduleActivity extends AppCompatActivity {
                         break;
                     default:
                 }
-
                 Log.d("createScheduleButtons", "Day is " + day + ", time is " + time);
                 Log.d("createScheduleButtons", "" + getResources().getIdentifier("mon_" + time, "id", getPackageName()));
+
+                final int index = i;
+                View.OnClickListener listener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showClassInfo(index);
+                    }
+                };
                 if(day.equals("mwf")) {
                     // monday, wednesday. friday classes
                     TextView monView = findViewById(getResources().getIdentifier("mon_" + time, "id", getPackageName()));
                     TextView wedView = findViewById(getResources().getIdentifier("wed_" + time, "id", getPackageName()));
                     TextView friView = findViewById(getResources().getIdentifier("fri_" + time, "id", getPackageName()));
+
                     monView.setText(section.getString("sectionName"));
                     wedView.setText(section.getString("sectionName"));
                     friView.setText(section.getString("sectionName"));
+
                     monView.setBackgroundResource(R.color.peach);
                     wedView.setBackgroundResource(R.color.peach);
                     friView.setBackgroundResource(R.color.peach);
 
+                    monView.setOnClickListener(listener);
+                    wedView.setOnClickListener(listener);
+                    friView.setOnClickListener(listener);
                 } else if(day.equals("tth")) {
                     // tuesday, thursday classes
                     TextView tueView = findViewById(getResources().getIdentifier("tue_" + time, "id", getPackageName()));
                     TextView thursView = findViewById(getResources().getIdentifier("thu_" + time, "id", getPackageName()));
+
                     tueView.setText(section.getString("sectionName"));
                     thursView.setText(section.getString("sectionName"));
+
                     tueView.setBackgroundResource(R.color.peach);
                     thursView.setBackgroundResource(R.color.peach);
+
+                    tueView.setOnClickListener(listener);
+                    thursView.setOnClickListener(listener);
                 } else if(day.equals("sat")) {
                     // saturday classes
                     TextView satView = findViewById(getResources().getIdentifier("sat_" + time, "id", getPackageName()));
                     satView.setText(section.getString("sectionName"));
                     satView.setBackgroundResource(R.color.peach);
+                    satView.setOnClickListener(listener);
                 }
                 i++;
             }
@@ -223,4 +243,15 @@ public class ViewScheduleActivity extends AppCompatActivity {
         }
     }
 
+    private void showClassInfo(int sectionIndex) {
+        try {
+            Log.d("showClassInfo", "Triggered!");
+            // send class info to new activity
+            Intent intent = new Intent();
+            intent.putExtra("section", sections.getJSONObject(sectionIndex).toString());
+        } catch (JSONException e){
+            Log.d("JsonException", e.toString());
+        }
+
+    }
 }
