@@ -1,5 +1,6 @@
 <?php
-	$session_key = md5("database");
+    $value = json_decode(file_get_contents('php://input'));
+/* 	$session_key = md5("database");
 	session_start();
 	if (empty($_SESSION[$session_key])) {
 		echo "Not logged in! Please <a href='index.html'>CLICK HERE</a> to return to the main page.";
@@ -10,12 +11,14 @@
 		exit();
 	} else {
 		$userid = $_SESSION[$session_key];
-	}
+	} */
 	
 	$myconnection = mysqli_connect('localhost', 'root', '') 
     or die ('Could not connect: ' . mysql_error());
 
 	$mydb = mysqli_select_db ($myconnection, 'db2') or die ('Could not select database');
+	
+	mysqli_query($myconnection, "START TRANSACTION");
 	
 	$GetSections = "SELECT sec.courseID, sec.sectionID, cou.title, sec.name, cou.description, sec.startDate, sec.endDate, sec.timeSlotID, cou.mentorReq, cou.menteeReq
 				   FROM sections sec, courses cou
@@ -36,83 +39,60 @@
 		}
 	}
 	
-	$GetMod = "SELECT modID FROM moderators WHERE userID= ".$userid.";";
-	$mod= mysqli_query($myconnection, $GetMod) or die ("Failed to query database: " . mysqli_error($myconnection));
-	$mod = $mod->fetch_row()[0];
-	
-	$GetMentor = "SELECT mentorID FROM mentors WHERE userID= ".$userid.";";
-	$mentor= mysqli_query($myconnection, $GetMentor) or die ("Failed to query database: " . mysqli_error($myconnection));
-	$mentor = $mentor->fetch_row()[0];
-	
-	$GetMentee = "SELECT menteeID FROM mentees WHERE userID= ".$userid.";";
-	$mentee= mysqli_query($myconnection, $GetMentee) or die ("Failed to query database: " . mysqli_error($myconnection));
-	$mentee = $mentee->fetch_row()[0];
-	
-	mysqli_close($myconnection);
-?>
-<!DOCTYPE html>
-<html>
-<head>
-</head>
-<body>
-	<a href="dashboard.php">Back to Start</a>
-	<h1>Class List</h1>
-	<?php if ($mentor != NULL or $mentee != NULL) :?>
-	<p>To sign up for classes <a href="course_signup.php">CLICK HERE</a></p>
-	<?php elseif ($mod != NULL) :?>
-	<p>To sign up to moderate <a href="course_moderate.php">CLICK HERE</a></p>
-	<?php else :?>
-	<?php endif;?>
-	<table style="border:1px solid;border-collapse: collapse;">
-			<tr style = "border:1px solid;border-collapse: collapse;">
-				<th style="min-width:50px;border:1px solid;border-collapse: collapse;">ID</th>
-				<th style="min-width:125px;border:1px solid;border-collapse: collapse;">Course</th>
-				<th style="min-width:100px;border:1px solid;border-collapse: collapse;">Section</th>
-				<th style="min-width:175px;border:1px solid;border-collapse: collapse;">Time</th>
-				<th style="border:1px solid;border-collapse: collapse;">startDate</th>
-				<th style="border:1px solid;border-collapse: collapse;">endDate</th>
-				<th style="border:1px solid;border-collapse: collapse;">mentor Req.</th>
-				<th style="border:1px solid;border-collapse: collapse;">mentee Req.</th>
-				<th style="border:1px solid;border-collapse: collapse;">Description</th>
-			</tr>
-			<?php
-			for($i = 0; $i<count($sections);$i++){
-				$currentTS =$timeSlots[$sections[$i][7]];
-				echo("<tr style = \"border:1px solid;border-collapse: collapse;\" >");
-				echo("
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][0].".".$sections[$i][1] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][2] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][3] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:right \">");
-				if($currentTS[0]){
-					echo("m");
-				}
-				if($currentTS[1]){
-					echo("t");
-				}
-				if($currentTS[2]){
-					echo("w");
-				}
-				if($currentTS[3]){
-					echo("th");
-				}
-				if($currentTS[4]){
-					echo("f");
-				}
-				if($currentTS[5]){
-					echo("s");
-				}
-				echo(" - " . $currentTS[6] . "-" . $currentTS[7] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][5] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][6] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][8] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][9] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\"><span title = \"".$sections[$i][4]."\">" . substr($sections[$i][4],0,33) . "<span></td>
-				</tr>");
-				
+	$result_json = (object)[];
+	for($i=0;$i<count($sections);$i++){
+		$list = array();
+		$timeslot = "";
+		$list['courseID'] = $sections[$i][0];
+		$list['courseName'] = $sections[$i][2];
+		$seclist = array();
+		do{
+			$subsec = array();
+			$subsec['sectionID'] = $sections[$i][1];
+			$subsec['sectionName'] = $sections[$i][3];
+			$subsec['descrption'] = $sections[$i][4];
+			$subsec['startDate'] = $sections[$i][5];
+			$subsec['endDate'] = $sections[$i][6];
+			$currentTS=$timeSlots[$sections[$i][7]];
+			if($currentTS[0]){
+				$timeslot = $timeslot . "m";
 			}
-				?>
-			</table>
+			if($currentTS[1]){
+				$timeslot= $timeslot . "t";
+			}
+			if($currentTS[2]){
+				$timeslot= $timeslot . "w";
+			}
+			if($currentTS[3]){
+				$timeslot= $timeslot . "th";
+			}
+			if($currentTS[4]){
+				$timeslot= $timeslot . "f";
+			}
+			if($currentTS[5]){
+				$timeslot= $timeslot . "s";
+			}
+			$timeslot= $timeslot . " " . $currentTS[6]. "-" . $currentTS[7];
+			$subsec['timeslot'] = $timeslot;
+			$subsec['mentorReq'] = $sections[$i][8];
+			$subsec['menteeReq'] = $sections[$i][9];
+			$seclist[]=$subsec;
+			//echo("". $sections[$i][0] . " ". $sections[$i+1][0]."\n");
+			if ($i+1<count($sections) and $sections[$i][0] == $sections[$i+1][0]){
+				++$i;
+			}
+			else{ break;}
+
+		}while($i+1<count($sections));
+		//echo("breaking");
+		$list['sections']=$seclist;
+		$list['sec_count']=count($seclist);
+		$value[]=$list;
+	}
+	$result_json = $value;
+	mysqli_close($myconnection);
+	header('Content-Type: application/json');
+	$encoded = json_encode($result_json);
 	
-</body>
-</html>
+	echo $encoded;
+?>
