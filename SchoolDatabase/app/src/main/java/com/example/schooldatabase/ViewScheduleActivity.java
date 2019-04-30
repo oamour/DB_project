@@ -22,6 +22,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ViewScheduleActivity extends AppCompatActivity {
     private SessionManager session;
     private RequestQueue queue;
@@ -102,6 +106,27 @@ public class ViewScheduleActivity extends AppCompatActivity {
             int i = 0;
             while(!sections.isNull(i)) {
                 JSONObject section = sections.getJSONObject(i);
+                //check if class is in past or future
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date startDate, endDate;
+                try {
+                    startDate = sdf.parse(section.getString("startDate"));
+                    endDate = sdf.parse(section.getString("endDate"));
+                } catch (ParseException e) {
+                    // If date fails to parse, just display the class.
+                    Log.d("ParseException", e.toString());
+                    startDate = new Date();
+                    endDate = new Date();
+                }
+                Date today = new Date();
+                Log.d("createScheduleButtons", "StartDate: " + startDate.toString() +
+                        "\nEndDate: " + endDate.toString() + "\ntoday: " + today.toString());
+                if (startDate.after(today) || endDate.before(today)) {
+                    // class not currently in progress, skip
+                    i++;
+                    continue;
+                }
+
                 int timeSlotID = section.getInt("timeSlot");
                 String day = "";
                 String time = "";
