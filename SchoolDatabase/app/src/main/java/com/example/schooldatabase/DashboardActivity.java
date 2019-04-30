@@ -95,6 +95,12 @@ public class DashboardActivity extends AppCompatActivity {
         welcome.append(" " + user.getName());
     }
 
+    @Override
+    public void onBackPressed() {
+        // prevent user from returning to main activity if logged in
+        moveTaskToBack(true);
+    }
+
     public void logoutButton(View view) {
         session.logoutUser();
         Context context = getApplicationContext();
