@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         //Log.d("login_type", login_type);
         if (loginType.equals("student")) {
             Button registerButton = findViewById(R.id.login_register_button);
-            registerButton.setText(getResources().getString(R.string.index_login_student));
+            registerButton.setText(getResources().getString(R.string.index_register_student));
             TextView registerText = findViewById(R.id.login_register_text);
             registerText.setText(getResources().getString(R.string.login_register_student));
         } else {
