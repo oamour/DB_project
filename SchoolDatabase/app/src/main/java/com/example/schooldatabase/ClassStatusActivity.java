@@ -24,6 +24,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ClassStatusActivity extends AppCompatActivity {
     private SessionManager session;
     private RequestQueue queue;
@@ -137,6 +141,24 @@ public class ClassStatusActivity extends AppCompatActivity {
         for (int i = 0; !sectionList.isNull(i); i++) {
             JSONObject section = sectionList.getJSONObject(i);
 
+            // check if class is currently in session
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date startDate, endDate;
+            try {
+                startDate = sdf.parse(section.getString("startDate"));
+                endDate = sdf.parse(section.getString("endDate"));
+            } catch (ParseException e) {
+                // If date fails to parse, just display the class.
+                Log.d("ParseException", e.toString());
+                startDate = new Date();
+                endDate = new Date();
+            }
+            Date today = new Date();
+            if (startDate.after(today) || endDate.before(today)) {
+                // class not currently in progress, skip
+                i++;
+                continue;
+            }
             // STRUCTURE:
             // - TITLE (clickable, reveals ConstraintLayout)
             // - CONSTRAINTLAYOUT (holds student info)
