@@ -81,6 +81,8 @@ function get_class_sections($userid) {
 		  $course_info = get_course_info($myconnection, $row["courseID"]);
 		  
 		  $section->name = $section_info["name"];
+		  $section->startDate = $section_info["startDate"];
+		  $section->endDate = $section_info["endDate"];
 		  $section->mentees = get_mentees($myconnection, $row["sectionID"], $row["courseID"]); 
 		  $section->mentors = get_mentors($myconnection, $row["sectionID"], $row["courseID"]);
 		  
