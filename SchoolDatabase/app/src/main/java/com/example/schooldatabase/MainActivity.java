@@ -7,7 +7,7 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
     public static final String LOGIN_TYPE = "com.example.schooldatabase.LOGIN_TYPE";
-    public static final String HREF = "http://10.253.26.185";
+    public static final String HREF = "http://10.0.2.2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
