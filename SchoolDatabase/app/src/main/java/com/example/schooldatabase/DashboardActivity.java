@@ -120,6 +120,9 @@ public class DashboardActivity extends AppCompatActivity {
     public void gotoViewSections(View view) {
         Intent intent = new Intent(this, ViewSectionsActivity.class);
         intent.putExtra("url","/code/project/api/all_classes.php");
+        intent.putExtra("type",0);
+        intent.putExtra("class",0);
+        intent.putExtra("sec",0);
         startActivity(intent);
     }
 
