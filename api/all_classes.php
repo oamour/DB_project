@@ -57,10 +57,10 @@
     $value = json_decode(file_get_contents('php://input'));
 	if($value == NULL){
 		$value = array();
-		$value[] = 13;
+		$value[] = 26;
+		$value[]= 8;
 		$value[]= 6;
 		$value[]= 1;
-		$value[]= 0;
 	}
 
 	if ($value != NULL){
@@ -99,6 +99,8 @@
 		$sections= mysqli_query($myconnection, $GetSections) or die ("Failed to query database: " . mysqli_error($myconnection));
 		$sections = $sections->fetch_all();
 		
+		
+		
 		$timeSlots = array();
 		$usedTS = array();
 		for($i = 0; $i<count($sections);$i++){
@@ -112,7 +114,15 @@
 		}
 		
 		if($regType == 1){
-			if(!in_array($regClass,getConflicts(getUserClasses($uid,$myconnection),$myconnection))and $mentor != NULL AND $mentor[1] >= getGradeLevel($regClass[0],$myconnection)[0]){
+			$MenteeCount= "SELECT mentorCapacity FROM sections WHERE courseID =".$regClass[0]." AND sectionID = ".$regClass[1].";";
+			$menteeCount = mysqli_query($myconnection, $MenteeCount) or die ("Failed to query database: " . mysqli_error($myconnection));
+			$mentorMaxCount = $menteeCount->fetch_row();
+			
+			$MenteeCount= "SELECT COUNT(mentorId) FROM mentorfor WHERE courseID =".$regClass[0]." AND sectionID = ".$regClass[1].";";
+			$menteeCount = mysqli_query($myconnection, $MenteeCount) or die ("Failed to query database: " . mysqli_error($myconnection));
+			$mentorCount = $menteeCount->fetch_row();
+			
+			if(!in_array($regClass,getConflicts(getUserClasses($uid,$myconnection),$myconnection))and $mentor != NULL AND $mentor[1] >= getGradeLevel($regClass[0],$myconnection)[0] AND $mentorCount != NULL AND ($mentorMaxCount[0] - $mentorCount[0]) > 0){
 				$Enrole = "INSERT INTO mentorfor(mentorID,sectionID,courseID) VALUES (" . $mentor[0] . "," . $regClass[1] . "," . $regClass[0] .");";
 				
 					$enroled = mysqli_query($myconnection, $Enrole) or die ("Failed to query database: " . mysqli_error($myconnection));
@@ -120,7 +130,15 @@
 			}
 		}
 		else if($regType == 2){
-			if(!in_array($regClass,getConflicts(getUserClasses($uid,$myconnection),$myconnection))and $mentee != NULL AND $mentee[1] >= getGradeLevel($regClass[0],$myconnection)[1]){
+			$MenteeCount= "SELECT menteeCapacity FROM sections WHERE courseID =".$regClass[0]."AND sectionID =".$regClass[1].";";
+			$menteeCount = mysqli_query($myconnection, $MenteeCount) or die ("Failed to query database: " . mysqli_error($myconnection));
+			$menteeMaxCount = $menteeCount->fetch_row();
+			
+			$MenteeCount= "SELECT COUNT(menteeId) FROM menteefor WHERE courseID =".$regClass[0]."AND sectionID =".$regClass[1].";";
+			$menteeCount = mysqli_query($myconnection, $MenteeCount) or die ("Failed to query database: " . mysqli_error($myconnection));
+			$menteeCount = $menteeCount->fetch_row();
+			
+			if(!in_array($regClass,getConflicts(getUserClasses($uid,$myconnection),$myconnection))and $mentee != NULL AND $mentee[1] >= getGradeLevel($regClass[0],$myconnection)[1]AND $menteeCount != NULL AND $menteeMaxCount[0] - $menteeCount[0] > 0){
 				$Enrole = "INSERT INTO menteefor(menteeID,sectionID,courseID) VALUES (" . $mentee[0] . "," . $regClass[1] . "," . $regClass[0] .");";
 					$enroled = mysqli_query($myconnection, $Enrole) or die ("Failed to query database: " . mysqli_error($myconnection));
 					mysqli_query($myconnection, "COMMIT");
