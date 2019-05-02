@@ -23,7 +23,11 @@
             android:parentActivityName=".DashboardActivity" />
         <activity
             android:name=".ClassStatusActivity"
-            android:label="@string/mentor_status"
+			android:label="@string/mentor_status"
+            android:parentActivityName=".DashboardActivity" />
+        <activity 
+		android:name=".ViewSectionsActivity"
+            android:label="View Sections"
             android:parentActivityName=".DashboardActivity" />
         <activity
             android:name=".SelectChildProfileActivity"

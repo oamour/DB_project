@@ -1,118 +1,249 @@
 <?php
-	$session_key = md5("database");
-	session_start();
-	if (empty($_SESSION[$session_key])) {
-		echo "Not logged in! Please <a href='index.html'>CLICK HERE</a> to return to the main page.";
-		exit();
-	} elseif (intval($_SESSION[$session_key]) <= 0) {
-		unset($_SESSION[$session_key]);
-		echo "Invalid session key! Please <a href='index.html'>CLICK HERE</a> to return to the main page.";
-		exit();
-	} else {
-		$userid = $_SESSION[$session_key];
-	}
 	
-	$myconnection = mysqli_connect('localhost', 'root', '') 
-    or die ('Could not connect: ' . mysql_error());
-
-	$mydb = mysqli_select_db ($myconnection, 'db2') or die ('Could not select database');
-	
-	$GetSections = "SELECT sec.courseID, sec.sectionID, cou.title, sec.name, cou.description, sec.startDate, sec.endDate, sec.timeSlotID, cou.mentorReq, cou.menteeReq
-				   FROM sections sec, courses cou
-				   WHERE cou.courseID = sec.courseID
-				   ORDER BY sec.courseID,sec.sectionID ASC;";
-	$sections= mysqli_query($myconnection, $GetSections) or die ("Failed to query database: " . mysqli_error($myconnection));
-	$sections = $sections->fetch_all();
-	
-	$timeSlots = array();
-	$usedTS = array();
-	for($i = 0; $i<count($sections);$i++){
-		if(!in_array($sections[$i][7],$usedTS)){
-			$usedTS[] = $sections[$i][7];
-			$GetTS = "SELECT ts.m,ts.t,ts.w,ts.th,ts.f,ts.sa,ts.startTime, ts.endTime FROM timeslot ts WHERE ts.timeSlotID = ". $sections[$i][7].";";
-			$ts= mysqli_query($myconnection, $GetTS) or die ("Failed to query database: " . mysqli_error($myconnection));
-			$ts = $ts->fetch_row();
-			$timeSlots[$sections[$i][7]] = $ts;
+	function getConflicts($value,$myconnection){
+		$conflicts=array();
+		for($i=0;$i<count($value);++$i){
+			$course=$value[$i][0];
+			$section = $value[$i][1];
+			
+			$getSecInfo= "SELECT startDate,endDate,timeSlotID 
+			FROM sections
+			WHERE courseID = ". $course." AND sectionID = ".$section." ;";
+			$section= mysqli_query($myconnection, $getSecInfo) or die ("Failed to query database: " . mysqli_error($myconnection));
+			$section = $section->fetch_row();
+			$start = $section[0];
+			$end=$section[1];
+			$ts=$section[2];
+			
+			$getconflicts="SELECT courseID,sectionID
+			FROM sections
+			WHERE courseID = ".$course." OR( timeSlotID = ".$ts." AND((startDate < '".$start."' AND endDate < '".$end."' AND endDate > '".$start. "') OR (startDate > '".$start."' AND endDate > '".$end."' AND startDate < '".$end."') OR (startDate > '".$start."' AND endDate < '".$end."') OR ( startDate < '".$start."' AND endDate > '".$end."') OR startDate = '".$start."' OR endDate = '".$end."'));";
+			$conflict = mysqli_query($myconnection, $getconflicts) or die ("Failed to query database: " . mysqli_error($myconnection));
+			$conflict = $conflict->fetch_all();
+			
+			for ($j =0; $j<count($conflict); $j++){
+				if(!in_array(array($conflict[$j][0],$conflict[$j][1]),$conflicts)){
+						$conflicts[]=array($conflict[$j][0],$conflict[$j][1]);
+				}
+			}
+			
 		}
+		return $conflicts;
 	}
 	
-	$GetMod = "SELECT modID FROM moderators WHERE userID= ".$userid.";";
-	$mod= mysqli_query($myconnection, $GetMod) or die ("Failed to query database: " . mysqli_error($myconnection));
-	$mod = $mod->fetch_row()[0];
+	function getGradeLevel($CID,$myconnection){
+		$getGL="SELECT cou.mentorReq, cou.menteeReq
+				FROM courses cou
+				WHERE cou.courseID = ".$CID.";";
+		$GL = mysqli_query($myconnection, $getGL) or die ("Failed to query database: " . mysqli_error($myconnection));
+		return $GL->fetch_row();
+	}
 	
-	$GetMentor = "SELECT mentorID FROM mentors WHERE userID= ".$userid.";";
-	$mentor= mysqli_query($myconnection, $GetMentor) or die ("Failed to query database: " . mysqli_error($myconnection));
-	$mentor = $mentor->fetch_row()[0];
-	
-	$GetMentee = "SELECT menteeID FROM mentees WHERE userID= ".$userid.";";
-	$mentee= mysqli_query($myconnection, $GetMentee) or die ("Failed to query database: " . mysqli_error($myconnection));
-	$mentee = $mentee->fetch_row()[0];
-	
-	mysqli_close($myconnection);
-?>
-<!DOCTYPE html>
-<html>
-<head>
-</head>
-<body>
-	<a href="dashboard.php">Back to Start</a>
-	<h1>Class List</h1>
-	<?php if ($mentor != NULL or $mentee != NULL) :?>
-	<p>To sign up for classes <a href="course_signup.php">CLICK HERE</a></p>
-	<?php elseif ($mod != NULL) :?>
-	<p>To sign up to moderate <a href="course_moderate.php">CLICK HERE</a></p>
-	<?php else :?>
-	<?php endif;?>
-	<table style="border:1px solid;border-collapse: collapse;">
-			<tr style = "border:1px solid;border-collapse: collapse;">
-				<th style="min-width:50px;border:1px solid;border-collapse: collapse;">ID</th>
-				<th style="min-width:125px;border:1px solid;border-collapse: collapse;">Course</th>
-				<th style="min-width:100px;border:1px solid;border-collapse: collapse;">Section</th>
-				<th style="min-width:175px;border:1px solid;border-collapse: collapse;">Time</th>
-				<th style="border:1px solid;border-collapse: collapse;">startDate</th>
-				<th style="border:1px solid;border-collapse: collapse;">endDate</th>
-				<th style="border:1px solid;border-collapse: collapse;">mentor Req.</th>
-				<th style="border:1px solid;border-collapse: collapse;">mentee Req.</th>
-				<th style="border:1px solid;border-collapse: collapse;">Description</th>
-			</tr>
-			<?php
-			for($i = 0; $i<count($sections);$i++){
-				$currentTS =$timeSlots[$sections[$i][7]];
-				echo("<tr style = \"border:1px solid;border-collapse: collapse;\" >");
-				echo("
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][0].".".$sections[$i][1] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][2] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][3] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:right \">");
+	function getUserClasses($UID,$myconnection){
+		$get_classes = "SELECT mf.courseID, mf.sectionID
+						FROM mentees ment, menteefor mf
+						WHERE ment.userID = ".$UID." AND ment.menteeID = mf.menteeID 
+						UNION
+						SELECT mf.courseID, mf.sectionID
+						FROM mentors ment, mentorfor mf
+						WHERE ment.userID = ".$UID." AND ment.mentorID = mf.mentorID;";
+		$classes = mysqli_query($myconnection, $get_classes) or die ("Failed to query database: " . mysqli_error($myconnection));
+		$classes = $classes->fetch_all();
+		return $classes;
+	}
+
+	//var_dump(getConflicts(getUserClasses(23,$myconnection),$myconnection));
+	$today = new DateTime();
+    $value = json_decode(file_get_contents('php://input'));
+	if($value == NULL){
+		$value = array();
+		$value[] = 26;
+		$value[]= 8;
+		$value[]= 6;
+		$value[]= 1;
+	}
+
+	if ($value != NULL){
+		$uid = $value[0];
+		$regClass = [$value[1],$value[2]];
+		$regType = $value[3];
+		
+		$myconnection = mysqli_connect('localhost', 'root', '') 
+		or die ('Could not connect: ' . mysql_error());
+
+		$mydb = mysqli_select_db ($myconnection, 'db2') or die ('Could not select database');
+		
+		mysqli_query($myconnection, "START TRANSACTION");
+		
+		$getMentee = "SELECT m.menteeID, u.gradeLevel FROM mentees m, users u WHERE m.userID =".$uid." and u.userID = m.userID;";
+		$mentee= mysqli_query($myconnection, $getMentee) or die ("Failed to query database: " . mysqli_error($myconnection));
+		$mentee = $mentee->fetch_row();
+		
+		$getMentor = "SELECT m.mentorID, u.gradeLevel FROM mentors m, users u WHERE m.userID =".$uid." and u.userID = m.userID;";
+		$mentor= mysqli_query($myconnection, $getMentor) or die ("Failed to query database: " . mysqli_error($myconnection));
+		$mentor = $mentor->fetch_row();
+		
+		$getMod = "SELECT modID FROM moderators WHERE userID =".$uid.";";
+		$mod= mysqli_query($myconnection, $getMod) or die ("Failed to query database: " . mysqli_error($myconnection));
+		$mod = $mod->fetch_row();
+		
+		$getFilledModPos = "SELECT courseID,sectionID
+						FROM modfor;";
+		$filledModPos=  mysqli_query($myconnection, $getFilledModPos) or die ("Failed to query database: " . mysqli_error($myconnection));
+		$filledModPos = $filledModPos->fetch_all();
+		
+		$GetSections = "SELECT sec.courseID, sec.sectionID, cou.title, sec.name, cou.description, sec.startDate, sec.endDate, sec.timeSlotID, cou.mentorReq, cou.menteeReq
+					   FROM sections sec, courses cou
+					   WHERE cou.courseID = sec.courseID
+					   ORDER BY sec.courseID,sec.sectionID ASC;";
+		$sections= mysqli_query($myconnection, $GetSections) or die ("Failed to query database: " . mysqli_error($myconnection));
+		$sections = $sections->fetch_all();
+		
+		
+		
+		$timeSlots = array();
+		$usedTS = array();
+		for($i = 0; $i<count($sections);$i++){
+			if(!in_array($sections[$i][7],$usedTS)){
+				$usedTS[] = $sections[$i][7];
+				$GetTS = "SELECT ts.m,ts.t,ts.w,ts.th,ts.f,ts.sa,ts.startTime, ts.endTime FROM timeslot ts WHERE ts.timeSlotID = ". $sections[$i][7].";";
+				$ts= mysqli_query($myconnection, $GetTS) or die ("Failed to query database: " . mysqli_error($myconnection));
+				$ts = $ts->fetch_row();
+				$timeSlots[$sections[$i][7]] = $ts;
+			}
+		}
+		
+		if($regType == 1){
+			$MenteeCount= "SELECT mentorCapacity FROM sections WHERE courseID =".$regClass[0]." AND sectionID = ".$regClass[1].";";
+			$menteeCount = mysqli_query($myconnection, $MenteeCount) or die ("Failed to query database: " . mysqli_error($myconnection));
+			$mentorMaxCount = $menteeCount->fetch_row();
+			
+			$MenteeCount= "SELECT COUNT(mentorId) FROM mentorfor WHERE courseID =".$regClass[0]." AND sectionID = ".$regClass[1].";";
+			$menteeCount = mysqli_query($myconnection, $MenteeCount) or die ("Failed to query database: " . mysqli_error($myconnection));
+			$mentorCount = $menteeCount->fetch_row();
+			
+			if(!in_array($regClass,getConflicts(getUserClasses($uid,$myconnection),$myconnection))and $mentor != NULL AND $mentor[1] >= getGradeLevel($regClass[0],$myconnection)[0] AND $mentorCount != NULL AND ($mentorMaxCount[0] - $mentorCount[0]) > 0){
+				$Enrole = "INSERT INTO mentorfor(mentorID,sectionID,courseID) VALUES (" . $mentor[0] . "," . $regClass[1] . "," . $regClass[0] .");";
+				
+					$enroled = mysqli_query($myconnection, $Enrole) or die ("Failed to query database: " . mysqli_error($myconnection));
+				mysqli_query($myconnection, "COMMIT");
+			}
+		}
+		else if($regType == 2){
+			$MenteeCount= "SELECT menteeCapacity FROM sections WHERE courseID =".$regClass[0]."AND sectionID =".$regClass[1].";";
+			$menteeCount = mysqli_query($myconnection, $MenteeCount) or die ("Failed to query database: " . mysqli_error($myconnection));
+			$menteeMaxCount = $menteeCount->fetch_row();
+			
+			$MenteeCount= "SELECT COUNT(menteeId) FROM menteefor WHERE courseID =".$regClass[0]."AND sectionID =".$regClass[1].";";
+			$menteeCount = mysqli_query($myconnection, $MenteeCount) or die ("Failed to query database: " . mysqli_error($myconnection));
+			$menteeCount = $menteeCount->fetch_row();
+			
+			if(!in_array($regClass,getConflicts(getUserClasses($uid,$myconnection),$myconnection))and $mentee != NULL AND $mentee[1] >= getGradeLevel($regClass[0],$myconnection)[1]AND $menteeCount != NULL AND $menteeMaxCount[0] - $menteeCount[0] > 0){
+				$Enrole = "INSERT INTO menteefor(menteeID,sectionID,courseID) VALUES (" . $mentee[0] . "," . $regClass[1] . "," . $regClass[0] .");";
+					$enroled = mysqli_query($myconnection, $Enrole) or die ("Failed to query database: " . mysqli_error($myconnection));
+					mysqli_query($myconnection, "COMMIT");
+			}
+		}
+		else if($regType == 3){
+			if($mod != NULL AND !in_array([$regClass[0],$regClass[1]],$filledModPos)){
+				$Enrole = "INSERT INTO modfor(modID,sectionID,courseID) VALUES (" . $mod[0] . "," . $regClass[1] . "," . $regClass[0] .");";
+					$enroled = mysqli_query($myconnection, $Enrole) or die ("Failed to query database: " . mysqli_error($myconnection));
+					mysqli_query($myconnection, "COMMIT");
+				$filledModPos[] = array($regClass[0],$regClass[1]);
+			}
+		}
+		else {
+			
+		}	
+		$conflicts = getConflicts(getUserClasses($uid,$myconnection),$myconnection);
+		$result_json = array();
+		for($i=0;$i<count($sections);$i++){
+			$list = array();
+			$timeslot = "";
+			$list['courseID'] = $sections[$i][0];
+			$list['courseName'] = $sections[$i][2];
+			$seclist = array();
+			do{
+				$subsec = array();
+				$subsec['sectionID'] = $sections[$i][1];
+				$subsec['sectionName'] = $sections[$i][3];
+				$subsec['descrption'] = $sections[$i][4];
+				$subsec['startDate'] = $sections[$i][5];
+				$subsec['endDate'] = $sections[$i][6];
+				$currentTS=$timeSlots[$sections[$i][7]];
+				$timeslot="";
 				if($currentTS[0]){
-					echo("m");
+					$timeslot = $timeslot . "m";
 				}
 				if($currentTS[1]){
-					echo("t");
+					$timeslot= $timeslot . "t";
 				}
 				if($currentTS[2]){
-					echo("w");
+					$timeslot= $timeslot . "w";
 				}
 				if($currentTS[3]){
-					echo("th");
+					$timeslot= $timeslot . "th";
 				}
 				if($currentTS[4]){
-					echo("f");
+					$timeslot= $timeslot . "f";
 				}
 				if($currentTS[5]){
-					echo("s");
+					$timeslot= $timeslot . "s";
 				}
-				echo(" - " . $currentTS[6] . "-" . $currentTS[7] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][5] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][6] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][8] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\">" . $sections[$i][9] . "</td>
-				<td style = \"border:1px solid;border-collapse: collapse;text-align:center\"><span title = \"".$sections[$i][4]."\">" . substr($sections[$i][4],0,33) . "<span></td>
-				</tr>");
-				
+				$timeslot= $timeslot . " " . $currentTS[6]. "-" . $currentTS[7];
+				$subsec['timeslot'] = $timeslot;
+				$subsec['mentorReq'] = $sections[$i][8];
+				$subsec['menteeReq'] = $sections[$i][9];
+				$endDate = new DateTime($subsec['endDate']);
+			if(!in_array(array($sections[$i][0],$sections[$i][1]),$conflicts)and $mentee != NULL AND $mentee[1] >= getGradeLevel($sections[$i][0],$myconnection)[1] and $endDate>$today){
+				$subsec['avail_ee'] = true;
 			}
-				?>
-			</table>
-	
-</body>
-</html>
+			else{
+				$subsec['avail_ee'] = false;
+			}
+			if(!in_array(array($sections[$i][0],$sections[$i][1]),$conflicts)and $mentor != NULL AND $mentor[1] >= getGradeLevel($sections[$i][0],$myconnection)[0] and $endDate>$today){
+				$subsec['avail_or'] = true;
+			}
+			else{
+				$subsec['avail_or'] = false;
+			}
+			if(!in_array([$sections[$i][0],$sections[$i][1]],$filledModPos)and $mod != NULL and $endDate>$today){
+				$subsec['avail_mod'] = true;
+			}
+			else{
+				$subsec['avail_mod'] = false;
+				$getModerator = "SELECT usr.name 
+								FROM users usr, modfor mf , moderators modd
+								WHERE mf.courseID = ".$sections[$i][0]." AND mf.sectionID = ".$sections[$i][1]." AND mf.modID = modd.modID AND usr.userID = modd.userID;";
+				$Moderator = mysqli_query($myconnection, $getModerator) or die ("Failed to query database: " . mysqli_error($myconnection));
+				$Moderator=$Moderator->fetch_row();
+				if($Moderator == NULL){
+					$subsec['Moderator'] = "None";
+				}else {
+					$subsec['Moderator'] = $Moderator[0];
+				}
+			}
+			
+				$seclist[]=$subsec;
+				//echo("". $sections[$i][0] . " ". $sections[$i+1][0]."\n");
+				if ($i+1<count($sections) and $sections[$i][0] == $sections[$i+1][0]){
+					++$i;
+				}
+				else{ break;}
+			
+			}while($i+1<count($sections));
+			//echo("breaking");
+			$list['sections']=$seclist;
+			$list['sec_count']=count($seclist);
+			
+			$result_json[]=$list;
+		}
+		//$result_json = $value;
+		
+		mysqli_close($myconnection);
+		header('Content-Type: application/json');
+		$encoded = json_encode($result_json);
+		
+		echo $encoded;
+	}
+?>
