@@ -469,6 +469,7 @@ public class ViewSectionsActivity extends AppCompatActivity {
                         new int[]{CurrentModerator.getId(),moderatorEnrole.getId()},null,ConstraintSet.CHAIN_SPREAD);
                 subSectionSet.connect(CurrentModerator.getId(),ConstraintSet.TOP,Mentor_Enrole.getId(),ConstraintSet.BOTTOM);
                 subSectionSet.connect(moderatorEnrole.getId(),ConstraintSet.BASELINE,CurrentModerator.getId(),ConstraintSet.BASELINE);
+                subSectionSet.connect(moderatorEnrole.getId(),ConstraintSet.TOP, Mentor_Enrole.getId(),ConstraintSet.BOTTOM);
 
                 /*if(section_index == 0) {
                     //attach to header
