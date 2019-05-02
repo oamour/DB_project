@@ -463,6 +463,7 @@ public class ViewSectionsActivity extends AppCompatActivity {
                         new int[]{Mentor_Enrole.getId(),Mentee_Enrole.getId()},null,ConstraintSet.CHAIN_SPREAD);
                 subSectionSet.connect(Mentee_Enrole.getId(),ConstraintSet.BASELINE,Mentor_Enrole.getId(),ConstraintSet.BASELINE);
                 subSectionSet.connect(Mentor_Enrole.getId(),ConstraintSet.TOP,description.getId(),ConstraintSet.BOTTOM,4);
+                subSectionSet.connect(Mentee_Enrole.getId(),ConstraintSet.TOP,description.getId(),ConstraintSet.BOTTOM,4);
 
                 subSectionSet.createHorizontalChain(sectionInfo.getId(),ConstraintSet.LEFT,sectionInfo.getId(),ConstraintSet.RIGHT,
                         new int[]{CurrentModerator.getId(),moderatorEnrole.getId()},null,ConstraintSet.CHAIN_SPREAD);

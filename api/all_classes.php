@@ -53,14 +53,14 @@
 	}
 
 	//var_dump(getConflicts(getUserClasses(23,$myconnection),$myconnection));
-	
+	$today = new DateTime();
     $value = json_decode(file_get_contents('php://input'));
 	if($value == NULL){
 		$value = array();
 		$value[] = 13;
 		$value[]= 6;
 		$value[]= 1;
-		$value[]= 3;
+		$value[]= 0;
 	}
 
 	if ($value != NULL){
@@ -176,19 +176,20 @@
 				$subsec['timeslot'] = $timeslot;
 				$subsec['mentorReq'] = $sections[$i][8];
 				$subsec['menteeReq'] = $sections[$i][9];
-			if(!in_array(array($sections[$i][0],$sections[$i][1]),$conflicts)and $mentee != NULL){
+				$endDate = new DateTime($subsec['endDate']);
+			if(!in_array(array($sections[$i][0],$sections[$i][1]),$conflicts)and $mentee != NULL AND $mentee[1] >= getGradeLevel($sections[$i][0],$myconnection)[1] and $endDate>$today){
 				$subsec['avail_ee'] = true;
 			}
 			else{
 				$subsec['avail_ee'] = false;
 			}
-			if(!in_array(array($sections[$i][0],$sections[$i][1]),$conflicts)and $mentor != NULL){
+			if(!in_array(array($sections[$i][0],$sections[$i][1]),$conflicts)and $mentor != NULL AND $mentor[1] >= getGradeLevel($sections[$i][0],$myconnection)[0] and $endDate>$today){
 				$subsec['avail_or'] = true;
 			}
 			else{
 				$subsec['avail_or'] = false;
 			}
-			if(!in_array([$sections[$i][0],$sections[$i][1]],$filledModPos)and $mod != NULL){
+			if(!in_array([$sections[$i][0],$sections[$i][1]],$filledModPos)and $mod != NULL and $endDate>$today){
 				$subsec['avail_mod'] = true;
 			}
 			else{
